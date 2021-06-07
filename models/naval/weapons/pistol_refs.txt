@@ -1,0 +1,5 @@
+importfilelist
+{
+	"file"	"hands_is_unused.vmt"
+	"file"	"skirmpistoluvw_is_unused.vmt"
+}

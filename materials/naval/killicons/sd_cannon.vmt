@@ -1,0 +1,6 @@
+"UnlitGeneric"
+{
+	"$basetexture" "killicons/sd_cannon"
+	"$vertexalpha" 1
+	"$vertexcolor" 1
+}

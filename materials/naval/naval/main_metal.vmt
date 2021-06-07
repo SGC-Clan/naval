@@ -1,0 +1,6 @@
+"VertexLitGeneric"
+{
+
+	 $basetexture "naval/aluminium"
+	 $translucent "1"
+}

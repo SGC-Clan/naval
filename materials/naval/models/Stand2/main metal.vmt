@@ -1,0 +1,6 @@
+"VertexlitGeneric"
+{
+"$basetexture" "materials/models/stand2/main metal.vtf
+"$surfaceprop" "metal"
+"$model" 1
+}

@@ -3,7 +3,7 @@
 [Library( "gun" )]
 partial class Gun : Weapon
 {
-	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
+	public override string ViewModelPath => "models/naval/weapons/v_pistol.vmdl";
 	public override float PrimaryRate => 10;
 
 	public TimeSince TimeSinceDischarge { get; set; }
@@ -12,7 +12,7 @@ partial class Gun : Weapon
 	{
 		base.Spawn();
 
-		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
+		SetModel( "models/naval/weapons/w_pistol/w_pistol.vmdl" );
 	}
 
 	/// <summary>

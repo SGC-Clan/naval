@@ -1,0 +1,6 @@
+"VertexlitGeneric"
+{
+"$basetexture" "naval/gunmetal"
+"$surfaceprop" "metal"
+"$model" 1
+}

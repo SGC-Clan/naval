@@ -9,7 +9,7 @@ public partial class Weapon : BaseWeapon, IUse
 	{
 		base.Spawn();
 
-		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
+		SetModel( "models/naval/weapons/w_pistol/w_pistol.vmdl" );
 
 		PickupTrigger = new PickupTrigger
 		{

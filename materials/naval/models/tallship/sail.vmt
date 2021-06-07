@@ -1,0 +1,8 @@
+"VertexLitGeneric"
+{
+	"$baseTexture" "models\tallship\sail"
+	"$model" 1
+	"$alphatest" 1
+	"$nocull" 1
+	"$bumpmap" "models\tallship\sail_normal"
+}

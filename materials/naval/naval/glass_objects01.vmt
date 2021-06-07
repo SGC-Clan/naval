@@ -1,0 +1,8 @@
+"VertexLitGeneric"
+{
+	"$basetexture" "Naval/glass_objects01"
+	"$envmapmask" "Naval/glass_objects01_m"
+	"$envmap" "env_cubemap"
+	"$envmaptint" "[.9 .8 .7]"
+	"$translucent" 1
+}
