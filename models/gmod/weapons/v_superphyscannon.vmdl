@@ -1,0 +1,721 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:modeldoc29:version{3cec427c-1b0e-4d48-a90a-0436f33a6041} -->
+{
+	rootNode = 
+	{
+		_class = "RootNode"
+		children = 
+		[
+			{
+				_class = "BoneMarkupList"
+				bone_cull_type = "None"
+			},
+			{
+				_class = "PoseParamList"
+				children = 
+				[
+					{
+						_class = "PoseParam"
+						name = "active"
+						poseparam_min = 0.0
+						poseparam_max = 1.0
+						poseparam_looping = false
+						poseparam_loop = 0.0
+					},
+				]
+			},
+			{
+				_class = "WeightListList"
+				children = 
+				[
+					{
+						_class = "WeightList"
+						name = "bonemask_default"
+						default_weight = 0.0
+						weights = 
+						[
+							{
+								bone = "base"
+								weight = 1.0
+							},
+						]
+						master_morph_weight = -1.0
+						morph_weights = [  ]
+					},
+					{
+						_class = "WeightList"
+						name = "bonemask_prong_blend"
+						default_weight = 0.0
+						weights = 
+						[
+							{
+								bone = "base"
+								weight = 0.0
+							},
+							{
+								bone = "prong_a"
+								weight = 1.0
+							},
+							{
+								bone = "prong_b"
+								weight = 1.0
+							},
+						]
+						master_morph_weight = -1.0
+						morph_weights = [  ]
+					},
+				]
+			},
+			{
+				_class = "Skeleton"
+				children = 
+				[
+					{
+						_class = "Bone"
+						name = "base"
+						children = 
+						[
+							{
+								_class = "Bone"
+								name = "prong_b"
+								children = 
+								[
+									{
+										_class = "Bone"
+										name = "base_b"
+										origin = [ 4.433215, -5.12524, 5.288795 ]
+										angles = [ -89.999985, -89.999985, 0.0 ]
+										do_not_discard = true
+									},
+									{
+										_class = "Bone"
+										name = "tip_b"
+										origin = [ 1.959469, -2.289875, 11.821228 ]
+										angles = [ -89.999985, -89.999985, 0.0 ]
+										do_not_discard = true
+									},
+								]
+								origin = [ 4.71156, -5.687351, 16.612518 ]
+								angles = [ -0.0, 0.0, 0.0 ]
+								do_not_discard = true
+							},
+							{
+								_class = "Bone"
+								name = "prong_a"
+								children = 
+								[
+									{
+										_class = "Bone"
+										name = "base_a"
+										origin = [ -0.025934, 7.221237, 4.806763 ]
+										angles = [ -89.999985, -89.999985, 0.0 ]
+										do_not_discard = true
+									},
+									{
+										_class = "Bone"
+										name = "tip_a"
+										origin = [ -0.025934, 3.504978, 11.386185 ]
+										angles = [ -89.999985, -89.999985, 0.0 ]
+										do_not_discard = true
+									},
+								]
+								origin = [ -0.049619, 1.866989, 17.056725 ]
+								angles = [ -0.0, 0.0, 0.0 ]
+								do_not_discard = true
+							},
+							{
+								_class = "Bone"
+								name = "doodad_4"
+								origin = [ -0.049619, 5.897995, 12.646206 ]
+								angles = [ -0.0, 0.0, 0.0 ]
+								do_not_discard = true
+							},
+							{
+								_class = "Bone"
+								name = "doodad_3"
+								origin = [ -0.049619, 0.933498, 12.26453 ]
+								angles = [ -0.0, 0.0, 0.0 ]
+								do_not_discard = true
+							},
+							{
+								_class = "Bone"
+								name = "doodad_2"
+								origin = [ 3.876497, -4.750324, 10.231926 ]
+								angles = [ -0.0, 0.0, 0.0 ]
+								do_not_discard = true
+							},
+							{
+								_class = "Bone"
+								name = "doodad_1"
+								origin = [ 7.106016, -8.507942, 12.683636 ]
+								angles = [ -0.0, 0.0, 0.0 ]
+								do_not_discard = true
+							},
+							{
+								_class = "Bone"
+								name = "handle"
+								origin = [ 11.49486, -4.366184, -5.947353 ]
+								angles = [ -0.0, 0.0, 0.0 ]
+								do_not_discard = true
+							},
+							{
+								_class = "Bone"
+								name = "muzzle"
+								origin = [ -0.075553, -1.431873, 18.091213 ]
+								angles = [ -89.999985, -89.999985, 0.0 ]
+								do_not_discard = true
+							},
+							{
+								_class = "Bone"
+								name = "square"
+								origin = [ 4.374483, -1.31823, -8.948818 ]
+								angles = [ -0.0, 0.0, 0.0 ]
+								do_not_discard = true
+							},
+						]
+						origin = [ -12.471216, -41.194546, 57.51926 ]
+						angles = [ -0.0, 0.0, 89.999985 ]
+						do_not_discard = true
+					},
+				]
+			},
+			{
+				_class = "AttachmentList"
+				children = 
+				[
+					{
+						_class = "Attachment"
+						name = "muzzle"
+						parent_bone = "muzzle"
+						relative_origin = [ 0.0, 0.250001, -2.0 ]
+						relative_angles = [ 0.0, 0.0, 0.0 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+					{
+						_class = "Attachment"
+						name = "fork1b"
+						parent_bone = "base_a"
+						relative_origin = [ 0.0, 0.0, 0.0 ]
+						relative_angles = [ 0.0, 0.0, 0.0 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+					{
+						_class = "Attachment"
+						name = "fork1m"
+						parent_bone = "prong_a"
+						relative_origin = [ 0.0, 0.0, 0.0 ]
+						relative_angles = [ -0.0, 0.0, 0.0 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+					{
+						_class = "Attachment"
+						name = "fork1t"
+						parent_bone = "tip_a"
+						relative_origin = [ 0.0, 0.0, 0.0 ]
+						relative_angles = [ 0.0, 0.0, 0.0 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+					{
+						_class = "Attachment"
+						name = "fork2b"
+						parent_bone = "base_b"
+						relative_origin = [ 0.0, 0.0, 0.0 ]
+						relative_angles = [ 0.0, 0.0, 0.0 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+					{
+						_class = "Attachment"
+						name = "fork2m"
+						parent_bone = "prong_b"
+						relative_origin = [ 0.0, 0.0, 0.0 ]
+						relative_angles = [ -0.0, 0.0, 0.0 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+					{
+						_class = "Attachment"
+						name = "fork2t"
+						parent_bone = "tip_b"
+						relative_origin = [ 0.0, 0.0, 0.0 ]
+						relative_angles = [ 0.0, 0.0, 0.0 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+				]
+			},
+			{
+				_class = "HitboxSetList"
+				children = 
+				[
+					{
+						_class = "HitboxSet"
+						name = "default"
+						children = 
+						[
+							{
+								_class = "Hitbox"
+								parent_bone = "base"
+								surface_property = "default"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -6.977427, -8.507942, -15.483858 ]
+								hitbox_maxs = [ 14.470749, 5.897995, 18.091213 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "prong_b"
+								surface_property = "default"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -1.619908, -5.240404, -1.377598 ]
+								hitbox_maxs = [ 4.704499, 1.819633, 11.821228 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "prong_a"
+								surface_property = "default"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -0.796053, -1.506226, -1.821797 ]
+								hitbox_maxs = [ 0.65473, 7.236468, 11.386185 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "doodad_1"
+								surface_property = "default"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -2.188001, -0.598663, -0.271576 ]
+								hitbox_maxs = [ 0.67759, 2.401111, 0.818036 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "handle"
+								surface_property = "default"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -3.115692, -7.893023, -18.528967 ]
+								hitbox_maxs = [ 3.045953, 1.961815, 2.143986 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "square"
+								surface_property = "default"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -0.034404, -10.210078, -13.878106 ]
+								hitbox_maxs = [ 5.406463, 0.798939, 0.643902 ]
+							},
+						]
+					},
+				]
+			},
+			{
+				_class = "RenderMeshList"
+				children = 
+				[
+					{
+						_class = "RenderMeshFile"
+						name = "v_superphyscannon_bg_studio_lod0"
+						filename = "models/gmod/weapons/v_superphyscannon_refs/mesh/v_superphyscannon_bg_studio_lod0.dmx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = [  ]
+						}
+					},
+				]
+			},
+			{
+				_class = "AnimationList"
+				children = 
+				[
+					{
+						_class = "AnimFile"
+						name = "idle"
+						activity_name = "ACT_VM_IDLE"
+						activity_weight = 1
+						weight_list_name = "bonemask_default"
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = true
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/gmod/weapons/v_superphyscannon_refs/anim/_idle_2.dmx"
+						start_frame = -1
+						end_frame = -1
+						framerate = 22.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "hold_idle"
+						activity_name = "ACT_VM_RELOAD"
+						activity_weight = 1
+						weight_list_name = "bonemask_default"
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = true
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/gmod/weapons/v_superphyscannon_refs/anim/_hold_idle_3.dmx"
+						start_frame = -1
+						end_frame = -1
+						framerate = 30.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "draw"
+						activity_name = "ACT_VM_DRAW"
+						activity_weight = 1
+						weight_list_name = "bonemask_default"
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/gmod/weapons/v_superphyscannon_refs/anim/_draw_4.dmx"
+						start_frame = -1
+						end_frame = -1
+						framerate = 30.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "holster"
+						activity_name = "ACT_VM_HOLSTER"
+						activity_weight = 1
+						weight_list_name = "bonemask_default"
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/gmod/weapons/v_superphyscannon_refs/anim/_holster_5.dmx"
+						start_frame = -1
+						end_frame = -1
+						framerate = 30.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "fire"
+						activity_name = "ACT_VM_PRIMARYATTACK"
+						activity_weight = 1
+						weight_list_name = "bonemask_default"
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/gmod/weapons/v_superphyscannon_refs/anim/_fire_6.dmx"
+						start_frame = -1
+						end_frame = -1
+						framerate = 30.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "altfire"
+						activity_name = "ACT_VM_SECONDARYATTACK"
+						activity_weight = 1
+						weight_list_name = "bonemask_default"
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/gmod/weapons/v_superphyscannon_refs/anim/_altfire_7.dmx"
+						start_frame = -1
+						end_frame = -1
+						framerate = 30.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "chargeup"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = "bonemask_default"
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = true
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/gmod/weapons/v_superphyscannon_refs/anim/_chargeup_8.dmx"
+						start_frame = -1
+						end_frame = -1
+						framerate = 30.0
+						reverse = false
+					},
+					{
+						_class = "1DBlend"
+						name = "prong_blend"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = "bonemask_prong_blend"
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						poseParam = "active"
+						blendList = 
+						[
+							{
+								name = "prongsshut_0"
+								weight = 0.0
+							},
+							{
+								name = "prongsopen_1"
+								weight = 1.0
+							},
+						]
+					},
+					{
+						_class = "AnimFile"
+						name = "prongsshut_0"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/gmod/weapons/v_superphyscannon_refs/anim/prongsshut_0.dmx"
+						start_frame = 0
+						end_frame = 0
+						framerate = 30.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "prongsopen_1"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/gmod/weapons/v_superphyscannon_refs/anim/prongsopen_1.dmx"
+						start_frame = 0
+						end_frame = 0
+						framerate = 30.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "@idle_2"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/gmod/weapons/v_superphyscannon_refs/anim/_idle_2.dmx"
+						start_frame = 0
+						end_frame = 80
+						framerate = 22.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "@hold_idle_3"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/gmod/weapons/v_superphyscannon_refs/anim/_hold_idle_3.dmx"
+						start_frame = 0
+						end_frame = 30
+						framerate = 30.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "@draw_4"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/gmod/weapons/v_superphyscannon_refs/anim/_draw_4.dmx"
+						start_frame = 0
+						end_frame = 29
+						framerate = 30.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "@holster_5"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/gmod/weapons/v_superphyscannon_refs/anim/_holster_5.dmx"
+						start_frame = 0
+						end_frame = 8
+						framerate = 30.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "@fire_6"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/gmod/weapons/v_superphyscannon_refs/anim/_fire_6.dmx"
+						start_frame = 0
+						end_frame = 18
+						framerate = 30.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "@altfire_7"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/gmod/weapons/v_superphyscannon_refs/anim/_altfire_7.dmx"
+						start_frame = 0
+						end_frame = 12
+						framerate = 30.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "@chargeup_8"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/gmod/weapons/v_superphyscannon_refs/anim/_chargeup_8.dmx"
+						start_frame = 0
+						end_frame = 80
+						framerate = 30.0
+						reverse = false
+					},
+				]
+				default_root_bone_name = ""
+			},
+			{
+				_class = "MaterialGroupList"
+				children = 
+				[
+					{
+						_class = "DefaultMaterialGroup"
+						remaps = 
+						[
+							{
+								from = "v_hand_sheet_is_unused.vmat"
+								to = "materials/models/gmod/weapons/v_hand/v_hand_sheet.vmat"
+							},
+							{
+								from = "v_superphyscannon_sheet_is_unused.vmat"
+								to = "materials/models/gmod/weapons/v_physcannon/v_superphyscannon_sheet.vmat"
+							},
+						]
+						use_global_default = false
+						global_default_material = ""
+					},
+				]
+			},
+		]
+		model_archetype = ""
+		primary_associated_entity = ""
+		anim_graph_name = ""
+	}
+}
