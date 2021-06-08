@@ -38,6 +38,7 @@
 					prop.PhysicsGroup.SetSurface( "wood" );
 
 					CreateHitEffects( tr.EndPos );
+					//ViewModelEntity?.SetAnimBool( "reload", true );
 
 				}
 				else if ( input.Down( InputButton.Attack2 ) )

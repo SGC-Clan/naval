@@ -725,9 +725,9 @@
 						anim_markup_ordered = false
 						disable_compression = false
 						source_filename = "models/naval/weapons/pistol_refs/anim/_idle_2.dmx"
-						start_frame = -1
+						start_frame = 0
 						end_frame = -1
-						framerate = 30.0
+						framerate = -1.0
 						reverse = false
 					},
 					{

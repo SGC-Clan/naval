@@ -51,7 +51,7 @@ partial class NavalPlayer : Player
 		Inventory.Add( new PhysGun(), true );
 		Inventory.Add( new GravGun() );
 		Inventory.Add( new Tool() );
-		Inventory.Add( new Gun() );
+		Inventory.Add( new Flintlock() );
 
 		base.Respawn();
 	}
