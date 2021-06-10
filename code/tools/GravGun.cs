@@ -21,7 +21,7 @@ public partial class GravGun : Carriable
 	protected virtual float LinearDampingRatio => 1.0f;
 	protected virtual float AngularFrequency => 10.0f;
 	protected virtual float AngularDampingRatio => 1.0f;
-	protected virtual float PullForce => 10.0f;
+	protected virtual float PullForce => 20.0f;
 	protected virtual float PushForce => 1000.0f;
 	protected virtual float ThrowForce => 2000.0f;
 	protected virtual float HoldDistance => 100.0f;

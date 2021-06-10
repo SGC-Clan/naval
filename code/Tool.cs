@@ -1,31 +1,13 @@
 ﻿using Sandbox;
 using Sandbox.Tools;
 
-[Library( "weapon_tool" )]
+[Library( "weapon_tool", Title = "Toolgun" )]
 partial class Tool : Carriable
 {
 	[ConVar.ClientData( "tool_current" )]
 	public static string UserToolCurrent { get; set; } = "tool_boxgun";
 
 	public override string ViewModelPath => "models/gmod/weapons/v_toolgun.vmdl";
-
-	public override void CreateViewModel()
-	{
-		Host.AssertClient();
-
-		if ( string.IsNullOrEmpty( ViewModelPath ) )
-			return;
-
-		ViewModelEntity = new ViewModel
-		{
-			Position = Position,
-			Owner = Owner,
-			EnableViewmodelRendering = true
-		};
-
-		ViewModelEntity.SetModel( ViewModelPath );
-	}
-
 
 	[Net, Predicted]
 	public BaseTool CurrentTool { get; set; }
@@ -137,7 +119,6 @@ namespace Sandbox.Tools
 		public virtual void CreateHitEffects( Vector3 pos )
 		{
 			Parent?.CreateHitEffects( pos );
-
 		}
 	}
 }
