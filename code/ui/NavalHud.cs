@@ -2,14 +2,14 @@
 using Sandbox.UI;
 
 [Library]
-public partial class SandboxHud : HudEntity<RootPanel>
+public partial class NavalHud : HudEntity<RootPanel>
 {
-	public SandboxHud()
+	public NavalHud()
 	{
 		if ( !IsClient )
 			return;
 
-		RootPanel.StyleSheet.Load( "/ui/SandboxHud.scss" );
+		RootPanel.StyleSheet.Load( "/ui/NavalHud.scss" );
 
 		RootPanel.AddChild<NameTags>();
 		RootPanel.AddChild<CrosshairCanvas>();
@@ -17,9 +17,10 @@ public partial class SandboxHud : HudEntity<RootPanel>
 		RootPanel.AddChild<VoiceList>();
 		RootPanel.AddChild<KillFeed>();
 		RootPanel.AddChild<Scoreboard<ScoreboardEntry>>();
-		RootPanel.AddChild<Health>();
 		RootPanel.AddChild<InventoryBar>();
 		RootPanel.AddChild<CurrentTool>();
 		RootPanel.AddChild<SpawnMenu>();
+		RootPanel.AddChild<VersionString>();
+		RootPanel.AddChild<StatusBar>();
 	}
 }

@@ -1,15 +1,72 @@
-Health
+VersionString
 {
 	position: absolute;
-	background-color: rgba( black, 0.5 );
-	right: 100px;
-	bottom: 48px;
-	font-size: 40px;
+	left: 10px;
+	top: 5px;
+	font-size: 20px;
 	font-weight: bold;
-	color: white;
-	height: 80px;
+	color: darkorange;
+	height: 20px;
 	padding: 0 20px;
 	align-items: center;
+}
+
+StatusBar {
+	position: absolute;
+	left: 0px;
+	bottom: 0px;
+	border-radius: 0px 50px 0px 0px;
+	background-color: rgba( #222, 0.3 );
+	width: 250px;
+	height: 150px;
+
+	.health {
+		position: absolute;
+		left: 10px;
+		top: 32px;
+		font-size: 25px;
+		font-weight: bold;
+		color: white;
+		height: 30px;
+		padding: 0 20px;
+		align-items: center;
+	}
+
+	.stamina {
+		position: absolute;
+		left: 10px;
+		top: 62px;
+		font-size: 25px;
+		font-weight: bold;
+		color: white;
+		height: 30px;
+		padding: 0 20px;
+		align-items: center;
+	}
+
+	.money {
+		position: absolute;
+		left: 10px;
+		top: 92px;
+		font-size: 25px;
+		font-weight: bold;
+		color: white;
+		height: 30px;
+		padding: 0 20px;
+		align-items: center;
+	}
+
+	.team {
+		position: absolute;
+		right: 10px;
+		bottom: 5px;
+		font-size: 15px;
+		font-weight: bold;
+		color: white;
+		height: 30px;
+		padding: 0 5px;
+		align-items: center;
+	}
 }
 
 CurrentTool

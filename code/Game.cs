@@ -14,7 +14,7 @@ partial class NavalGame : Game
 		if ( IsServer )
 		{
 			// Create the HUD
-			new SandboxHud();
+			new NavalHud();
 		}
 	}
 
