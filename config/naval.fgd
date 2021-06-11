@@ -9,7 +9,7 @@
 // 
 // Tool : Carriable 
 // 
-@SolidClass = weapon_tool : ""
+@PointClass = weapon_tool : ""
 [
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
 ]
@@ -17,7 +17,7 @@
 // 
 // BalloonEntity : Sandbox.Prop 
 // 
-@SolidClass  model() 
+@PointClass  model() 
 metadata
 {
 }
@@ -35,7 +35,7 @@ metadata
 // 
 // BouncyBallEntity : Sandbox.Prop 
 // 
-@SolidClass  model() 
+@PointClass  model() 
 metadata
 {
 }
@@ -53,7 +53,7 @@ metadata
 // 
 // DirectionalGravity : Sandbox.Prop 
 // 
-@SolidClass  model() 
+@PointClass  model() 
 metadata
 {
 }
@@ -71,7 +71,7 @@ metadata
 // 
 // DroneEntity : Sandbox.Prop 
 // 
-@SolidClass  model() 
+@PointClass  model() 
 metadata
 {
 }
@@ -89,7 +89,7 @@ metadata
 // 
 // LampEntity : Sandbox.SpotLightEntity 
 // 
-@SolidClass = ent_lamp : ""
+@PointClass = ent_lamp : ""
 [
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
 	input TurnOn(void) : ""
@@ -104,7 +104,7 @@ metadata
 // 
 // LightEntity : Sandbox.PointLightEntity 
 // 
-@SolidClass = ent_light : ""
+@PointClass = ent_light : ""
 [
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
 	input TurnOn(void) : ""
@@ -119,7 +119,7 @@ metadata
 // 
 // NoiseTest : Sandbox.Prop 
 // 
-@SolidClass  model() 
+@PointClass  model() 
 metadata
 {
 }
@@ -137,7 +137,7 @@ metadata
 // 
 // ThrusterEntity : Sandbox.Prop 
 // 
-@SolidClass  model() 
+@PointClass  model() 
 metadata
 {
 }
@@ -155,7 +155,7 @@ metadata
 // 
 // WheelEntity : Sandbox.Prop 
 // 
-@SolidClass  model() 
+@PointClass  model() 
 metadata
 {
 }
@@ -173,7 +173,7 @@ metadata
 // 
 // Flashlight : Weapon 
 // 
-@SolidClass = flashlight : ""
+@PointClass = flashlight : ""
 [
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
 ]
@@ -181,7 +181,7 @@ metadata
 // 
 // GravGun : Carriable 
 // 
-@SolidClass = gravgun : ""
+@PointClass = gravgun : ""
 [
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
 ]
@@ -189,7 +189,7 @@ metadata
 // 
 // PhysGun : Carriable 
 // 
-@SolidClass = physgun : ""
+@PointClass = physgun : ""
 [
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
 ]
@@ -197,7 +197,7 @@ metadata
 // 
 // Flintlock : Weapon 
 // 
-@SolidClass = weapon_flintlock : ""
+@PointClass = weapon_flintlock : ""
 [
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
 ]
@@ -205,7 +205,7 @@ metadata
 // 
 // Pistol : Weapon 
 // 
-@SolidClass = weapon_pistol : ""
+@PointClass = weapon_pistol : ""
 [
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
 ]
@@ -213,7 +213,7 @@ metadata
 // 
 // Shotgun : Weapon 
 // 
-@SolidClass = weapon_shotgun : ""
+@PointClass = weapon_shotgun : ""
 [
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
 ]
@@ -221,7 +221,7 @@ metadata
 // 
 // SMG : Weapon 
 // 
-@SolidClass = weapon_smg : ""
+@PointClass = weapon_smg : ""
 [
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
 ]

@@ -12,7 +12,6 @@
 
 			using ( Prediction.Off() )
 			{
-				var input = Owner.Input;
 				var startPos = Owner.EyePos;
 				var dir = Owner.EyeRot.Forward;
 
@@ -29,7 +28,7 @@
 				if ( tr.Entity is not Prop prop )
 					return;
 
-				if ( input.Pressed( InputButton.Attack1 ) )
+				if ( Input.Pressed( InputButton.Attack1 ) )
 				{
 
 					var CurMass = prop.PhysicsGroup.Mass;
@@ -39,7 +38,7 @@
 					CreateHitEffects( tr.EndPos );
 
 				}
-				else if ( input.Pressed( InputButton.Attack2 ) )
+				else if ( Input.Pressed( InputButton.Attack2 ) )
 				{
 
 					var CurMass = prop.PhysicsGroup.Mass;
@@ -49,7 +48,7 @@
 					CreateHitEffects( tr.EndPos );
 
 				}
-				else if ( input.Down( InputButton.Reload ) )
+				else if ( Input.Down( InputButton.Reload ) )
 				{
 
 					DebugOverlay.Text( prop.Position, "Mass: " + prop.PhysicsGroup.Mass );

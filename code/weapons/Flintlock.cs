@@ -20,7 +20,7 @@ partial class Flintlock : Weapon
 	/// </summary>
 	public override bool CanPrimaryAttack()
 	{
-		if ( !Owner.Input.Pressed( InputButton.Attack1 ) )
+		if ( !Input.Pressed( InputButton.Attack1 ) )
 			return false;
 
 		return base.CanPrimaryAttack();
