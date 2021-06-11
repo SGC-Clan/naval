@@ -713,25 +713,6 @@
 					{
 						_class = "AnimFile"
 						name = "shoot"
-						children = 
-						[
-							{
-								_class = "AnimEvent"
-								event_class = "AE_MUZZLEFLASH"
-								event_frame = 2
-								event_keys = 
-								{
-									weaponType = "pistol"
-									attachment = "muzzle"
-								}
-							},
-							{
-								_class = "AnimEvent"
-								event_class = "AE_SPARK"
-								event_frame = 2
-								event_keys = null
-							},
-						]
 						activity_name = "ACT_VM_PRIMARYATTACK"
 						activity_weight = 1
 						weight_list_name = "bonemask_default"
@@ -752,15 +733,6 @@
 					{
 						_class = "AnimFile"
 						name = "shootempty"
-						children = 
-						[
-							{
-								_class = "AnimEvent"
-								event_class = "AE_SPARK"
-								event_frame = 2
-								event_keys = null
-							},
-						]
 						activity_name = "ACT_VM_DRYFIRE"
 						activity_weight = 1
 						weight_list_name = "bonemask_default"

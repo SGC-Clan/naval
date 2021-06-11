@@ -4,8 +4,11 @@
 partial class Flintlock : Weapon
 {
 	public override string ViewModelPath => "models/naval/weapons/v_pistol.vmdl";
-	public override float PrimaryRate => 10;
+	public override float PrimaryRate => 0.5f;
+	public override float SecondaryRate => 0.5f;
+	public override float ReloadTime => 2;
 
+	public bool BulletIsLoaded = false;
 	public TimeSince TimeSinceDischarge { get; set; }
 
 	public override void Spawn()
@@ -31,6 +34,10 @@ partial class Flintlock : Weapon
 		base.Reload();
 
 		ViewModelEntity?.SetAnimBool( "reload", true );
+
+		Sound.FromEntity( "nvl.flintlock.reloadflock", this );
+
+		BulletIsLoaded = true;
 	}
 
 	public override void AttackPrimary()
@@ -38,7 +45,18 @@ partial class Flintlock : Weapon
 		TimeSincePrimaryAttack = 0;
 		TimeSinceSecondaryAttack = 0;
 
-		Shoot( Owner.EyePos, Owner.EyeRot.Forward );
+		//Check if bullet is in the chember
+		if ( BulletIsLoaded == true )
+		{
+			//Shoot the gun
+			BulletIsLoaded = false;
+			Shoot( Owner.EyePos, Owner.EyeRot.Forward );
+		}
+		else
+		{
+			//Try shooting without a bullet and make couple sparks instead
+			ShootEmpty();
+		}
 	}
 
 	private void Shoot( Vector3 pos, Vector3 dir )
@@ -58,6 +76,9 @@ partial class Flintlock : Weapon
 		//
 		foreach ( var tr in TraceBullet( pos, pos + dir * 4000 ) )
 		{
+			//make a bulletpass sound
+			Sound.FromWorld( "nvl.bulletpass", tr.EndPos );
+
 			tr.Surface.DoBulletImpact( tr );
 
 			if ( !IsServer ) continue;
@@ -76,6 +97,18 @@ partial class Flintlock : Weapon
 				tr.Entity.TakeDamage( damage );
 			}
 		}
+	}
+
+	private void ShootEmpty()
+	{
+
+		Sound.FromEntity( "nvl.flintlock.blankshot", this );
+		if ( IsClient )
+		{
+			Particles.Create( "particles/naval_fuze_sparks.vpcf", EffectEntity, "spark" );
+		}
+
+		ViewModelEntity?.SetAnimBool( "shootempty", true );
 	}
 
 	private void Discharge()
@@ -147,11 +180,11 @@ partial class Flintlock : Weapon
 		var muzzle = EffectEntity.GetAttachment( "muzzle" );
 		//bool InWater = Physics.TestPointContents( muzzle.Position, CollisionLayer.Water );
 
-		//Sound.FromEntity( "rust_pistol.shoot", this );
 		Sound.FromEntity( "nvl.flintlock.fire", this );
-		Particles.Create( "particles/pistol_muzzleflash.vpcf", EffectEntity, "muzzle" );
+		Particles.Create( "particles/naval_gunpowder_smoke.vpcf", EffectEntity, "muzzle" );
+		Particles.Create( "particles/naval_fuze_sparks.vpcf", EffectEntity, "spark" );
 
-		ViewModelEntity?.SetAnimBool( "fire", true );
+		ViewModelEntity?.SetAnimBool( "shoot", true );
 		CrosshairPanel?.OnEvent( "onattack" );
 
 		if ( IsLocalPawn )
