@@ -3,7 +3,7 @@ using Sandbox.Joints;
 using System;
 using System.Linq;
 
-[Library( "physgun" )]
+[Library( "physgun", Title = "Physics Gun" )]
 public partial class PhysGun : Carriable
 {
 	public override string ViewModelPath => "models/gmod/weapons/v_superphyscannon.vmdl";

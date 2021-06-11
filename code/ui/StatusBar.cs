@@ -23,9 +23,20 @@ public class StatusBar : Panel
 		var player = Local.Pawn;
 		if ( player == null ) return;
 
-		Health.Text = "🩸 " + $"{player.Health.CeilToInt()}";
-		Stamina.Text = "🏃 "+"100";
+		var StaminaTemp = 100;
+
+		var HealthRemainder = 100 - player.Health.CeilToInt();
+		var StaminaRemainder = 100 - StaminaTemp;
+		Health.Text = "🩸 " + $"{player.Health.CeilToInt()}" + "%";
+		Stamina.Text = "🏃 "+ $"{StaminaTemp}" + "%";
 		Money.Text = "💰 " + "3371";
 		Team.Text = "Royal Navy";
+
+		
+		Health.Style.Set( $"background: linear-gradient(to right, red " + player.Health.CeilToInt() + "%, 0%, rgba( #222, 0.3 )" + HealthRemainder + "%);" );
+		Stamina.Style.Set( $"background: linear-gradient(to right, blue " + StaminaTemp + "%, 0%, rgba( #222, 0.3 )" + StaminaRemainder + "%);" );
+		Team.Style.Set( $"color: blue;" );
+
+
 	}
 }

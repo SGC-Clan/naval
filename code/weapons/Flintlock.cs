@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-[Library( "weapon_flintlock", Title = "Flintlock", Spawnable = true )]
+[Library( "weapon_flintlock", Title = "Flintlock Pistol", Spawnable = true )]
 partial class Flintlock : Weapon
 {
 	public override string ViewModelPath => "models/naval/weapons/v_pistol.vmdl";

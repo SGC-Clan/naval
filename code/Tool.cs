@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using Sandbox.Tools;
 
-[Library( "weapon_tool", Title = "Toolgun" )]
+[Library( "weapon_tool", Title = "Tool gun" )]
 partial class Tool : Carriable
 {
 	[ConVar.ClientData( "tool_current" )]
