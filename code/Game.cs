@@ -45,7 +45,7 @@ namespace naval
 		public BaseTeam GetTeamById( int id )
 		{
 			if ( id == 0 ) return null;
-			return Teams[1];
+			return Teams[id - 1];
 		}
 
 		private void registerTeam( BaseTeam team )

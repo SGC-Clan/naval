@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-partial class NavalPlayer
+public partial class NavalPlayer
 {
 	protected bool IsUseDisabled()
 	{
