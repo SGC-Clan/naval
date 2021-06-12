@@ -22,5 +22,6 @@ public partial class NavalHud : HudEntity<RootPanel>
 		RootPanel.AddChild<SpawnMenu>();
 		RootPanel.AddChild<VersionString>();
 		RootPanel.AddChild<StatusBar>();
+		RootPanel.AddChild<Compass>();
 	}
 }

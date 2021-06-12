@@ -1,12 +1,4 @@
 // 
-// NavalGame : Sandbox.Game 
-// 
-@PointClass = naval : ""
-[
-	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
-]
-
-// 
 // Tool : Carriable 
 // 
 @PointClass = weapon_tool : ""
@@ -276,6 +268,14 @@ metadata
 // SMG : Weapon 
 // 
 @PointClass = weapon_smg : ""
+[
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+]
+
+// 
+// naval.NavalGame : Sandbox.Game 
+// 
+@PointClass = naval : ""
 [
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
 ]
