@@ -8,4 +8,7 @@ tools_thumbnail_cache.bin
 *.xml
 *.dll
 *.pdb
+*.vtf
+*.vmt
+*.mdl
 .intermediate/net5.0/sandbox.deps.json

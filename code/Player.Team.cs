@@ -1,4 +1,4 @@
-﻿using naval.teams;
+﻿using naval.Teams;
 using Sandbox;
 using naval;
 
@@ -9,6 +9,8 @@ public partial class NavalPlayer : Player
 
 		public BaseTeam Team
 		{
+
+			
 			get => NavalGame.Instance.GetTeamById( TeamIndex );
 			set
 			{
