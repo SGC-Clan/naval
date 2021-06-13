@@ -11,4 +11,10 @@ tools_thumbnail_cache.bin
 *.vtf
 *.vmt
 *.mdl
+*.tga
+*.vtx
+*.phy
+*.vvd
+*.qc
+*.smd
 .intermediate/net5.0/sandbox.deps.json

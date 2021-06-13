@@ -1,7 +1,0 @@
-"VertexLitGeneric"
-{
-
-	 $color2 "{ 200.0 255.0 255.0 }"
-	 $basetexture "naval/main metal"
-	 $translucent "1"
-}
