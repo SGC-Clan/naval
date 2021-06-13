@@ -183,6 +183,7 @@ partial class Flintlock : Weapon
 		Sound.FromEntity( "nvl.flintlock.fire", this );
 		Particles.Create( "particles/naval_gunpowder_smoke.vpcf", EffectEntity, "muzzle" );
 		Particles.Create( "particles/naval_fuze_sparks.vpcf", EffectEntity, "spark" );
+		Particles.Create( "particles/pistol_muzzleflash.vpcf", this, "muzzle" );
 
 		ViewModelEntity?.SetAnimBool( "shoot", true );
 		CrosshairPanel?.OnEvent( "onattack" );
