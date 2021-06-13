@@ -36,13 +36,18 @@ public class StatusBar : Panel
 		Health.Text = "🩸 " + $"{player.Health.CeilToInt()}" + "%";
 		Stamina.Text = "🏃 "+ $"{StaminaTemp}" + "%";
 		Money.Text = "💰 " + "3371";
-		Team.Text = CurrentTeam.TeamName;
+		if ( CurrentTeam != null ) {
+			Team.Text = CurrentTeam.TeamName;
+		}
 
 
 
 		Health.Style.Set( $"background: linear-gradient(to right, red " + player.Health.CeilToInt() + "%, 0%, rgba( #222, 0.3 )" + HealthRemainder + "%);" );
 		Stamina.Style.Set( $"background: linear-gradient(to right, blue " + StaminaTemp + "%, 0%, rgba( #222, 0.3 )" + StaminaRemainder + "%);" );
-		Team.Style.Set( $"color: rgb({CurrentTeam.TeamColor.r},{CurrentTeam.TeamColor.g},{CurrentTeam.TeamColor.b});" );
+		if ( CurrentTeam != null )
+		{
+			Team.Style.Set( $"color: rgb({CurrentTeam.TeamColor.r},{CurrentTeam.TeamColor.g},{CurrentTeam.TeamColor.b});" );
+		}
 
 
 	}
