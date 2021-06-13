@@ -1,6 +1,12 @@
-﻿using Sandbox;
-
-partial class NavalPlayer : Player
+﻿using naval.teams;
+using Sandbox;
+using Sandbox.UI;
+using Sandbox.UI.Construct;
+using System;
+using System.IO;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+public partial class NavalPlayer : Player
 {
 	private TimeSince timeSinceDropped;
 	private TimeSince timeSinceJumpReleased;
@@ -56,6 +62,10 @@ partial class NavalPlayer : Player
 		//Inventory.Add( new Shotgun() );
 		//Inventory.Add( new SMG() );
 		//Inventory.Add( new Flashlight() );
+
+		//this.Team = NavalGame.Instance.RoyalNavy;
+
+
 		base.Respawn();
 	}
 

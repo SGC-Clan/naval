@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-partial class NavalPlayer
+public partial class NavalPlayer
 {
 	ModelEntity pants;
 	ModelEntity jacket;
