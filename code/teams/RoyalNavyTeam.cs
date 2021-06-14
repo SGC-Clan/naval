@@ -1,12 +1,11 @@
 ﻿using Sandbox;
-using naval;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace naval.teams
+namespace naval.Teams
 {
 	public class RoyalNavyTeam : BaseTeam
 	{

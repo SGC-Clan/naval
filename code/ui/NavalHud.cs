@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using Sandbox.UI;
+using naval.Teams;
 
 [Library]
 public partial class NavalHud : HudEntity<RootPanel>

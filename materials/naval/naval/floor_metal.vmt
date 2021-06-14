@@ -1,7 +1,0 @@
-"VertexLitGeneric"
-{
-
-	 $basetexturetransform "center 0.5 0.5 scale 1.0 1.0 rotate -90.0 translate 0.0 0.0"
-	 $basetexture "naval/foot metal"
-	 $translucent "1"
-}

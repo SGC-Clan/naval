@@ -1,4 +1,4 @@
-﻿using naval.teams;
+﻿using naval.Teams;
 using Sandbox;
 using Sandbox.UI;
 using Sandbox.UI.Construct;
@@ -16,15 +16,22 @@ namespace naval
 	{
 		public static NavalGame Instance => (Current as NavalGame);
 
+		public List<BaseTeam> NavalTeams { get => teams; set => teams = value; }
 		public RoyalNavyTeam RoyalNavy = new();
 		public FrenchNavyTeam FrenchNavy = new();
 		public MerchantsTeam Merchants = new();
 		public PiratesTeam Pirates = new();
-
-		public List<BaseTeam> Teams { get; set; } = new();
+		private List<BaseTeam> teams = new();
 
 		public NavalGame()
 		{
+
+			void registerTeam( BaseTeam team )
+			{
+				NavalTeams.Add( team );
+				team.TeamIndex = NavalTeams.Count;
+			}
+
 			if ( IsServer )
 			{
 				//Team Code Provided by sbox-hideandseek - Oppossome (In the Style of Stack Overflow <3)
@@ -44,26 +51,38 @@ namespace naval
 
 		public BaseTeam GetTeamById( int id )
 		{
-			if ( id == 0 ) return null;
-			//return Teams[id - 1];
-			return null;
+
+			Log.Info( $"GetTeamById id: " + id );
+			if ( id == 0 )
+			{
+				Log.Info( $"GetTeamById id: " + id );
+				return null;
+			}
+			else
+			{
+				Log.Info( $"GetTeamById2 id: " + id );
+				var LTeams = NavalTeams[id].ToString();
+				Log.Info( $"Teams: " + LTeams );
+				return NavalTeams[id - 1];
+
+			}
+
+
+
 		}
 
-		private void registerTeam( BaseTeam team )
-		{
-			Teams.Add( team );
-			team.TeamIndex = Teams.Count;
-		}
+
 
 		public override void ClientJoined( Client cl )
 		{
 			base.ClientJoined( cl );
 			var player = new NavalPlayer();
-			
+
 			player.Respawn();
 
 			cl.Pawn = player;
 			player.Team = RoyalNavy;
+
 		}
 
 		public override void ClientDisconnect( Client client, NetworkDisconnectionReason reason )
@@ -72,7 +91,7 @@ namespace naval
 			nvlPlayer.Team.OnPlayerExited( nvlPlayer );
 
 			nvlPlayer.Team = RoyalNavy;
-			
+
 			base.ClientDisconnect( client, reason );
 		}
 

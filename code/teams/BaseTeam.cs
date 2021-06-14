@@ -3,7 +3,7 @@ using Sandbox;
 using System;
 using System.Collections.Generic;
 
-namespace naval.teams
+namespace naval.Teams
 {
 	public abstract partial class BaseTeam
 	{

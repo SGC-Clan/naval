@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace naval.teams
+namespace naval.Teams
 {
 	public class MerchantsTeam : BaseTeam
 	{
