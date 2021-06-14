@@ -52,15 +52,21 @@ public partial class BlackpowderCannonEntity : Prop, IUse
 		Sound.FromEntity( "nvl.blackpowdercannon.fire", this );
 
 		// Create the cannon ball entity
-		var ShootPos = this.GetAttachment( "muzzle" ).Position;
-		var ShootAngle = this.GetAttachment( "muzzle" ).Rotation;
+
+		//var ShootPos = this.GetAttachment( "muzzle" ).Position; // TO:DO  Oh my fuckin god, API has changed I have no idea how to Fix IT!
+		//var ShootAngle = this.GetAttachment( "muzzle" ).Rotation; // TO:DO  -||-
+
+		var ShootPos = Transform.PointToWorld( new Vector3( 0 , -56, 0 ) ); //I had to hardcode positions for now since I cant just use an attachment as reference.. 
+		var ShootAngle = Transform.RotationToWorld( Rotation.From( new Angles( 180f, 0, 180f )  ) );
+
 		var ent = new Prop
 		{
 			Position = ShootPos,
 			Rotation = ShootAngle,
 		};
 		ent.SetModel( "models/naval/props/props/cball.vmdl" );
-		ent.Velocity += ent.Transform.NormalToWorld( new Vector3( ProjectileVelocity, 0, 0 ) );
+		//ent.Velocity += ent.Transform.NormalToWorld( new Vector3( ProjectileVelocity, 0, 0 ) ); // this was working when GetAttachment() was also working correctly
+		ent.Velocity += ent.Transform.NormalToWorld( new Vector3( 0, ProjectileVelocity, 0 ) );
 		Particles.Create( "particles/dev/dev_snapshot_preview_trails_skinned.vpcf", this, "" );
 
 		//recoil

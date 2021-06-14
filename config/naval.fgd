@@ -249,30 +249,6 @@ metadata
 ]
 
 // 
-// Pistol : Weapon 
-// 
-@PointClass = weapon_pistol : ""
-[
-	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
-]
-
-// 
-// Shotgun : Weapon 
-// 
-@PointClass = weapon_shotgun : ""
-[
-	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
-]
-
-// 
-// SMG : Weapon 
-// 
-@PointClass = weapon_smg : ""
-[
-	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
-]
-
-// 
 // naval.NavalGame : Sandbox.Game 
 // 
 @PointClass = naval : ""

@@ -113,17 +113,17 @@ partial class Flintlock : Weapon
 
 	private void Discharge()
 	{
-		if ( TimeSinceDischarge < 0.5f )
-			return;
+	//	if ( TimeSinceDischarge < 0.5f )
+	//		return;
 
-		TimeSinceDischarge = 0;
+	//	TimeSinceDischarge = 0;
 
-		var muzzle = GetAttachment( "muzzle" );
-		var pos = muzzle.Position;
-		var rot = muzzle.Rotation;
-		Shoot( pos, rot.Forward );
+	//	var muzzle = GetAttachment( "muzzle" );
+	//	var pos = muzzle.Position;
+	//	var rot = muzzle.Rotation;
+	//	Shoot( pos, rot.Forward );
 
-		ApplyAbsoluteImpulse( rot.Backward * 200.0f );
+	//	ApplyAbsoluteImpulse( rot.Backward * 200.0f );
 	}
 
 	protected override void OnPhysicsCollision( CollisionEventData eventData )
@@ -193,4 +193,5 @@ partial class Flintlock : Weapon
 			new Sandbox.ScreenShake.Perlin( 0.5f, 2.0f, 0.5f );
 		}
 	}
+
 }

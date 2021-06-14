@@ -27,7 +27,8 @@ public partial class NavalPlayer : Player
 
 		public void TickTeamCheck()
 		{
-			if ( TeamIndex != lastTeamIndex )
-				this.Team = NavalGame.Instance.GetTeamById( TeamIndex );
+		if ( TeamIndex != lastTeamIndex )
+			this.Team = NavalGame.Instance.GetTeamById( TeamIndex );
+
 		}
 	}

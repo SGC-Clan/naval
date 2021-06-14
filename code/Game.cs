@@ -16,12 +16,12 @@ namespace naval
 	{
 		public static NavalGame Instance => (Current as NavalGame);
 
-		public List<BaseTeam> NavalTeams { get => teams; set => teams = value; }
+		public static List<BaseTeam> NavalTeams { get => teams; set => teams = value; }
 		public RoyalNavyTeam RoyalNavy = new();
 		public FrenchNavyTeam FrenchNavy = new();
 		public MerchantsTeam Merchants = new();
 		public PiratesTeam Pirates = new();
-		private List<BaseTeam> teams = new();
+		private static List<BaseTeam> teams = new();
 
 		public NavalGame()
 		{
@@ -29,45 +29,28 @@ namespace naval
 			void registerTeam( BaseTeam team )
 			{
 				NavalTeams.Add( team );
+				Log.Info( "Team Registered:"+(team).ToString() );
 				team.TeamIndex = NavalTeams.Count;
 			}
 
-			if ( IsServer )
-			{
-				//Team Code Provided by sbox-hideandseek - Oppossome (In the Style of Stack Overflow <3)
-				registerTeam( RoyalNavy );
-				registerTeam( FrenchNavy );
-				registerTeam( Merchants );
-				registerTeam( Pirates );
+			//Team Code Provided by sbox-hideandseek - Oppossome (In the Style of Stack Overflow <3)
+			registerTeam( RoyalNavy );
+			registerTeam( FrenchNavy );
+			registerTeam( Merchants );
+			registerTeam( Pirates );
 
-				// Create the HUD
-				new NavalHud();
-			}
-			else
-			{
-				return;
-			}
+			// Create the HUD
+			new NavalHud();
+
 		}
 
 		public BaseTeam GetTeamById( int id )
 		{
 
-			Log.Info( $"GetTeamById id: " + id );
-			if ( id == 0 )
-			{
-				Log.Info( $"GetTeamById id: " + id );
-				return null;
-			}
-			else
-			{
-				Log.Info( $"GetTeamById2 id: " + id );
-				var LTeams = NavalTeams[id].ToString();
-				Log.Info( $"Teams: " + LTeams );
-				return NavalTeams[id - 1];
-
-			}
+			if ( id == 0 ) { return null; }
 
 
+			return NavalTeams[id - 1];
 
 		}
 
