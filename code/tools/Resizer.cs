@@ -42,8 +42,7 @@ namespace Sandbox.Tools
 					tr.Entity.PhysicsGroup.Wake();
 				}
 
-				if ( Input.Pressed( InputButton.Attack1 ) ||
-					 Input.Pressed( InputButton.Attack2 ) )
+				if ( Input.Pressed( InputButton.Attack1 ) || Input.Pressed( InputButton.Attack2 ) )
 				{
 					CreateHitEffects( tr.EndPos );
 				}

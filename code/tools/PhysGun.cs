@@ -3,10 +3,10 @@ using Sandbox.Joints;
 using System;
 using System.Linq;
 
-[Library( "physgun", Title = "Physics Gun" )]
+[Library( "physgun" )]
 public partial class PhysGun : Carriable
 {
-	public override string ViewModelPath => "models/gmod/weapons/v_superphyscannon.vmdl";
+	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
 	protected PhysicsBody holdBody;
 	protected WeldJoint holdJoint;
