@@ -113,23 +113,24 @@ partial class Flintlock : Weapon
 
 	private void Discharge()
 	{
-	//	if ( TimeSinceDischarge < 0.5f )
-	//		return;
+		if ( TimeSinceDischarge < 0.5f )
+			return;
 
-	//	TimeSinceDischarge = 0;
+		TimeSinceDischarge = 0;
 
-	//	var muzzle = GetAttachment( "muzzle" );
-	//	var pos = muzzle.Position;
-	//	var rot = muzzle.Rotation;
-	//	Shoot( pos, rot.Forward );
+		var muzzle = GetAttachment( "muzzle" ) ?? default;
+		var pos = muzzle.Position;
+		var rot = muzzle.Rotation;
+		Shoot( pos, rot.Forward );
 
-	//	ApplyAbsoluteImpulse( rot.Backward * 200.0f );
+		ApplyAbsoluteImpulse( rot.Backward * 200.0f );
 	}
 
 	protected override void OnPhysicsCollision( CollisionEventData eventData )
 	{
-		if ( eventData.Speed > 500.0f )
+		if ( eventData.Speed > 500.0f && BulletIsLoaded == true )
 		{
+			BulletIsLoaded = false;
 			Discharge();
 		}
 	}

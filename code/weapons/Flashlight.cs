@@ -1,9 +1,10 @@
 ﻿using Sandbox;
 
-[Library( "flashlight", Title = "Flashlight", Spawnable = true )]
+[Library( "weapon_flashlight", Title = "Flashlight", Spawnable = true )]
 partial class Flashlight : Weapon
 {
 	public override string ViewModelPath => "weapons/rust_flashlight/v_rust_flashlight.vmdl";
+	public override float SecondaryRate => 2.0f;
 
 	protected virtual Vector3 LightOffset => Vector3.Forward * 10;
 
@@ -65,6 +66,8 @@ partial class Flashlight : Weapon
 		if ( cl == null )
 			return;
 
+		base.Simulate( cl );
+
 		bool toggle = Input.Pressed( InputButton.Flashlight ) || Input.Pressed( InputButton.Attack1 );
 
 		if ( timeSinceLightToggled > 0.1f && toggle )
@@ -85,11 +88,77 @@ partial class Flashlight : Weapon
 
 			timeSinceLightToggled = 0;
 		}
+	}
 
-		if ( IsClient && Input.Pressed( InputButton.Attack2 ) )
+	public override void AttackSecondary()
+	{
+		if ( MeleeAttack() )
 		{
-			ViewModelEntity?.SetAnimBool( "admire", true );
+			OnMeleeHit();
 		}
+		else
+		{
+			OnMeleeMiss();
+		}
+
+		PlaySound( "rust_flashlight.attack" );
+	}
+
+	private bool MeleeAttack()
+	{
+		var forward = Owner.EyeRot.Forward;
+		forward = forward.Normal;
+
+		bool hit = false;
+
+		foreach ( var tr in TraceBullet( Owner.EyePos, Owner.EyePos + forward * 80, 20.0f ) )
+		{
+			if ( !tr.Entity.IsValid() ) continue;
+
+			tr.Surface.DoBulletImpact( tr );
+
+			hit = true;
+
+			if ( !IsServer ) continue;
+
+			using ( Prediction.Off() )
+			{
+				var damageInfo = DamageInfo.FromBullet( tr.EndPos, forward * 100, 25 )
+					.UsingTraceResult( tr )
+					.WithAttacker( Owner )
+					.WithWeapon( this );
+
+				tr.Entity.TakeDamage( damageInfo );
+			}
+		}
+
+		return hit;
+	}
+
+	[ClientRpc]
+	private void OnMeleeMiss()
+	{
+		Host.AssertClient();
+
+		if ( IsLocalPawn )
+		{
+			_ = new Sandbox.ScreenShake.Perlin();
+		}
+
+		ViewModelEntity?.SetAnimBool( "attack", true );
+	}
+
+	[ClientRpc]
+	private void OnMeleeHit()
+	{
+		Host.AssertClient();
+
+		if ( IsLocalPawn )
+		{
+			_ = new Sandbox.ScreenShake.Perlin( 1.0f, 1.0f, 3.0f );
+		}
+
+		ViewModelEntity?.SetAnimBool( "attack_hit", true );
 	}
 
 	private void Activate()
