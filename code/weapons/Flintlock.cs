@@ -8,7 +8,7 @@ partial class Flintlock : Weapon
 	public override float SecondaryRate => 0.5f;
 	public override float ReloadTime => 2;
 
-	public bool BulletIsLoaded = false;
+	public bool BulletIsLoaded = true; // start reloaded
 	public TimeSince TimeSinceDischarge { get; set; }
 
 	public override void Spawn()
