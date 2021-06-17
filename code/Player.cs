@@ -58,6 +58,7 @@ public partial class NavalPlayer : Player
 		Inventory.Add( new GravGun() );
 		Inventory.Add( new Tool() );
 		Inventory.Add( new Flintlock() );
+		Inventory.Add( new Cutlass() );
 		//Inventory.Add( new Pistol() );
 		//Inventory.Add( new Shotgun() );
 		//Inventory.Add( new SMG() );

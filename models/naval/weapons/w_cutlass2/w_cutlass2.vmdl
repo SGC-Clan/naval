@@ -87,6 +87,39 @@
 					},
 				]
 			},
+			{
+				_class = "Skeleton"
+				children = 
+				[
+					{
+						_class = "Bone"
+						name = "valvebiped"
+						children = 
+						[
+							{
+								_class = "Bone"
+								name = "hold_R"
+								children = 
+								[
+									{
+										_class = "Bone"
+										name = "muzzle"
+										origin = [ 0.0, 0.0, 39.441086 ]
+										angles = [ 0.0, 0.0, 0.0 ]
+										do_not_discard = true
+									},
+								]
+								origin = [ 0.0, 0.0, 0.0 ]
+								angles = [ 0.0, 0.0, -90.0 ]
+								do_not_discard = true
+							},
+						]
+						origin = [ 0.0, 0.0, 0.0 ]
+						angles = [ 0.0, 0.0, 0.0 ]
+						do_not_discard = true
+					},
+				]
+			},
 		]
 		model_archetype = ""
 		primary_associated_entity = ""

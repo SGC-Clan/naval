@@ -81,7 +81,7 @@
 						_class = "PhysicsHullFile"
 						name = "cannon_barrel_physics1"
 						parent_bone = ""
-						surface_prop = "metal.weapon"
+						surface_prop = "metal"
 						collision_prop = "default"
 						recenter_on_parent_bone = false
 						offset_origin = [ 0.0, 0.0, 0.0 ]
