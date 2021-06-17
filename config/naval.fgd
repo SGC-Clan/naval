@@ -15,8 +15,8 @@ metadata
 }
 = ent_balloon : ""
 [
-	model(studio) [report]: "World Model"
-	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	model(studio) [report]: "World Model" : ""
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins." 
 	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
 	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
@@ -33,8 +33,8 @@ metadata
 }
 = ent_bouncyball : ""
 [
-	model(studio) [report]: "World Model"
-	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	model(studio) [report]: "World Model" : ""
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins." 
 	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
 	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
@@ -51,8 +51,8 @@ metadata
 }
 = directional_gravity : ""
 [
-	model(studio) [report]: "World Model"
-	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	model(studio) [report]: "World Model" : ""
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins." 
 	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
 	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
@@ -69,8 +69,8 @@ metadata
 }
 = ent_drone : ""
 [
-	model(studio) [report]: "World Model"
-	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	model(studio) [report]: "World Model" : ""
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins." 
 	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
 	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
@@ -87,8 +87,8 @@ metadata
 }
 = keep_upright : ""
 [
-	model(studio) [report]: "World Model"
-	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	model(studio) [report]: "World Model" : ""
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins." 
 	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
 	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
@@ -135,8 +135,8 @@ metadata
 }
 = nvl_blackpowder_cannon : ""
 [
-	model(studio) [report]: "World Model"
-	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	model(studio) [report]: "World Model" : ""
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins." 
 	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
 	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
@@ -153,8 +153,8 @@ metadata
 }
 = nvl_cannon_ball_projectile : ""
 [
-	model(studio) [report]: "World Model"
-	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	model(studio) [report]: "World Model" : ""
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins." 
 	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
 	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
@@ -171,8 +171,8 @@ metadata
 }
 = nvl_cannon_platform : ""
 [
-	model(studio) [report]: "World Model"
-	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	model(studio) [report]: "World Model" : ""
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins." 
 	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
 	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
@@ -189,8 +189,8 @@ metadata
 }
 = noise_test : ""
 [
-	model(studio) [report]: "World Model"
-	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	model(studio) [report]: "World Model" : ""
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins." 
 	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
 	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
@@ -207,8 +207,8 @@ metadata
 }
 = ent_thruster : ""
 [
-	model(studio) [report]: "World Model"
-	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	model(studio) [report]: "World Model" : ""
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins." 
 	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
 	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
@@ -225,8 +225,8 @@ metadata
 }
 = ent_wheel : ""
 [
-	model(studio) [report]: "World Model"
-	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins."
+	model(studio) [report]: "World Model" : ""
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins." 
 	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
 	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
 	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."

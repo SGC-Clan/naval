@@ -4,7 +4,9 @@
 partial class Cutlass : Weapon
 {
 	public override string ViewModelPath => "models/naval/weapons/cutlass2.vmdl";
-	public override float SecondaryRate => 2.0f;
+
+	public override float PrimaryRate => 0.8f;
+	public override float SecondaryRate => 0.8f;
 
 	public override void Spawn()
 	{
@@ -18,6 +20,7 @@ partial class Cutlass : Weapon
 	{
 		base.ActiveStart( ent );
 		PlaySound( "nvl.sword.draw" );
+		ViewModelEntity?.SetAnimBool( "Draw", true );
 	}
 
 	public override void CreateViewModel()
@@ -34,13 +37,16 @@ partial class Cutlass : Weapon
 		PlaySound( "nvl.sword.holster" );
 	}
 
-	public override void AttackPrimary()
+	public override async void AttackPrimary()
 	{
+		ViewModelEntity?.SetAnimBool( "AttackPrimary", true );
+
+		await GameTask.DelayRealtimeSeconds( 0.4f );
+
 		if ( MeleeAttack() )
 		{
 			OnMeleeHit();
 
-			PlaySound( "nvl.sword.clash" );
 		}
 		else
 		{
@@ -56,10 +62,18 @@ partial class Cutlass : Weapon
 		forward = forward.Normal;
 
 		bool hit = false;
+		ViewModelEntity?.SetAnimBool( "Miss", true );
 
 		foreach ( var tr in TraceBullet( Owner.EyePos, Owner.EyePos + forward * 80, 20.0f ) )
 		{
 			if ( !tr.Entity.IsValid() ) continue;
+
+			if ( tr.Entity.IsWorld )
+			{
+				PlaySound( "nvl.sword.clash" ); // Only make this annoying sound when you hit ground or something static
+				ViewModelEntity?.SetAnimBool( "Stun", true );//temp stun code 
+				ViewModelEntity?.SetAnimBool( "Miss", false );
+			}
 
 			tr.Surface.DoBulletImpact( tr );
 
@@ -76,6 +90,7 @@ partial class Cutlass : Weapon
 
 				tr.Entity.TakeDamage( damageInfo );
 			}
+
 		}
 
 		return hit;
@@ -90,8 +105,6 @@ partial class Cutlass : Weapon
 		{
 			_ = new Sandbox.ScreenShake.Perlin();
 		}
-
-		ViewModelEntity?.SetAnimBool( "attack", true );
 	}
 
 	[ClientRpc]
@@ -103,8 +116,11 @@ partial class Cutlass : Weapon
 		{
 			_ = new Sandbox.ScreenShake.Perlin( 1.0f, 1.0f, 3.0f );
 		}
+	}
 
-		ViewModelEntity?.SetAnimBool( "attack_hit", true );
+	public override void AttackSecondary()
+	{
+		ViewModelEntity?.SetAnimBool( "Block", true );
 	}
 
 }
