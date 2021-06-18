@@ -64,6 +64,10 @@ partial class Cutlass : Weapon
 		bool hit = false;
 		ViewModelEntity?.SetAnimBool( "Miss", true );
 
+		//World model animation (temp)
+		(Owner as AnimEntity)?.SetAnimBool( "hit", true );
+		(Owner as AnimEntity)?.SetAnimFloat( "hit_strenght", 0.5f );
+
 		foreach ( var tr in TraceBullet( Owner.EyePos, Owner.EyePos + forward * 80, 20.0f ) )
 		{
 			if ( !tr.Entity.IsValid() ) continue;
@@ -121,6 +125,11 @@ partial class Cutlass : Weapon
 	public override void AttackSecondary()
 	{
 		ViewModelEntity?.SetAnimBool( "Block", true );
+	}
+
+	public override bool CanReload()
+	{
+		return false;
 	}
 
 }
