@@ -6,7 +6,7 @@ using System.Linq;
 [Library( "physgun" )]
 public partial class PhysGun : Carriable
 {
-	public override string ViewModelPath => "models/gmod/weapons/v_superphyscannon.vmdl";
+	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
 	protected PhysicsBody holdBody;
 	protected WeldJoint holdJoint;
@@ -346,8 +346,8 @@ public partial class PhysGun : Carriable
 	protected virtual void DoRotate( Rotation eye, Vector3 input )
 	{
 		var localRot = eye;
-		localRot *= Rotation.FromAxis( Vector3.Up, input.x );
-		localRot *= Rotation.FromAxis( Vector3.Right, input.y );
+		localRot *= Rotation.FromAxis( Vector3.Up, input.X );
+		localRot *= Rotation.FromAxis( Vector3.Right, input.Y );
 		localRot = eye.Inverse * localRot;
 
 		heldRot = localRot * heldRot;

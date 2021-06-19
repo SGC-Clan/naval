@@ -31,6 +31,13 @@ public partial class NavalCannonBallProjectile : Prop
 		}
 	}
 
+	public override void Simulate( Client cl )
+	{
+		base.Simulate( cl );
+		
+		//Water level
+	}
+
 	public void ProjectileExplode() 
 	{
 		Sound.FromWorld( "nvl.cannonball.hitground", Transform.Position );

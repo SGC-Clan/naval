@@ -101,7 +101,7 @@ public partial class DroneEntity : Prop, IPhysicsUpdate
 			var y = (Input.Down( InputButton.Right ) ? 1 : 0) + (Input.Down( InputButton.Left ) ? -1 : 0);
 			currentInput.movement = new Vector3( x, y, 0 ).Normal;
 			currentInput.throttle = (Input.Down( InputButton.Run ) ? 1 : 0) + (Input.Down( InputButton.Duck ) ? -1 : 0);
-			currentInput.yaw = -Input.MouseDelta.x;
+			currentInput.yaw = -Input.MouseDelta.X;
 		}
 	}
 
