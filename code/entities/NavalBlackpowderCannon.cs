@@ -67,11 +67,13 @@ public partial class BlackpowderCannonEntity : Prop, IUse, IPhysicsUpdate
 
 		var ShootPos = Transform.PointToWorld( new Vector3( 0 , -59, 0 ) ); //I had to hardcode positions for now since I cant just use an attachment as reference.. 
 		var ShootAngle = Transform.RotationToWorld( Rotation.From( new Angles( 180f, 0, 180f )  ) );
+		var ProjScale = Scale;
 
 		var ent = new NavalCannonBallProjectile
 		{
 			Position = ShootPos,
 			Rotation = ShootAngle,
+			Scale = ProjScale,
 		};
 		ent.SetModel( "models/naval/props/props/cball.vmdl" );
 		//ent.Velocity += ent.Transform.NormalToWorld( new Vector3( ProjectileVelocity, 0, 0 ) ); // this was working when GetAttachment() was also working correctly

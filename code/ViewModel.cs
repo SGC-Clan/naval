@@ -42,9 +42,9 @@ public class ViewModel : BaseViewModel
 		var yawDelta = Angles.NormalizeAngle( lastYaw - newYaw );
 
 		var playerVelocity = Local.Pawn.Velocity;
-		var verticalDelta = playerVelocity.Z * Time.Delta;
+		var verticalDelta = playerVelocity.z * Time.Delta;
 		var viewDown = Rotation.FromPitch( newPitch ).Up * -1.0f;
-		verticalDelta *= (1.0f - System.MathF.Abs( viewDown.Cross( Vector3.Down ).Y ));
+		verticalDelta *= (1.0f - System.MathF.Abs( viewDown.Cross( Vector3.Down ).y ));
 		pitchDelta -= verticalDelta * 1;
 
 		var offset = CalcSwingOffset( pitchDelta, yawDelta );
@@ -82,10 +82,10 @@ public class ViewModel : BaseViewModel
 			bobAnim -= twoPI;
 		}
 
-		var speed = new Vector2( velocity.X, velocity.Y ).Length;
+		var speed = new Vector2( velocity.x, velocity.y ).Length;
 		speed = speed > 10.0 ? speed : 0.0f;
 		var offset = BobDirection * (speed * 0.005f) * System.MathF.Cos( bobAnim );
-		offset = offset.WithZ( -System.MathF.Abs( offset.Z ) );
+		offset = offset.WithZ( -System.MathF.Abs( offset.z ) );
 
 		return offset;
 	}
