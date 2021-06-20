@@ -192,6 +192,25 @@ metadata
 ]
 
 // 
+// NavalShipController : Sandbox.Prop 
+// 
+@PointClass  model() 
+metadata
+{
+}
+= nvl_ship_controller : ""
+[
+	model(studio) [report]: "World Model" : ""
+	skin(materialgroup) [ group="Render Properties" ] : "Skin" : "default" : "Some models have multiple versions of their textures, called skins." 
+	bodygroups(bodygroupchoices) [ group="Render Properties" ] : "Body Groups" : "" 
+	disableshadows(boolean) [ group="Misc" ] : "Disable Shadows" : 0 : "Used to disable dynamic shadows on this entity." 
+	targetname(target_source) : "Name" : : "The name that other entities refer to this entity by."
+	parentname(target_destination) [ group="Hierarchy" ] : "Parent" : : "The name of this entity's parent in the movement hierarchy. Entities with parents move with their parent."
+	collisiongroupoverride(integer) : "CollisionGroupOverride" :  : ""
+
+]
+
+// 
 // NoiseTest : Sandbox.Prop 
 // 
 @PointClass  model() 

@@ -2,7 +2,7 @@
 using System.Linq;
 
 [Library( "keep_upright", Title = "Keep Upright", Spawnable = true )]
-public partial class KeepUpright : Prop, IPhysicsUpdate
+public partial class KeepUpright : Prop
 {
 	bool enabled = false;
 
@@ -29,14 +29,22 @@ public partial class KeepUpright : Prop, IPhysicsUpdate
 		enabled = false;
 	}
 
-	public void OnPostPhysicsStep( float dt )
+	public override void Simulate( Client owner )
 	{
+		if ( owner == null ) return;
 		if ( !PhysicsBody.IsValid() )
 		{
 			return;
 		}
-	
 
+		if ( !IsServer ) return;
+
+		using ( Prediction.Off() )
+		{
+
+			this.WorldAng = new Angles( this.Rotation.Pitch(), this.Rotation.Yaw(), 0 );
+
+		}
 
 	}
 }
