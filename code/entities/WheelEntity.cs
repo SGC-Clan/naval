@@ -10,7 +10,7 @@ public partial class WheelEntity : Prop
 	{
 		base.OnDestroy();
 
-		if ( Joint.IsValid() )
+		if ( Joint.IsValid )
 		{
 			Joint.Remove();
 		}

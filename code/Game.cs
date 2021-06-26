@@ -145,5 +145,41 @@ namespace naval
 
 			//Log.Info( $"ent: {ent}" );
 		}
+
+		[ServerCmd( "naval_sit" )]
+		public static void NavalSit()
+		{
+			var player = ConsoleSystem.Caller.Pawn;
+
+			var tr = Trace.Ray( player.EyePos, player.EyePos + player.EyeRot.Forward * 200 )
+				.UseHitboxes()
+				.Ignore( player )
+				.Size( 2 )
+				.Run();
+
+			if ( !tr.Entity.IsValid() )
+				return;
+
+			if ( player is Player basePlayer )
+			{
+				if ( basePlayer.DevController is SitController )
+				{
+					Log.Info( "Noclip Mode Off" );
+					basePlayer.GroundEntity = null;
+					basePlayer?.SetAnimBool( "b_sit", false );
+					basePlayer.DevController = null;
+				}
+				else
+				{
+					Log.Info( "Noclip Mode On" );
+					basePlayer.GroundEntity = tr.Entity;
+					basePlayer?.SetAnimBool( "b_sit", true );
+					basePlayer.DevController = new SitController();
+				}
+			}
+
+		}
+
+
 	}
 }

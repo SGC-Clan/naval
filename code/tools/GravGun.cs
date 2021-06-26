@@ -58,7 +58,7 @@ public partial class GravGun : Carriable
 
 			if ( HeldBody.IsValid() && HeldBody.PhysicsGroup != null )
 			{
-				if ( holdJoint.IsValid() && !holdJoint.IsActive )
+				if ( holdJoint.IsValid && !holdJoint.IsActive )
 				{
 					GrabEnd();
 				}
@@ -149,8 +149,10 @@ public partial class GravGun : Carriable
 	{
 		if ( !holdBody.IsValid() )
 		{
-			holdBody = PhysicsWorld.AddBody();
-			holdBody.BodyType = PhysicsBodyType.Keyframed;
+			holdBody = new PhysicsBody
+			{
+				BodyType = PhysicsBodyType.Keyframed
+			};
 		}
 	}
 
@@ -243,7 +245,7 @@ public partial class GravGun : Carriable
 
 	private void GrabEnd()
 	{
-		if ( holdJoint.IsValid() )
+		if ( holdJoint.IsValid )
 		{
 			holdJoint.Remove();
 		}

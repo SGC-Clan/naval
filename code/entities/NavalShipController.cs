@@ -5,6 +5,7 @@ using Sandbox.Tools;
 [Library( "nvl_ship_controller", Title = "Ship Controller", Spawnable = true )]
 public partial class NavalShipController : Prop, IUse, IPhysicsUpdate
 {
+	public Player SeatUser = null; //player can sit on this entity
 	
 	public override void Spawn() 
 	{
@@ -20,7 +21,9 @@ public partial class NavalShipController : Prop, IUse, IPhysicsUpdate
 
 	public bool OnUse( Entity user )
 	{
-		return false;
+		ConsoleSystem.Run( "naval_sit" );
+
+		return true;
 	}
 
 	public void Remove()
@@ -38,4 +41,5 @@ public partial class NavalShipController : Prop, IUse, IPhysicsUpdate
 		if ( !body.IsValid() )
 			return;
 	}
+
 }

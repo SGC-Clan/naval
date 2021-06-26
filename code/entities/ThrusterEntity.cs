@@ -3,7 +3,7 @@
 [Library( "ent_thruster" )]
 public partial class ThrusterEntity : Prop, IPhysicsUpdate, IUse
 {
-	public float Force = 1000.0f;
+	public float Force = 100.0f;
 	public bool Massless = false;
 	public PhysicsBody TargetBody;
 
