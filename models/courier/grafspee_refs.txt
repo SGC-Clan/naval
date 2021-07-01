@@ -1,0 +1,4 @@
+importfilelist
+{
+	"file"	"grafspee_is_unused.vmt"
+}

@@ -1,0 +1,992 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:modeldoc29:version{3cec427c-1b0e-4d48-a90a-0436f33a6041} -->
+{
+	rootNode = 
+	{
+		_class = "RootNode"
+		children = 
+		[
+			{
+				_class = "BoneMarkupList"
+				bone_cull_type = "None"
+			},
+			{
+				_class = "WeightListList"
+				children = 
+				[
+					{
+						_class = "WeightList"
+						name = "bonemask_default"
+						default_weight = 0.0
+						weights = 
+						[
+							{
+								bone = "bone001"
+								weight = 1.0
+							},
+						]
+						master_morph_weight = -1.0
+						morph_weights = [  ]
+					},
+				]
+			},
+			{
+				_class = "Skeleton"
+				children = 
+				[
+					{
+						_class = "Bone"
+						name = "bone001"
+						children = 
+						[
+							{
+								_class = "Bone"
+								name = "bone002"
+								children = 
+								[
+									{
+										_class = "Bone"
+										name = "bone003"
+										children = 
+										[
+											{
+												_class = "Bone"
+												name = "bone004"
+												children = 
+												[
+													{
+														_class = "Bone"
+														name = "bone005"
+														children = 
+														[
+															{
+																_class = "Bone"
+																name = "bone006"
+																origin = [ 12.974243, 0.0, 0.0 ]
+																angles = [ -0.0, 0.0, 0.0 ]
+																do_not_discard = true
+															},
+														]
+														origin = [ 10.22213, 0.0, -0.0 ]
+														angles = [ -0.0, 0.0, 0.0 ]
+														do_not_discard = true
+													},
+												]
+												origin = [ 11.60408, -0.000001, 0.0 ]
+												angles = [ -0.0, 0.0, 0.0 ]
+												do_not_discard = true
+											},
+										]
+										origin = [ 10.421341, -0.000005, 0.0 ]
+										angles = [ -0.0, 0.0, 0.0 ]
+										do_not_discard = true
+									},
+								]
+								origin = [ 12.189514, -0.000002, 0.0 ]
+								angles = [ -0.0, 0.0, 0.0 ]
+								do_not_discard = true
+							},
+							{
+								_class = "Bone"
+								name = "bone007"
+								children = 
+								[
+									{
+										_class = "Bone"
+										name = "bone008"
+										children = 
+										[
+											{
+												_class = "Bone"
+												name = "bone009"
+												children = 
+												[
+													{
+														_class = "Bone"
+														name = "bone010"
+														children = 
+														[
+															{
+																_class = "Bone"
+																name = "bone011"
+																children = 
+																[
+																	{
+																		_class = "Bone"
+																		name = "bone012"
+																		origin = [ 10.426449, 0.000002, 0.000002 ]
+																		angles = [ -0.0, -0.0, -0.0 ]
+																		do_not_discard = true
+																	},
+																]
+																origin = [ 11.992496, 0.0, 0.000002 ]
+																angles = [ -0.0, -0.0, -0.0 ]
+																do_not_discard = true
+															},
+														]
+														origin = [ 9.634693, 0.000001, 0.000002 ]
+														angles = [ 0.0, 0.0, -0.0 ]
+														do_not_discard = true
+													},
+												]
+												origin = [ 11.801682, 0.0, 0.000001 ]
+												angles = [ 0.0, 0.0, -0.0 ]
+												do_not_discard = true
+											},
+										]
+										origin = [ 10.435036, -0.000013, 0.000001 ]
+										angles = [ 0.0, -0.0, 0.000115 ]
+										do_not_discard = true
+									},
+								]
+								origin = [ 0.0, 0.0, -0.0 ]
+								angles = [ 0.0, -179.999969, -0.000115 ]
+								do_not_discard = true
+							},
+						]
+						origin = [ 0.0, -0.211056, 69.491768 ]
+						angles = [ -89.999985, 0.0, 0.0 ]
+						do_not_discard = true
+					},
+				]
+			},
+			{
+				_class = "PhysicsBodyMarkupList"
+				children = 
+				[
+					{
+						_class = "PhysicsBodyMarkup"
+						target_body = "Bone001"
+						mass_override = 1.0
+						inertia_scale = 3.0
+						linear_damping = 0.01
+						angular_damping = 1.0
+						use_mass_center_override = false
+						mass_center_override = [ 0.0, 0.0, 0.0 ]
+					},
+					{
+						_class = "PhysicsBodyMarkup"
+						target_body = "Bone007"
+						mass_override = 1.0
+						inertia_scale = 3.0
+						linear_damping = 0.01
+						angular_damping = 1.0
+						use_mass_center_override = false
+						mass_center_override = [ 0.0, 0.0, 0.0 ]
+					},
+					{
+						_class = "PhysicsBodyMarkup"
+						target_body = "Bone008"
+						mass_override = 1.0
+						inertia_scale = 3.0
+						linear_damping = 0.01
+						angular_damping = 1.0
+						use_mass_center_override = false
+						mass_center_override = [ 0.0, 0.0, 0.0 ]
+					},
+					{
+						_class = "PhysicsBodyMarkup"
+						target_body = "Bone009"
+						mass_override = 1.0
+						inertia_scale = 3.0
+						linear_damping = 0.01
+						angular_damping = 1.0
+						use_mass_center_override = false
+						mass_center_override = [ 0.0, 0.0, 0.0 ]
+					},
+					{
+						_class = "PhysicsBodyMarkup"
+						target_body = "Bone010"
+						mass_override = 1.0
+						inertia_scale = 3.0
+						linear_damping = 0.01
+						angular_damping = 1.0
+						use_mass_center_override = false
+						mass_center_override = [ 0.0, 0.0, 0.0 ]
+					},
+					{
+						_class = "PhysicsBodyMarkup"
+						target_body = "Bone011"
+						mass_override = 1.0
+						inertia_scale = 3.0
+						linear_damping = 0.01
+						angular_damping = 1.0
+						use_mass_center_override = false
+						mass_center_override = [ 0.0, 0.0, 0.0 ]
+					},
+					{
+						_class = "PhysicsBodyMarkup"
+						target_body = "Bone002"
+						mass_override = 1.0
+						inertia_scale = 3.0
+						linear_damping = 0.01
+						angular_damping = 1.0
+						use_mass_center_override = false
+						mass_center_override = [ 0.0, 0.0, 0.0 ]
+					},
+					{
+						_class = "PhysicsBodyMarkup"
+						target_body = "Bone003"
+						mass_override = 1.0
+						inertia_scale = 3.0
+						linear_damping = 0.01
+						angular_damping = 1.0
+						use_mass_center_override = false
+						mass_center_override = [ 0.0, 0.0, 0.0 ]
+					},
+					{
+						_class = "PhysicsBodyMarkup"
+						target_body = "Bone004"
+						mass_override = 1.0
+						inertia_scale = 3.0
+						linear_damping = 0.01
+						angular_damping = 1.0
+						use_mass_center_override = false
+						mass_center_override = [ 0.0, 0.0, 0.0 ]
+					},
+					{
+						_class = "PhysicsBodyMarkup"
+						target_body = "Bone005"
+						mass_override = 1.0
+						inertia_scale = 3.0
+						linear_damping = 0.01
+						angular_damping = 1.0
+						use_mass_center_override = false
+						mass_center_override = [ 0.0, 0.0, 0.0 ]
+					},
+					{
+						_class = "PhysicsBodyMarkup"
+						target_body = "Bone012"
+						mass_override = 1.0
+						inertia_scale = 3.0
+						linear_damping = 0.01
+						angular_damping = 1.0
+						use_mass_center_override = false
+						mass_center_override = [ 0.0, 0.0, 0.0 ]
+					},
+					{
+						_class = "PhysicsBodyMarkup"
+						target_body = "Bone006"
+						mass_override = 1.0
+						inertia_scale = 3.0
+						linear_damping = 0.01
+						angular_damping = 1.0
+						use_mass_center_override = false
+						mass_center_override = [ 0.0, 0.0, 0.0 ]
+					},
+				]
+			},
+			{
+				_class = "PhysicsJointList"
+				children = 
+				[
+					{
+						_class = "PhysicsJointWeld"
+						parent_body = "Bone001"
+						child_body = "Bone007"
+						anchor_origin = [ 0.0, 0.0, 0.0 ]
+						anchor_angles = [ 0.0, -179.999969, -0.000115 ]
+						collision_enabled = false
+						linear_freqeuncy = 0.0
+						linear_damping_ratio = 0.0
+						max_force = 0.0
+						angular_frequency = 0.0
+						angular_damping_ratio = 0.0
+						max_torque = 0.0
+					},
+					{
+						_class = "PhysicsJointWeld"
+						parent_body = "Bone007"
+						child_body = "Bone008"
+						anchor_origin = [ 10.43504, -0.000013, 0.000008 ]
+						anchor_angles = [ 0.0, -0.0, 0.000115 ]
+						collision_enabled = false
+						linear_freqeuncy = 0.0
+						linear_damping_ratio = 0.0
+						max_force = 0.0
+						angular_frequency = 0.0
+						angular_damping_ratio = 0.0
+						max_torque = 0.0
+					},
+					{
+						_class = "PhysicsJointWeld"
+						parent_body = "Bone008"
+						child_body = "Bone009"
+						anchor_origin = [ 11.801682, 0.0, 0.0 ]
+						anchor_angles = [ 0.0, 0.0, -0.0 ]
+						collision_enabled = false
+						linear_freqeuncy = 0.0
+						linear_damping_ratio = 0.0
+						max_force = 0.0
+						angular_frequency = 0.0
+						angular_damping_ratio = 0.0
+						max_torque = 0.0
+					},
+					{
+						_class = "PhysicsJointWeld"
+						parent_body = "Bone009"
+						child_body = "Bone010"
+						anchor_origin = [ 9.634693, 0.000001, -0.000004 ]
+						anchor_angles = [ -0.0, 0.0, 0.0 ]
+						collision_enabled = false
+						linear_freqeuncy = 0.0
+						linear_damping_ratio = 0.0
+						max_force = 0.0
+						angular_frequency = 0.0
+						angular_damping_ratio = 0.0
+						max_torque = 0.0
+					},
+					{
+						_class = "PhysicsJointWeld"
+						parent_body = "Bone010"
+						child_body = "Bone011"
+						anchor_origin = [ 11.992495, 0.0, 0.0 ]
+						anchor_angles = [ 0.0, 0.0, -0.0 ]
+						collision_enabled = false
+						linear_freqeuncy = 0.0
+						linear_damping_ratio = 0.0
+						max_force = 0.0
+						angular_frequency = 0.0
+						angular_damping_ratio = 0.0
+						max_torque = 0.0
+					},
+					{
+						_class = "PhysicsJointWeld"
+						parent_body = "Bone001"
+						child_body = "Bone002"
+						anchor_origin = [ 12.189514, -0.000002, 0.0 ]
+						anchor_angles = [ -0.0, 0.0, 0.0 ]
+						collision_enabled = false
+						linear_freqeuncy = 0.0
+						linear_damping_ratio = 0.0
+						max_force = 0.0
+						angular_frequency = 0.0
+						angular_damping_ratio = 0.0
+						max_torque = 0.0
+					},
+					{
+						_class = "PhysicsJointWeld"
+						parent_body = "Bone002"
+						child_body = "Bone003"
+						anchor_origin = [ 10.421341, -0.000005, 0.0 ]
+						anchor_angles = [ -0.0, 0.0, 0.0 ]
+						collision_enabled = false
+						linear_freqeuncy = 0.0
+						linear_damping_ratio = 0.0
+						max_force = 0.0
+						angular_frequency = 0.0
+						angular_damping_ratio = 0.0
+						max_torque = 0.0
+					},
+					{
+						_class = "PhysicsJointWeld"
+						parent_body = "Bone003"
+						child_body = "Bone004"
+						anchor_origin = [ 11.60408, -0.000001, -0.000008 ]
+						anchor_angles = [ -0.0, 0.0, 0.0 ]
+						collision_enabled = false
+						linear_freqeuncy = 0.0
+						linear_damping_ratio = 0.0
+						max_force = 0.0
+						angular_frequency = 0.0
+						angular_damping_ratio = 0.0
+						max_torque = 0.0
+					},
+					{
+						_class = "PhysicsJointWeld"
+						parent_body = "Bone004"
+						child_body = "Bone005"
+						anchor_origin = [ 10.22213, 0.0, 0.000008 ]
+						anchor_angles = [ -0.0, 0.0, 0.0 ]
+						collision_enabled = false
+						linear_freqeuncy = 0.0
+						linear_damping_ratio = 0.0
+						max_force = 0.0
+						angular_frequency = 0.0
+						angular_damping_ratio = 0.0
+						max_torque = 0.0
+					},
+					{
+						_class = "PhysicsJointWeld"
+						parent_body = "Bone011"
+						child_body = "Bone012"
+						anchor_origin = [ 10.426448, 0.000002, 0.000003 ]
+						anchor_angles = [ 0.0, 0.0, -0.0 ]
+						collision_enabled = false
+						linear_freqeuncy = 0.0
+						linear_damping_ratio = 0.0
+						max_force = 0.0
+						angular_frequency = 0.0
+						angular_damping_ratio = 0.0
+						max_torque = 0.0
+					},
+					{
+						_class = "PhysicsJointWeld"
+						parent_body = "Bone005"
+						child_body = "Bone006"
+						anchor_origin = [ 12.974236, 0.0, 0.0 ]
+						anchor_angles = [ -0.0, 0.0, 0.0 ]
+						collision_enabled = false
+						linear_freqeuncy = 0.0
+						linear_damping_ratio = 0.0
+						max_force = 0.0
+						angular_frequency = 0.0
+						angular_damping_ratio = 0.0
+						max_torque = 0.0
+					},
+				]
+			},
+			{
+				_class = "PhysicsShapeList"
+				children = 
+				[
+					{
+						_class = "PhysicsHullFile"
+						name = "Bone001_0_mesh"
+						parent_bone = "Bone001"
+						surface_prop = "default"
+						collision_prop = "default"
+						recenter_on_parent_bone = true
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						filename = "models/nita/shipwreck/metalchain_02_refs/phys/metalchain_02_phy.dmx"
+						import_scale = 1.0
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"Bone001_0_mesh",
+							]
+						}
+					},
+					{
+						_class = "PhysicsHullFile"
+						name = "Bone007_0_mesh"
+						parent_bone = "Bone007"
+						surface_prop = "default"
+						collision_prop = "default"
+						recenter_on_parent_bone = true
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						filename = "models/nita/shipwreck/metalchain_02_refs/phys/metalchain_02_phy.dmx"
+						import_scale = 1.0
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"Bone007_0_mesh",
+							]
+						}
+					},
+					{
+						_class = "PhysicsHullFile"
+						name = "Bone008_0_mesh"
+						parent_bone = "Bone008"
+						surface_prop = "default"
+						collision_prop = "default"
+						recenter_on_parent_bone = true
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						filename = "models/nita/shipwreck/metalchain_02_refs/phys/metalchain_02_phy.dmx"
+						import_scale = 1.0
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"Bone008_0_mesh",
+							]
+						}
+					},
+					{
+						_class = "PhysicsHullFile"
+						name = "Bone009_0_mesh"
+						parent_bone = "Bone009"
+						surface_prop = "default"
+						collision_prop = "default"
+						recenter_on_parent_bone = true
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						filename = "models/nita/shipwreck/metalchain_02_refs/phys/metalchain_02_phy.dmx"
+						import_scale = 1.0
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"Bone009_0_mesh",
+							]
+						}
+					},
+					{
+						_class = "PhysicsHullFile"
+						name = "Bone010_0_mesh"
+						parent_bone = "Bone010"
+						surface_prop = "default"
+						collision_prop = "default"
+						recenter_on_parent_bone = true
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						filename = "models/nita/shipwreck/metalchain_02_refs/phys/metalchain_02_phy.dmx"
+						import_scale = 1.0
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"Bone010_0_mesh",
+							]
+						}
+					},
+					{
+						_class = "PhysicsHullFile"
+						name = "Bone011_0_mesh"
+						parent_bone = "Bone011"
+						surface_prop = "default"
+						collision_prop = "default"
+						recenter_on_parent_bone = true
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						filename = "models/nita/shipwreck/metalchain_02_refs/phys/metalchain_02_phy.dmx"
+						import_scale = 1.0
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"Bone011_0_mesh",
+							]
+						}
+					},
+					{
+						_class = "PhysicsHullFile"
+						name = "Bone002_0_mesh"
+						parent_bone = "Bone002"
+						surface_prop = "default"
+						collision_prop = "default"
+						recenter_on_parent_bone = true
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						filename = "models/nita/shipwreck/metalchain_02_refs/phys/metalchain_02_phy.dmx"
+						import_scale = 1.0
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"Bone002_0_mesh",
+							]
+						}
+					},
+					{
+						_class = "PhysicsHullFile"
+						name = "Bone003_0_mesh"
+						parent_bone = "Bone003"
+						surface_prop = "default"
+						collision_prop = "default"
+						recenter_on_parent_bone = true
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						filename = "models/nita/shipwreck/metalchain_02_refs/phys/metalchain_02_phy.dmx"
+						import_scale = 1.0
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"Bone003_0_mesh",
+							]
+						}
+					},
+					{
+						_class = "PhysicsHullFile"
+						name = "Bone004_0_mesh"
+						parent_bone = "Bone004"
+						surface_prop = "default"
+						collision_prop = "default"
+						recenter_on_parent_bone = true
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						filename = "models/nita/shipwreck/metalchain_02_refs/phys/metalchain_02_phy.dmx"
+						import_scale = 1.0
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"Bone004_0_mesh",
+							]
+						}
+					},
+					{
+						_class = "PhysicsHullFile"
+						name = "Bone005_0_mesh"
+						parent_bone = "Bone005"
+						surface_prop = "default"
+						collision_prop = "default"
+						recenter_on_parent_bone = true
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						filename = "models/nita/shipwreck/metalchain_02_refs/phys/metalchain_02_phy.dmx"
+						import_scale = 1.0
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"Bone005_0_mesh",
+							]
+						}
+					},
+					{
+						_class = "PhysicsHullFile"
+						name = "Bone012_0_mesh"
+						parent_bone = "Bone012"
+						surface_prop = "default"
+						collision_prop = "default"
+						recenter_on_parent_bone = true
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						filename = "models/nita/shipwreck/metalchain_02_refs/phys/metalchain_02_phy.dmx"
+						import_scale = 1.0
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"Bone012_0_mesh",
+							]
+						}
+					},
+					{
+						_class = "PhysicsHullFile"
+						name = "Bone006_0_mesh"
+						parent_bone = "Bone006"
+						surface_prop = "default"
+						collision_prop = "default"
+						recenter_on_parent_bone = true
+						offset_origin = [ 0.0, 0.0, 0.0 ]
+						offset_angles = [ 0.0, 0.0, 0.0 ]
+						filename = "models/nita/shipwreck/metalchain_02_refs/phys/metalchain_02_phy.dmx"
+						import_scale = 1.0
+						faceMergeAngle = 10.0
+						maxHullVertices = 0
+						import_mode = "SingleHull"
+						optimization_algorithm = "QEM"
+						import_filter = 
+						{
+							exclude_by_default = true
+							exception_list = 
+							[
+								"Bone006_0_mesh",
+							]
+						}
+					},
+				]
+			},
+			{
+				_class = "AttachmentList"
+				children = 
+				[
+					{
+						_class = "Attachment"
+						name = "start"
+						parent_bone = "bone006"
+						relative_origin = [ 10.0, 0.0, 0.0 ]
+						relative_angles = [ -0.0, 0.0, 0.0 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+					{
+						_class = "Attachment"
+						name = "end"
+						parent_bone = "bone012"
+						relative_origin = [ 15.0, 0.0, 0.0 ]
+						relative_angles = [ -0.0, -0.0, -0.0 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+				]
+			},
+			{
+				_class = "HitboxSetList"
+				children = 
+				[
+					{
+						_class = "HitboxSet"
+						name = "default"
+						children = 
+						[
+							{
+								_class = "Hitbox"
+								parent_bone = "bone001"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -2.576653, -4.004216, -1.000001 ]
+								hitbox_maxs = [ 12.694427, 4.426325, 1.000005 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "bone002"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -3.509346, -0.788945, -4.215267 ]
+								hitbox_maxs = [ 11.761726, 1.211058, 4.215277 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "bone003"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -2.600349, -4.004211, -0.999994 ]
+								hitbox_maxs = [ 12.670723, 4.426331, 1.000012 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "bone004"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -2.947624, -0.78894, -4.21526 ]
+								hitbox_maxs = [ 12.323463, 1.211062, 4.215284 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "bone005"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -1.922287, -4.004211, -0.999987 ]
+								hitbox_maxs = [ 13.348785, 4.426331, 1.000019 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "bone006"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -3.639709, -0.788941, -4.215253 ]
+								hitbox_maxs = [ 11.631363, 1.211061, 4.215291 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "bone007"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -1.446968, -1.211067, -4.215275 ]
+								hitbox_maxs = [ 13.824116, 0.788949, 4.21527 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "bone008"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -0.625183, -4.426327, -1.00001 ]
+								hitbox_maxs = [ 14.645897, 4.00422, 0.999997 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "bone009"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -1.793392, -1.211064, -4.215283 ]
+								hitbox_maxs = [ 13.477692, 0.788943, 4.215261 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "bone010"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -0.171265, -4.426342, -1.000019 ]
+								hitbox_maxs = [ 15.099815, 4.004205, 0.999987 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "bone011"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -0.916302, -1.21108, -4.215294 ]
+								hitbox_maxs = [ 14.354782, 0.788926, 4.21525 ]
+							},
+							{
+								_class = "Hitbox"
+								parent_bone = "bone012"
+								surface_property = "metal"
+								translation_only = false
+								group_id = 0
+								hitbox_mins = [ -0.085931, -4.426359, -1.00003 ]
+								hitbox_maxs = [ 15.18515, 4.004188, 0.999976 ]
+							},
+						]
+					},
+				]
+			},
+			{
+				_class = "RenderMeshList"
+				children = 
+				[
+					{
+						_class = "RenderMeshFile"
+						name = "metalchain_02_bg_body_lod0"
+						filename = "models/nita/shipwreck/metalchain_02_refs/mesh/metalchain_02_bg_body_lod0.dmx"
+						import_translation = [ 0.0, 0.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
+						import_scale = 1.0
+						align_origin_x_type = "None"
+						align_origin_y_type = "None"
+						align_origin_z_type = "None"
+						parent_bone = ""
+						import_filter = 
+						{
+							exclude_by_default = false
+							exception_list = [  ]
+						}
+					},
+				]
+			},
+			{
+				_class = "AnimationList"
+				children = 
+				[
+					{
+						_class = "AnimFile"
+						name = "idle"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = "bonemask_default"
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/nita/shipwreck/metalchain_02_refs/anim/_idle_0.dmx"
+						start_frame = -1
+						end_frame = -1
+						framerate = 30.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "ragdoll"
+						activity_name = "ACT_DIERAGDOLL"
+						activity_weight = 1
+						weight_list_name = "bonemask_default"
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/nita/shipwreck/metalchain_02_refs/anim/_ragdoll_1.dmx"
+						start_frame = -1
+						end_frame = -1
+						framerate = 30.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "@idle_0"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/nita/shipwreck/metalchain_02_refs/anim/_idle_0.dmx"
+						start_frame = 0
+						end_frame = 1
+						framerate = 30.0
+						reverse = false
+					},
+					{
+						_class = "AnimFile"
+						name = "@ragdoll_1"
+						activity_name = ""
+						activity_weight = 1
+						weight_list_name = ""
+						fade_in_time = 0.2
+						fade_out_time = 0.2
+						looping = false
+						delta = false
+						worldSpace = false
+						hidden = false
+						anim_markup_ordered = false
+						disable_compression = false
+						source_filename = "models/nita/shipwreck/metalchain_02_refs/anim/_ragdoll_1.dmx"
+						start_frame = 0
+						end_frame = 1
+						framerate = 30.0
+						reverse = false
+					},
+				]
+				default_root_bone_name = ""
+			},
+		]
+		model_archetype = ""
+		primary_associated_entity = ""
+		anim_graph_name = ""
+	}
+}

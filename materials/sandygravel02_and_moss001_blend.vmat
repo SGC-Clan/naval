@@ -1,0 +1,43 @@
+// THIS FILE IS AUTO-GENERATED
+
+Layer0
+{
+	shader "blend.vfx"
+
+	//---- Color ----
+	g_flModelTintAmount "1.000"
+	g_vColorTint "[1.000000 1.000000 1.000000 0.000000]"
+
+	//---- Fade ----
+	g_flFadeExponent "1.000"
+
+	//---- Fog ----
+	g_bFogEnabled "1"
+
+	//---- Lighting ----
+	g_flDirectionalLightmapMinZ "0.050"
+	g_flDirectionalLightmapStrength "1.000"
+
+	//---- Mask ----
+	TextureMask "materials/default/default_mask.tga"
+
+	//---- Material A ----
+	g_flMetalnessA "0.000"
+	TextureColorA "materials/SandyGravel02_1K_BaseColor.png"
+	TextureNormalA "materials/SandyGravel02_1K_Normal.png"
+	TextureRoughnessA "materials/SandyGravel02_1K_Roughness.png"
+
+	//---- Material B ----
+	g_flMetalnessB "0.605"
+	g_vTexCoordScale2 "[1.000 1.000]"
+	TextureColorB "materials/Moss001_1K_Color.jpg"
+	TextureNormalB "materials/Moss001_1K_Normal.jpg"
+	TextureRoughnessB "materials/Moss001_1K_Roughness.jpg"
+
+	//---- Texture Coordinates ----
+	g_nScaleTexCoordUByModelScaleAxis "0"
+	g_nScaleTexCoordVByModelScaleAxis "0"
+	g_vTexCoordOffset "[0.000 0.000]"
+	g_vTexCoordScale "[1.000 1.000]"
+	g_vTexCoordScrollSpeed "[0.000 0.000]"
+}

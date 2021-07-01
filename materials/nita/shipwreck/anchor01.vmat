@@ -1,0 +1,13 @@
+// Converted with vmt_to_vmat.py
+
+Layer0
+{
+	shader "vr_complex.vfx"
+
+	TextureColor "materials\nita\shipwreck\anchor01_color.tga"
+	TextureNormal "materials\nita\shipwreck\anchor01_normal.tga"
+	TextureDetail "materials/detail\noise_detail_01.tga"
+	F_DETAIL_TEXTURE 1
+	g_vDetailTexCoordScale "[9.792 9.792]"
+	g_flDetailBlendFactor ".55"
+}

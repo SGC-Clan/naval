@@ -1,0 +1,4 @@
+importfilelist
+{
+	"file"	"materials\nita\shipwreck\wallwebbing_01_tex.vmt"
+}

@@ -1,0 +1,4 @@
+importfilelist
+{
+	"file"	"anchor01_is_unused.vmt"
+}

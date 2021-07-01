@@ -1,0 +1,4 @@
+importfilelist
+{
+	"file"	"barbette1s_is_unused.vmt"
+}

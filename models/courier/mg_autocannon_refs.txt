@@ -1,0 +1,4 @@
+importfilelist
+{
+	"file"	"mg_autocannon_is_unused.vmt"
+}
