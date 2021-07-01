@@ -88,7 +88,7 @@
 
 				if ( attachEnt.IsWorld )
 				{
-					rope.SetPos( 1, attachLocalPos );
+					rope.SetPosition( 1, attachLocalPos );
 				}
 				else
 				{

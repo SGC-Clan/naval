@@ -72,7 +72,7 @@ public partial class PhysGun
 				var physBody = physGroup.GetBody( GrabbedBone );
 				if ( physBody != null )
 				{
-					Beam.SetPos( 1, physBody.Transform.PointToWorld( GrabbedPos ) );
+					Beam.SetPosition( 1, physBody.Transform.PointToWorld( GrabbedPos ) );
 				}
 			}
 			else
@@ -107,12 +107,12 @@ public partial class PhysGun
 		else
 		{
 			lastBeamPos = tr.EndPos;// Vector3.Lerp( lastBeamPos, tr.EndPos, Time.Delta * 10 );
-			Beam.SetPos( 1, lastBeamPos );
+			Beam.SetPosition( 1, lastBeamPos );
 
 			if ( EndNoHit == null )
 				EndNoHit = Particles.Create( "particles/physgun_end_nohit.vpcf", lastBeamPos );
 
-			EndNoHit.SetPos( 0, lastBeamPos );
+			EndNoHit.SetPosition( 0, lastBeamPos );
 		}
 	}
 }

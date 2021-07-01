@@ -42,13 +42,7 @@ public partial class NavalCannonBallProjectile : Prop
 	{
 		Sound.FromWorld( "nvl.cannonball.hitground", Transform.Position );
 
-		Particles.Create( "particles/impact.wood.vpcf", this, "" );
-		Particles.Create( "particles/impact.generic.smokepuff.vpcf", this, "" );
-		Particles.Create( "particles/impact.generic.smokering.vpcf", this, "" );
-		Particles.Create( "particles/impact.generic.vpcf", this, "" );
-		Particles.Create( "particles/naval_gunpowder_smoke.vpcf", this, "" );
-		//Particles.Create( "particles/explosion_fireball.vpcf", this, "" );
-		//Particles.Create( "particles/explosion_flare.vpcf", this, "" );
+		var tempparticle = Particles.Create( "particles/naval_cannonball_hitground.vpcf", this, "" );
 
 		//this.Delete();
 	}

@@ -12,7 +12,7 @@ public partial class Tool
 	public void CreateHitEffects( Vector3 hitPos )
 	{
 		var particle = Particles.Create( "particles/tool_hit.vpcf", hitPos );
-		particle.SetPos( 0, hitPos );
+		particle.SetPosition( 0, hitPos );
 		particle.Destroy( false );
 
 		PlaySound( HitSound.Name );

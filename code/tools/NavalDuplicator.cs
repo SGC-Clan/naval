@@ -63,7 +63,7 @@ namespace Sandbox.Tools
 			TempSavedEntScale = tr.Entity.Scale;
 
 			var particle = Particles.Create( "particles/physgun_freeze.vpcf" );
-			particle.SetPos( 0, tr.Entity.Position );
+			particle.SetPosition( 0, tr.Entity.Position );
 		}
 
 		public void Paste() 

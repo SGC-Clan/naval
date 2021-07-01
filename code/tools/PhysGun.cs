@@ -171,7 +171,7 @@ public partial class PhysGun : Carriable
 			if ( GrabbedEntity.IsValid() )
 			{
 				var freezeEffect = Particles.Create( "particles/physgun_freeze.vpcf" );
-				freezeEffect.SetPos( 0, heldBody.Transform.PointToWorld( GrabbedPos ) );
+				freezeEffect.SetPosition( 0, heldBody.Transform.PointToWorld( GrabbedPos ) );
 			}
 
 			GrabEnd();
