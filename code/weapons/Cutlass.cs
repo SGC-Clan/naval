@@ -71,9 +71,13 @@ partial class Cutlass : Weapon
 		bool hit = false;
 		ViewModelEntity?.SetAnimBool( "Miss", true );
 
-		//World model animation (temp)
+		//World model animations
 		(Owner as AnimEntity)?.SetAnimBool( "hit", true );
 		(Owner as AnimEntity)?.SetAnimFloat( "hit_strenght", 0.5f );
+
+		Random rand = new Random();
+		float RandAttackAnim = (float)rand.Next( 3 );
+		(Owner as AnimEntity)?.SetAnimFloat( "holdtype_attack", RandAttackAnim );
 
 		foreach ( var tr in TraceBullet( Owner.EyePos, Owner.EyePos + forward * 80, 20.0f ) )
 		{
@@ -142,12 +146,8 @@ partial class Cutlass : Weapon
 
 	public override void SimulateAnimator( PawnAnimator anim )
 	{
-		Random random = new Random();
-		int randomSwingAnim = random.Next( 4 );
-
 		anim.SetParam( "holdtype", 4 );
 		anim.SetParam( "holdtype_pose_hand", 0.06f ); //nearly pinched fingers
-		anim.SetParam( "holdtype_attack", randomSwingAnim );
 		anim.SetParam( "aimat_weight", 1.0f );
 
 		//if blocking set animation to 2 handed
