@@ -53,8 +53,14 @@ public partial class BlackpowderCannonEntity : Prop, IUse
 
 		WickSound.Stop();
 
-		Particles.Create( "particles/naval_gunpowder_smoke.vpcf", this, "muzzle" );
-		Particles.Create( "particles/pistol_muzzleflash.vpcf", this, "muzzle" );
+		//Particles.Create( "particles/naval_gunpowder_smoke.vpcf", this, "muzzle" ); //suddenly stoped working.. cool
+		//Particles.Create( "particles/pistol_muzzleflash.vpcf", this, "muzzle" ); // this also is not working
+
+		var PowderSmoke = Particles.Create( "particles/naval_gunpowder_smoke.vpcf", Transform.PointToWorld( new Vector3( 0, -59, 0 ) ) ); // i have to hardcode this now
+		PowderSmoke.SetForward( 0, Transform.NormalToWorld( new Vector3( 0, -1, 0 ) ) );
+
+		var MuzzleFlash = Particles.Create( "particles/pistol_muzzleflash.vpcf", Transform.PointToWorld( new Vector3( 0, -59, 0 ) ) );
+		MuzzleFlash.SetForward( 0, Transform.NormalToWorld( new Vector3( 0, -1, 0 ) ) );
 
 		//new Sandbox.ScreenShake.Perlin( 0.5f, 2.0f, 0.5f );
 

@@ -44,6 +44,6 @@ public partial class NavalCannonBallProjectile : Prop
 
 		var tempparticle = Particles.Create( "particles/naval_cannonball_hitground.vpcf", this, "" );
 
-		//this.Delete();
+		this.Delete();
 	}
 }
