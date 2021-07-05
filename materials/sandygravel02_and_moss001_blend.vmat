@@ -22,13 +22,13 @@ Layer0
 	TextureMask "materials/default/default_mask.tga"
 
 	//---- Material A ----
-	g_flMetalnessA "0.000"
+	g_flMetalnessA "0.395"
 	TextureColorA "materials/SandyGravel02_1K_BaseColor.png"
 	TextureNormalA "materials/SandyGravel02_1K_Normal.png"
 	TextureRoughnessA "materials/SandyGravel02_1K_Roughness.png"
 
 	//---- Material B ----
-	g_flMetalnessB "0.084"
+	g_flMetalnessB "0.533"
 	g_vTexCoordScale2 "[2.000 2.000]"
 	TextureColorB "materials/Moss001_1K_Color.jpg"
 	TextureNormalB "materials/Moss001_1K_Normal.jpg"

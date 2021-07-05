@@ -8,22 +8,38 @@ using System.Threading.Tasks;
 namespace Sandbox
 {
 	[Library]
-	public class SitController : BasePlayerController
+	public class SitController : WalkController
 	{
+		private PhysicsBody SeatBody;
+		private Vector3 GroundLocalPos;
+
 		public override void Simulate()
 		{
-			if ( GroundEntity == null )
-				return;
+			EyePosLocal = Vector3.Up * (EyeHeight * Pawn.Scale);
+			UpdateBBox();
 
-			if ( (GroundEntity as NavalShipController).SeatUser == null )
-				return;
+			EyePosLocal += TraceOffset;
+			EyeRot = Input.Rotation;
 
-			var Seat = (GroundEntity as NavalShipController).SeatUser;
+			SeatBody = (Pawn as NavalPlayer).SitEntity;
 
-			Position = Seat.Position;
-			Rotation = Seat.Rotation;
+			if ( SeatBody == null || Input.Down( InputButton.Use ) ) //when seat is missing or player pressed E button
+			{
+				ExitSeat();
+			}
+			if ( SeatBody != null )
+			{
+				//disarm player that seats
+				Pawn.Inventory.SetActiveSlot( -1, true );
 
-			SetTag( "Sitting" );
+				Position = SeatBody.Transform.PointToWorld( GroundLocalPos ) - SeatBody.Velocity * Time.Delta;
+				Velocity = SeatBody.Velocity;
+			}
+		}
+
+		public void ExitSeat() 
+		{
+			ConsoleSystem.Run( "naval_sit" );
 		}
 
 	}

@@ -146,35 +146,41 @@ namespace naval
 			//Log.Info( $"ent: {ent}" );
 		}
 
+
+		//Toggle player sitting state
 		[ServerCmd( "naval_sit" )]
 		public static void NavalSit()
 		{
 			var player = ConsoleSystem.Caller.Pawn;
 
-			var tr = Trace.Ray( player.EyePos, player.EyePos + player.EyeRot.Forward * 200 )
-				.UseHitboxes()
-				.Ignore( player )
-				.Size( 2 )
-				.Run();
+			if ( (player as NavalPlayer).TimeSinceLastSit > 1f ) {
+				(player as NavalPlayer).TimeSinceLastSit = 0;
 
-			if ( !tr.Entity.IsValid() )
-				return;
+				var tr = Trace.Ray( player.EyePos, player.EyePos + player.EyeRot.Forward * 200 )
+					.UseHitboxes()
+					.Ignore( player )
+					.Size( 2 )
+					.Run();
 
-			if ( player is Player basePlayer )
-			{
-				if ( basePlayer.DevController is SitController )
+				if ( !tr.Body.IsValid() )
+					return;
+
+				if ( player is Player basePlayer )
 				{
-					Log.Info( "Noclip Mode Off" );
-					basePlayer.GroundEntity = null;
-					basePlayer?.SetAnimBool( "b_sit", false );
-					basePlayer.DevController = null;
-				}
-				else
-				{
-					Log.Info( "Noclip Mode On" );
-					basePlayer.GroundEntity = tr.Entity;
-					basePlayer?.SetAnimBool( "b_sit", true );
-					basePlayer.DevController = new SitController();
+					if ( basePlayer.DevController is SitController ) //if player is sitting already - this works as toggle
+					{
+						Log.Info( "Stopped sitting on entity" );
+						( basePlayer as NavalPlayer ).SitEntity = null;
+						basePlayer?.SetAnimBool( "b_sit", false );
+						basePlayer.DevController = null;
+					}
+					else
+					{
+						Log.Info( "Start sitting on entity" );
+						(basePlayer as NavalPlayer).SitEntity = tr.Body;
+						basePlayer?.SetAnimBool( "b_sit", true );
+						basePlayer.DevController = new SitController();
+					}
 				}
 			}
 
