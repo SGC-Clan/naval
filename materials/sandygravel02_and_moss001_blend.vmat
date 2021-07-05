@@ -28,8 +28,8 @@ Layer0
 	TextureRoughnessA "materials/SandyGravel02_1K_Roughness.png"
 
 	//---- Material B ----
-	g_flMetalnessB "0.605"
-	g_vTexCoordScale2 "[1.000 1.000]"
+	g_flMetalnessB "0.084"
+	g_vTexCoordScale2 "[2.000 2.000]"
 	TextureColorB "materials/Moss001_1K_Color.jpg"
 	TextureNormalB "materials/Moss001_1K_Normal.jpg"
 	TextureRoughnessB "materials/Moss001_1K_Roughness.jpg"

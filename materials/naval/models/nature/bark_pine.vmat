@@ -2,7 +2,19 @@
 
 Layer0
 {
-	shader "vr_simple.vfx"
+	shader "tarps.vfx"
+
+	//---- Ambient Occlusion ----
+	TextureAmbientOcclusion "materials/default/default_ao.tga"
+
+	//---- Animation ----
+	AnimationTexture "materials/default/default.tga"
+	AnimationTexture "materials/default/default.tga"
+	FreedomOfMotionTexture "materials/default/default.tga"
+	g_flAmplitude "55.090"
+	g_flSpatialFrequency "0.299"
+	g_flSpeed "0.778"
+	ReverseMotionMask "materials/default/default.tga"
 
 	//---- Color ----
 	g_flModelTintAmount "1.000"
