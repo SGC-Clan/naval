@@ -3,7 +3,7 @@ using Sandbox.Tools;
 
 
 [Library( "nvl_ship_controller", Title = "Ship Controller", Spawnable = true )]
-public partial class NavalShipController : Prop, IUse, IPhysicsUpdate
+public partial class NavalShipController : Prop, IUse
 {
 	public Player SeatUser = null; //player can sit on this entity
 	

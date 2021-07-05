@@ -2,7 +2,7 @@
 using System;
 
 [Library( "ent_drone", Title = "Drone", Spawnable = true )]
-public partial class DroneEntity : Prop, IPhysicsUpdate
+public partial class DroneEntity : Prop
 {
 	public virtual float altitudeAcceleration => 2000;
 	public virtual float movementAcceleration => 5000;

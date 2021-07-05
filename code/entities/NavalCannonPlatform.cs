@@ -3,7 +3,7 @@ using Sandbox.Tools;
 
 
 [Library( "nvl_cannon_platform", Title = "Cannon Platform", Spawnable = true )]
-public partial class CannonPlatformEntity : Prop, IUse, IPhysicsUpdate
+public partial class CannonPlatformEntity : Prop, IUse
 {
 	public PhysicsJoint AttachJoint;
 

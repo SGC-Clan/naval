@@ -3,7 +3,7 @@ using Sandbox.Tools;
 using System.Runtime.CompilerServices;
 
 [Library( "nvl_blackpowder_cannon", Title = "Blackpowder Cannon", Spawnable = true )]
-public partial class BlackpowderCannonEntity : Prop, IUse, IPhysicsUpdate
+public partial class BlackpowderCannonEntity : Prop, IUse
 {
 	public float WickTime = 1.2f; //(seconds) how long the wick burns before shooting the cannonball
 	public float ReloadTime = 4f; //(seconds) how long it takes to reload the cannon

@@ -2,7 +2,7 @@
 using System.Linq;
 
 [Library( "directional_gravity", Title = "Directional Gravity", Spawnable = true )]
-public partial class DirectionalGravity : Prop, IPhysicsUpdate
+public partial class DirectionalGravity : Prop
 {
 	bool enabled = false;
 

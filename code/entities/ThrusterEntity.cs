@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 
 [Library( "ent_thruster" )]
-public partial class ThrusterEntity : Prop, IPhysicsUpdate, IUse
+public partial class ThrusterEntity : Prop, IUse
 {
 	public float Force = 100.0f;
 	public bool Massless = false;

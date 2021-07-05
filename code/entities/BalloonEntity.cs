@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 
 [Library( "ent_balloon", Title = "Balloon", Spawnable = true )]
-public partial class BalloonEntity : Prop, IPhysicsUpdate
+public partial class BalloonEntity : Prop
 {
 	static SoundEvent PopSound = new( "sounds/balloon_pop_cute.vsnd" )
 	{
