@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System;
 
 [Library( "weapon_cutlass", Title = "Sword (Cutlass)", Spawnable = true )]
 partial class Cutlass : Weapon
@@ -7,6 +8,8 @@ partial class Cutlass : Weapon
 
 	public override float PrimaryRate => 0.8f;
 	public override float SecondaryRate => 0.8f;
+
+	public bool IsBlocking = false; 
 
 	public override void Spawn()
 	{
@@ -39,7 +42,11 @@ partial class Cutlass : Weapon
 
 	public override async void AttackPrimary()
 	{
+		IsBlocking = false;
+
 		ViewModelEntity?.SetAnimBool( "AttackPrimary", true );
+
+		(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
 
 		await GameTask.DelayRealtimeSeconds( 0.4f );
 
@@ -125,11 +132,30 @@ partial class Cutlass : Weapon
 	public override void AttackSecondary()
 	{
 		ViewModelEntity?.SetAnimBool( "Block", true );
+		IsBlocking = true;
 	}
 
 	public override bool CanReload()
 	{
 		return false;
+	}
+
+	public override void SimulateAnimator( PawnAnimator anim )
+	{
+		Random random = new Random();
+		int randomSwingAnim = random.Next( 4 );
+
+		anim.SetParam( "holdtype", 4 );
+		anim.SetParam( "holdtype_pose_hand", 0.06f ); //nearly pinched fingers
+		anim.SetParam( "holdtype_attack", randomSwingAnim );
+		anim.SetParam( "aimat_weight", 1.0f );
+
+		//if blocking set animation to 2 handed
+		if ( IsBlocking ) {
+			anim.SetParam( "holdtype_handedness", 0 );
+		} else {
+			anim.SetParam( "holdtype_handedness", 1 );
+		}
 	}
 
 }
