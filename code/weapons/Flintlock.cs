@@ -187,12 +187,20 @@ partial class Flintlock : Weapon
 		Particles.Create( "particles/pistol_muzzleflash.vpcf", this, "muzzle" );
 
 		ViewModelEntity?.SetAnimBool( "shoot", true );
+		(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
 		CrosshairPanel?.OnEvent( "onattack" );
 
 		if ( IsLocalPawn )
 		{
 			new Sandbox.ScreenShake.Perlin( 0.5f, 2.0f, 0.5f );
 		}
+	}
+
+	public override void SimulateAnimator( PawnAnimator anim )
+	{
+		anim.SetParam( "holdtype", 1 );
+		anim.SetParam( "holdtype_pose_hand", 0.06f );
+		anim.SetParam( "aimat_weight", 1.0f );
 	}
 
 }
