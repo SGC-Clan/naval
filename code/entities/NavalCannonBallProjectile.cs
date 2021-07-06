@@ -34,15 +34,48 @@ public partial class NavalCannonBallProjectile : Prop
 	public override void Simulate( Client cl )
 	{
 		base.Simulate( cl );
-		
+
 		//Water level
 	}
 
-	public void ProjectileExplode() 
-	{
-		Sound.FromWorld( "nvl.cannonball.hitground", Transform.Position );
+	[Net]
+	public bool ShouldEmitTrailParticles { get; set; }
 
-		var tempparticle = Particles.Create( "particles/naval_cannonball_hitground.vpcf", this, "" );
+	[Event.Tick]
+	public void OnThink() 
+	{
+		//Client side particle effects
+		if ( IsServer )
+		{
+			ShouldEmitTrailParticles = PhysicsBody.Velocity.Length < 100f ? false : true;
+
+			//water impact effects
+			if ( PhysicsBody.WaterLevel > 0 )
+			{
+				ProjectileExplode( "water" );
+			}
+		}
+		else if ( ShouldEmitTrailParticles ) // if client
+		{
+			Particles.Create( "particles/naval_projectile_small_smoke_trail.vpcf", this, null );
+		}
+
+	}
+
+	public void ProjectileExplode( string type = "normal" ) 
+	{
+
+		switch ( type )
+		{
+			case "water":
+				Sound.FromWorld( "nvl.water.splash", Transform.Position );
+				Particles.Create( "particles/water_splash.vpcf", this, null );
+				break;
+			default:
+				Sound.FromWorld( "nvl.cannonball.hitground", Transform.Position );
+				Particles.Create( "particles/naval_cannonball_hitground.vpcf", this, null );
+				break;
+		}
 
 		this.Delete();
 	}

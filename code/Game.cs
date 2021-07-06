@@ -153,7 +153,7 @@ namespace naval
 		{
 			var player = ConsoleSystem.Caller.Pawn;
 
-			if ( (player as NavalPlayer).TimeSinceLastSit > 1f ) {
+			if ( (player as NavalPlayer).TimeSinceLastSit > 0.5f ) {
 				(player as NavalPlayer).TimeSinceLastSit = 0;
 
 				var tr = Trace.Ray( player.EyePos, player.EyePos + player.EyeRot.Forward * 200 )
@@ -162,19 +162,16 @@ namespace naval
 					.Size( 2 )
 					.Run();
 
-				if ( !tr.Body.IsValid() )
-					return;
-
 				if ( player is Player basePlayer )
 				{
-					if ( basePlayer.DevController is SitController ) //if player is sitting already - this works as toggle
+					if ( basePlayer.DevController is SitController || !tr.Body.IsValid() ) //if player is sitting already - this works as toggle
 					{
 						Log.Info( "Stopped sitting on entity" );
 						( basePlayer as NavalPlayer ).SitEntity = null;
 						basePlayer?.SetAnimBool( "b_sit", false );
 						basePlayer.DevController = null;
 					}
-					else
+					else if ( tr.Body.IsValid() )
 					{
 						Log.Info( "Start sitting on entity" );
 						(basePlayer as NavalPlayer).SitEntity = tr.Body;
