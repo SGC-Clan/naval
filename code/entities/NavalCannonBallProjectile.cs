@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System;
 
 [Library( "nvl_cannon_ball_projectile", Title = "Cannon Ball", Spawnable = false )]
 public partial class NavalCannonBallProjectile : Prop
@@ -44,9 +45,10 @@ public partial class NavalCannonBallProjectile : Prop
 	[Event.Tick]
 	public void OnThink() 
 	{
-		//Client side particle effects
+		
 		if ( IsServer )
 		{
+			//server toggles client side particle effects from
 			ShouldEmitTrailParticles = PhysicsBody.Velocity.Length < 100f ? false : true;
 
 			//water impact effects
@@ -69,14 +71,75 @@ public partial class NavalCannonBallProjectile : Prop
 		{
 			case "water":
 				Sound.FromWorld( "nvl.water.splash", Transform.Position );
-				Particles.Create( "particles/water_splash.vpcf", this, null );
+				Particles.Create( "particles/water_splash_medium.vpcf", Transform.PointToWorld( new Vector3( 0, 0, 10 ) ) );
 				break;
+
 			default:
 				Sound.FromWorld( "nvl.cannonball.hitground", Transform.Position );
 				Particles.Create( "particles/naval_cannonball_hitground.vpcf", this, null );
+				DamageExplosion( 170f, 100f, 1f );
 				break;
 		}
 
 		this.Delete();
+	}
+
+	public void DamageExplosion( float Radius = 150f, float Damage = 30f, float Force = 100f ) {
+
+		var debug = false;
+
+		if ( Radius > 0.0f )
+		{
+			var sourcePos = PhysicsBody.MassCenter;
+			var overlaps = Physics.GetEntitiesInSphere( sourcePos, Radius );
+
+			if ( debug )
+				DebugOverlay.Sphere( sourcePos, Radius, Color.Orange, true, 5 );
+
+			foreach ( var overlap in overlaps )
+			{
+				if ( overlap is not ModelEntity ent || !ent.IsValid() )
+					continue;
+
+				if ( ent.LifeState != LifeState.Alive )
+					continue;
+
+				if ( !ent.PhysicsBody.IsValid() )
+					continue;
+
+				if ( ent.IsWorld )
+					continue;
+
+				var targetPos = ent.PhysicsBody.MassCenter;
+
+				var dist = Vector3.DistanceBetween( sourcePos, targetPos );
+				if ( dist > Radius )
+					continue;
+
+				var tr = Trace.Ray( sourcePos, targetPos )
+					.Ignore( this )
+					.WorldOnly()
+					.Run();
+
+				if ( tr.Fraction < 1.0f )
+				{
+					if ( debug )
+						DebugOverlay.Line( sourcePos, tr.EndPos, Color.Red, 5, true );
+
+					continue;
+				}
+
+				if ( debug )
+					DebugOverlay.Line( sourcePos, targetPos, 5, true );
+
+				var distanceMul = 1.0f - Math.Clamp( dist / Radius, 0.0f, 1.0f );
+				var damage = Damage * distanceMul;
+				var force = (Force * distanceMul) * ent.PhysicsBody.Mass;
+				var forceDir = (targetPos - sourcePos).Normal;
+
+				ent.TakeDamage( DamageInfo.Explosion( sourcePos, forceDir * force, damage )
+					.WithAttacker( this ) );
+			}
+		}
 	}
 }
