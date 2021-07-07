@@ -982,7 +982,7 @@
 		},
 		{
 			_class = "C_OP_BasicMovement"
-			m_fDrag = 0.529
+			m_fDrag = 0.354
 		},
 		{
 			_class = "C_OP_SetFloat"
