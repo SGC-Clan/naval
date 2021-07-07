@@ -29,6 +29,9 @@ public partial class NavalPlayer : Player
 
 	public ICamera LastCamera { get; set; }
 
+	// time since last "FIRE!" scream by the player (when shooting cannons)
+	public TimeSince timeSinceLastFireScream;
+
 	public NavalPlayer()
 	{
 		Inventory = new Inventory( this );

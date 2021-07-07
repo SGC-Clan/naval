@@ -8,7 +8,7 @@ public partial class BlackpowderCannonEntity : Prop, IUse
 	public float WickTime = 1.2f; //(seconds) how long the wick burns before shooting the cannonball
 	public float ReloadTime = 4f; //(seconds) how long it takes to reload the cannon
 	public float RecoilForce = 250f; //(hu) how much kickback should the cannon recieve after each shoot
-	public float ProjectileVelocity = 2000f; //(hu) how much velocity should be applied to cannon ball upon firing
+	public float ProjectileVelocity = 2400f; //(hu) how much velocity should be applied to cannon ball upon firing
 	public bool IsReloaded = true;
 	public Sound WickSound = new Sound();
 	public Entity CannonPlatformParent = null;
@@ -27,16 +27,19 @@ public partial class BlackpowderCannonEntity : Prop, IUse
 
 	public bool OnUse( Entity user )
 	{
-		//I SAY FIRE! FIRE!
-		Sound.FromEntity( "nvl.voice.fire", user );
 
 		if ( IsReloaded == true )
 		{
 			//TEMP set owner is here!
 			Owner = user;
 
-			WickSound = Sound.FromEntity( "nvl.blackpowdercannon.wick", this );
-			Particles.Create( "particles/naval_fuze_sparks.vpcf", this, "spark" );
+			//Player screaming FIRE!
+			if ( (user as NavalPlayer).timeSinceLastFireScream > 8f ) 
+			{
+				(user as NavalPlayer).timeSinceLastFireScream = 0;
+				Sound.FromEntity( "nvl.voice.fire", user );
+			}
+				
 
 			IsReloaded = false;
 
@@ -49,9 +52,16 @@ public partial class BlackpowderCannonEntity : Prop, IUse
 
 	public async void ShootCannonball() 
 	{
+
+		WickSound = Sound.FromEntity( "nvl.blackpowdercannon.wick", this );
+		//Particles.Create( "particles/naval_fuze_sparks.vpcf", this, "spark" ); --attachment does not work, I need to hardcode position
+		Particles.Create( "particles/naval_fuze_sparks.vpcf", Transform.PointToWorld( new Vector3( 0, 33, 14 ) ) );
+
 		await GameTask.DelayRealtimeSeconds( 1.2f );
 
 		WickSound.Stop();
+
+		Sound.FromEntity( "nvl.blackpowdercannon.fire", this );
 
 		//Particles.Create( "particles/naval_gunpowder_smoke.vpcf", this, "muzzle" ); //suddenly stoped working.. cool
 		//Particles.Create( "particles/pistol_muzzleflash.vpcf", this, "muzzle" ); // this also is not working
@@ -63,8 +73,6 @@ public partial class BlackpowderCannonEntity : Prop, IUse
 		MuzzleFlash.SetForward( 0, Transform.NormalToWorld( new Vector3( 0, -1, 0 ) ) );
 
 		//new Sandbox.ScreenShake.Perlin( 0.5f, 2.0f, 0.5f );
-
-		Sound.FromEntity( "nvl.blackpowdercannon.fire", this );
 
 		// Create the cannon ball entity
 
