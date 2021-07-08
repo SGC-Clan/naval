@@ -42,9 +42,9 @@ namespace naval.Teams
 			Money.Text = "💰 " + "3371";
 
 
+			Health.Style.Set( $"background: linear-gradient(to left, red " + HealthRemainder + 3 + "%, rgba( #222, 0.3 )" + HealthRemainder + "%);" );
+			Stamina.Style.Set( $"background: linear-gradient(to left, blue " + StaminaRemainder + 3 + "%, rgba( #222, 0.3 )" + StaminaRemainder + "%);" );
 
-			Health.Style.Set( $"background: linear-gradient(to right, red " + player.Health.CeilToInt() + "%, 0%, rgba( #222, 0.3 )" + HealthRemainder + "%);" );
-			Stamina.Style.Set( $"background: linear-gradient(to right, blue " + StaminaTemp + "%, 0%, rgba( #222, 0.3 )" + StaminaRemainder + "%);" );
 
 			Team.Text = player.Team.TeamName;
 			Team.Style.Set( $"color: blue;" );
