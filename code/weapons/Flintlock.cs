@@ -79,6 +79,11 @@ partial class Flintlock : Weapon
 			//make a bulletpass sound
 			Sound.FromWorld( "nvl.bulletpass", tr.EndPos );
 
+			//custom bullet tracer effects
+			var tracer = Particles.Create( "particles/naval_hitscan_projectile_small.vpcf", this, "muzzle" );
+			//tracer.SetPosition( 0, tr.StartPos );
+			tracer.SetPosition( 1, tr.EndPos );
+
 			tr.Surface.DoBulletImpact( tr );
 
 			if ( !IsServer ) continue;
@@ -96,6 +101,7 @@ partial class Flintlock : Weapon
 
 				tr.Entity.TakeDamage( damage );
 			}
+
 		}
 	}
 

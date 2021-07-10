@@ -3,14 +3,15 @@
 [Library( "ent_thruster" )]
 public partial class ThrusterEntity : Prop, IUse
 {
-	public float Force = 100.0f;
+	public float Force = 1000.0f;
 	public bool Massless = false;
 	public PhysicsBody TargetBody;
 
 	[Net]
 	public bool Enabled { get; set; } = true;
 
-	public virtual void OnPostPhysicsStep( float dt )
+	[Event.Physics.PostStep]
+	public virtual void OnPostPhysicsStep()
 	{
 		if ( IsServer && Enabled )
 		{

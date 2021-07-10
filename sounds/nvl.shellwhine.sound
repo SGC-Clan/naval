@@ -4,17 +4,13 @@
 	{
 		sounds = 
 		[
-			"sounds/water_splash_01.vsnd",
-			"sounds/water_splash_02.vsnd",
-			"sounds/water_splash_03.vsnd",
-			"sounds/water_splash_04.vsnd",
-			"sounds/water_splash_05.vsnd",
+			"sounds/shellwhine.vsnd",
 		]
 		UI = false
 		Volume = 1.0
 		VolumeRandom = 0.0
 		Pitch = 1.0
 		PitchRandom = 0.0
-		DistanceMax = 2000.0
+		DistanceMax = 6000.0
 	}
 }

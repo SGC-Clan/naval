@@ -18,6 +18,8 @@ public partial class NavalTurretBase : Prop, IUse
 	public float Yaw = 55f % 360.0f;
 	public float ShootInterval = 1.2f; //(seconds) delay between shots
 	public float ReloadTime = 4f; //(seconds) how long it takes to reload the turret
+	public bool Fire = false; //toggle turret shooting 
+	public float FuzeDelay = 0.1f; //(seconds) how much time should pass between igniting the fuze and firing
 	public float RecoilForce = 100f; //(hu) how much kickback should the cannon recieve after each shoot
 	public float ProjectileVelocity = 5000f; //(hu) how much velocity should be applied to cannon ball upon firing
 	public bool IsReloaded = true;
@@ -25,7 +27,7 @@ public partial class NavalTurretBase : Prop, IUse
 	{
 		base.Spawn();
 
-		SetModel( "models/courier/88skc30tur.vmdl" );
+		SetModel( "models/courier/88skc30.vmdl" );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
 	}
 
@@ -42,11 +44,9 @@ public partial class NavalTurretBase : Prop, IUse
 			//TEMP set owner is here!
 			Owner = user;
 
-			Particles.Create( "particles/naval_fuze_sparks.vpcf", this, "spark" );
-
 			IsReloaded = false;
 
-			ShootCannonball();
+			ShootProjectile();
 			
 		}
 
@@ -57,71 +57,87 @@ public partial class NavalTurretBase : Prop, IUse
 	public void OnFrame()
 	{
 
-		Yaw += 10.0f * Time.Delta;
-		Yaw %= 360.0f;
+		// ==== Turret Bone Animations ====
 
-		Pitch += (float)Math.Sin( Time.Delta  ) * 100.0f;
-		Pitch %= 360.0f;
+		//Yaw += 10.0f * Time.Delta;
+		//Yaw %= 360.0f;
+
+		//Pitch += (float)Math.Sin( Time.Delta  ) * 100.0f;
+		//Pitch %= 360.0f;
 
 		// Modify Yaw
-		string YawBoneID = "joint2"; // turret bearing
-		Vector3 YawBoneOffset = Transform.PointToWorld( TurretBones[1] );
+		//string YawBoneID = "joint2"; // turret bearing
+		//Vector3 YawBoneOffset = Transform.PointToWorld( TurretBones[1] );
 
-		var transform = new Transform( YawBoneOffset, Rotation.From( new Angles( 0, Yaw, 90 ) ) , 1 );
-		SetBoneTransform( YawBoneID, transform );
+		//var transform = new Transform( YawBoneOffset, Rotation.From( new Angles( 0, Yaw, 90 ) ) , 1 );
+		//SetBoneTransform( YawBoneID, transform );
 
 		// Modify Pitch
-		string PitchBoneID = "joint3"; // turret elevation
-		Vector3 PitchBoneOffset = Transform.PointToWorld( TurretBones[2] );
+		//string PitchBoneID = "joint3"; // turret elevation
+		//Vector3 PitchBoneOffset = Transform.PointToWorld( TurretBones[2] );
 
-		transform = new Transform( PitchBoneOffset, Rotation.From( new Angles( Pitch, 0, 0 ) ), 1 );
-		SetBoneTransform( PitchBoneID, transform );
+		//transform = new Transform( PitchBoneOffset, Rotation.From( new Angles( Pitch, 0, 0 ) ), 1 );
+		//SetBoneTransform( PitchBoneID, transform );
 
 		// Modify Recoil
 		//int boneID = 3; //joint4 - turret recoil animation
 	}
 
-	public async void ShootCannonball() 
+	[Event.Tick]
+	public void OnTick()
 	{
-		//await GameTask.DelayRealtimeSeconds( 1.2f );
+	
+	}
+
+	public async void ShootProjectile() 
+	{
+
+		if ( FuzeDelay > 0f ) 
+		{
+			await GameTask.DelayRealtimeSeconds( FuzeDelay );
+		}
 
 		//Particles.Create( "particles/naval_gunpowder_smoke.vpcf", this, "muzzle" ); //suddenly stoped working.. cool
 		//Particles.Create( "particles/pistol_muzzleflash.vpcf", this, "muzzle" ); // this also is not working
 
-		var PowderSmoke = Particles.Create( "particles/naval_gunpowder_smoke.vpcf", Transform.PointToWorld( new Vector3( 0, -59, 0 ) ) ); // i have to hardcode this now
-		PowderSmoke.SetForward( 0, Transform.NormalToWorld( new Vector3( 0, -1, 0 ) ) );
+		var PowderSmoke = Particles.Create( "particles/naval_fire_effects_medium.vpcf", Transform.PointToWorld( new Vector3( 110, 0, 66 ) ) ); // i have to hardcode this now
+		PowderSmoke.SetForward( 0, Transform.NormalToWorld( new Vector3( 1, 0, 0 ) ) );
 
-		var MuzzleFlash = Particles.Create( "particles/pistol_muzzleflash.vpcf", Transform.PointToWorld( new Vector3( 0, -59, 0 ) ) );
-		MuzzleFlash.SetForward( 0, Transform.NormalToWorld( new Vector3( 0, -1, 0 ) ) );
+		var MuzzleFlash = Particles.Create( "particles/pistol_muzzleflash.vpcf", Transform.PointToWorld( new Vector3( 110, 0, 66 ) ) );
+		MuzzleFlash.SetForward( 0, Transform.NormalToWorld( new Vector3( 1, 0, 0 ) ) );
+
+		//empty shell
+		var EmptyShell = Particles.Create( "particles/naval_empty_shell_medium.vpcf", Transform.PointToWorld( new Vector3( -50, 0, 66 ) ) );
+		EmptyShell.SetForward( 0, Transform.NormalToWorld( new Vector3( -1, 0, 0 ) ) );
 
 		//new Sandbox.ScreenShake.Perlin( 0.5f, 2.0f, 0.5f );
 
-		Sound.FromEntity( "nvl.blackpowdercannon.fire", this );
+		Sound.FromEntity( "nvl.deckgun_fire", this ); 
 
 		// Create the cannon ball entity
 
 		//var ShootPos = this.GetAttachment( "muzzle" ).Position; // TO:DO  Oh my fuckin god, API has changed I have no idea how to Fix IT!
 		//var ShootAngle = this.GetAttachment( "muzzle" ).Rotation; // TO:DO  -||-
 
-		var ShootPos = Transform.PointToWorld( new Vector3( 0 , -59, 0 ) ); //I had to hardcode positions for now since I cant just use an attachment as reference.. 
-		var ShootAngle = Transform.RotationToWorld( Rotation.From( new Angles( 180f, 0, 180f )  ) );
+		var ShootPos = Transform.PointToWorld( new Vector3( 110, 0, 66 ) ); //I had to hardcode positions for now since I cant just use an attachment as reference.. 
+		var ShootAngle = Transform.RotationToWorld( Rotation.From( new Angles( 0, 0, 0 )  ) );
 		var ProjScale = Scale;
 
-		var ent = new NavalCannonBallProjectile
+		var ent = new NavalProjectileBase
 		{
 			Position = ShootPos,
 			Rotation = ShootAngle,
 			Scale = ProjScale,
+			Owner = Owner,
 		};
-		ent.SetModel( "models/naval/props/props/cball.vmdl" );
+		ent.SetModel( "models/naval/weapons/shell2.vmdl" );
 		//ent.Velocity += ent.Transform.NormalToWorld( new Vector3( ProjectileVelocity, 0, 0 ) ); // this was working when GetAttachment() was also working correctly
-		ent.Velocity += ent.Transform.NormalToWorld( new Vector3( 0, ProjectileVelocity, 0 ) );
-		Particles.Create( "particles/dev/dev_snapshot_preview_trails_skinned.vpcf", this, null );
+		ent.Velocity += Transform.NormalToWorld( new Vector3( ProjectileVelocity, 0, 0 ) );
 
 		ent.CannonParent = this;
 
 		//recoil
-		this.Velocity += this.Transform.NormalToWorld( new Vector3(0, RecoilForce, 0) );
+		this.Velocity += this.Transform.NormalToWorld( new Vector3( -RecoilForce, 0, 0) );
 		//screen shake
 		if ( IsLocalPawn )
 		{

@@ -47,9 +47,9 @@
 						//target.Weld( rootProp ); //this is actually a parent, not traditional weld 
 						// Lets use physical constraint, buoyeancy works much better with this
 						var ConstraintWeld = PhysicsJoint.Weld
-							.From( target.PhysicsBody )
-							.To( tr.Body )
-							.WithPivot( tr.EndPos )
+							.From( tr.Body )
+							.To( target.PhysicsBody, tr.Body.Transform.PointToLocal( tr.Body.Position ), target.PhysicsBody.Transform.RotationToLocal( tr.Body.Rotation ) )
+							.WithCollisionsEnabled()
 							.Create();
 
 						target = null;

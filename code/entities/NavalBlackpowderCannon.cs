@@ -92,7 +92,6 @@ public partial class BlackpowderCannonEntity : Prop, IUse
 		ent.SetModel( "models/naval/props/props/cball.vmdl" );
 		//ent.Velocity += ent.Transform.NormalToWorld( new Vector3( ProjectileVelocity, 0, 0 ) ); // this was working when GetAttachment() was also working correctly
 		ent.Velocity += ent.Transform.NormalToWorld( new Vector3( 0, ProjectileVelocity, 0 ) );
-		Particles.Create( "particles/dev/dev_snapshot_preview_trails_skinned.vpcf", this, null );
 
 		ent.CannonParent = this;
 

@@ -1,22 +1,33 @@
 ﻿using Sandbox;
 using System;
 
-[Library( "nvl_cannon_ball_projectile", Title = "Cannon Ball", Spawnable = false )]
-public partial class NavalCannonBallProjectile : Prop
+[Library( "nvl_projectile_base", Title = "Naval Projectile", Spawnable = false )]
+public partial class NavalProjectileBase : Prop
 {
 	public Prop CannonParent = null; //a cannon this projectile originated from
+	public Particles GlowEffect = null;
+	public Sound ShellWhine;
 
 	public override void Spawn()
 	{
 		base.Spawn();
 
-		SetModel( "models/naval/props/props/cball.vmdl" );
+		SetModel( "models/naval/weapons/shell2.vmdl" );
 		//SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
+
+		//particle glow
+		GlowEffect = Particles.Create( "particles/naval_projectile_glow.vpcf", this, null );
+		GlowEffect.SetEntity(0, this, true);
+
+		//shell whine
+		//ShellWhine = Sound.FromWorld( "sounds/nvl.shellwhine.sound", Position );
+
+		DebugOverlay.Sphere( Position, 100, Color.Magenta );
 	}
 
 	protected override void OnPhysicsCollision( CollisionEventData eventData )
 	{
-		if ( eventData.Speed > 550f && eventData.Entity != CannonParent )
+		if ( eventData.Entity != CannonParent ) //eventData.Speed > 550f 
 		{
 			//simple explosion damage to hit entity
 			if ( eventData.Entity.IsValid() )
@@ -59,7 +70,7 @@ public partial class NavalCannonBallProjectile : Prop
 		}
 		else if ( ShouldEmitTrailParticles ) // if client
 		{
-			Particles.Create( "particles/naval_projectile_small_smoke_trail.vpcf", this, null );
+			//Particles.Create( "particles/naval_projectile_small_smoke_trail.vpcf", this, null );
 		}
 
 	}
@@ -78,7 +89,7 @@ public partial class NavalCannonBallProjectile : Prop
 
 			default:
 				Sound.FromWorld( "nvl.cannonball.hitground", Transform.Position );
-				Particles.Create( "particles/naval_cannonball_hitground.vpcf", this, null );
+				Particles.Create( "particles/naval_projectile_explosion_medium.vpcf", this, null );
 				DamageExplosion( 170f, 100f, 10f );
 				break;
 		}
@@ -144,4 +155,16 @@ public partial class NavalCannonBallProjectile : Prop
 			}
 		}
 	}
+
+	protected override void OnDestroy()
+	{
+		base.OnDestroy();
+
+		if ( GlowEffect != null )
+			GlowEffect.Destroy( true );
+
+		//ShellWhine.Stop();
+
+	}
+
 }
