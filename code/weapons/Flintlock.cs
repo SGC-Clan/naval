@@ -80,9 +80,8 @@ partial class Flintlock : Weapon
 			Sound.FromWorld( "nvl.bulletpass", tr.EndPos );
 
 			//custom bullet tracer effects
-			var tracer = Particles.Create( "particles/naval_hitscan_projectile_small.vpcf", this, "muzzle" );
-			//tracer.SetPosition( 0, tr.StartPos );
-			tracer.SetPosition( 1, tr.EndPos );
+			//var tracer = Particles.Create( "particles/naval_hitscan_projectile_small.vpcf", this, "muzzle" );
+			//tracer.SetPosition( 1, tr.EndPos );
 
 			tr.Surface.DoBulletImpact( tr );
 

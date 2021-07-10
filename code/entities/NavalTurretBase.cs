@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 [Library( "nvl_turret_base", Title = "Naval Turret Example", Spawnable = true )]
 public partial class NavalTurretBase : Prop, IUse
 {
+	public TimeSince UseDelay;
 	public Vector3 TargetPos = new Vector3( 1000,5000,0 ); //at what position should turret rotate towards
 	public readonly Vector3[] TurretBones = new Vector3[] //array storing original model bone positions so we can transform them
 	{
@@ -38,20 +39,36 @@ public partial class NavalTurretBase : Prop, IUse
 
 	public bool OnUse( Entity user )
 	{
-
-		if ( IsReloaded == true )
+		//use delay
+		if ( UseDelay < 1f )
 		{
-			//TEMP set owner is here!
-			Owner = user;
-
-			IsReloaded = false;
-
-			ShootProjectile();
-			
+			UseDelay = 0;
+			return false;
 		}
+
+		//Toggle Fire 
+		Fire = !Fire;
 
 		return false;
 	}
+
+
+	[Event.Tick]
+	public void OnTick()
+	{
+		//Shoot as soon as Fire is True
+		if ( Fire == true )
+		{
+			if ( IsReloaded == true )
+			{
+				IsReloaded = false;
+
+				ShootProjectile();
+
+			}
+		}
+	}
+
 
 	[Event.Frame]
 	public void OnFrame()
@@ -81,12 +98,6 @@ public partial class NavalTurretBase : Prop, IUse
 
 		// Modify Recoil
 		//int boneID = 3; //joint4 - turret recoil animation
-	}
-
-	[Event.Tick]
-	public void OnTick()
-	{
-	
 	}
 
 	public async void ShootProjectile() 
@@ -145,7 +156,7 @@ public partial class NavalTurretBase : Prop, IUse
 		}
 
 		// Reload
-		await GameTask.DelayRealtimeSeconds( 2f );
+		await GameTask.DelayRealtimeSeconds( ReloadTime );
 
 		Sound.FromEntity( "nvl.blackpowdercannon.reload", this );
 		IsReloaded = true;

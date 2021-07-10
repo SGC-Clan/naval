@@ -70,7 +70,7 @@ public partial class NavalProjectileBase : Prop
 		}
 		else if ( ShouldEmitTrailParticles ) // if client
 		{
-			//Particles.Create( "particles/naval_projectile_small_smoke_trail.vpcf", this, null );
+			Particles.Create( "particles/naval_projectile_small_smoke_trail.vpcf", this, null );
 		}
 
 	}
