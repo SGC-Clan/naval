@@ -13,19 +13,11 @@ public partial class NavalPlayer : Player
 
 	private DamageInfo lastDamage;
 
-	[Net]
-	public PawnController SitController { get; set; }
-	// entity that player sits on
-	public PhysicsBody SitEntity;
-
-	// time since last sitting attempt 
-	public TimeSince TimeSinceLastSit;
-
-	[Net]
-	public Camera VehicleCamera { get; set; }
-
-	[Net]
-	public PawnAnimator VehicleAnimator { get; set; }
+	// For vehicles
+	[Net] public PawnController VehicleController { get; set; }
+	[Net] public ICamera VehicleCamera { get; set; }
+	[Net] public Entity Vehicle { get; set; }
+	[Net] public ICamera MainCamera { get; set; }
 
 	public ICamera LastCamera { get; set; }
 
@@ -110,17 +102,22 @@ public partial class NavalPlayer : Player
 
 	public override PawnController GetActiveController()
 	{
+		if ( VehicleController != null ) return VehicleController;
 		if ( DevController != null ) return DevController;
-		if ( SitController != null ) return SitController;
 
 		return base.GetActiveController();
 	}
 
 	public override PawnAnimator GetActiveAnimator()
 	{
-		if ( VehicleAnimator != null ) return VehicleAnimator;
-
 		return base.GetActiveAnimator();
+	}
+
+	public ICamera GetActiveCamera()
+	{
+		if ( VehicleCamera != null ) return VehicleCamera;
+
+		return MainCamera;
 	}
 
 	public override void Simulate( Client cl )
