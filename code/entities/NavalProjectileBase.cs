@@ -81,16 +81,20 @@ public partial class NavalProjectileBase : Prop
 		switch ( type )
 		{
 			case "water":
-				Sound.FromWorld( "nvl.water.splash", Transform.Position ); 
+				Sound.FromWorld( "nvl.explosion.water", Transform.Position ); 
 				Particles.Create( "particles/water_splash_medium.vpcf", Transform.PointToWorld( new Vector3( 0, 0, 10 ) ) );
 				Particles.Create( "particles/water_splash_medium.vpcf", this, null );
 				DamageExplosion( 120f, 50f, 5f );
+				//distant sound
+				Sound.FromWorld( "nvl.distant.explosion.water", Transform.Position );
 				break;
 
 			default:
-				Sound.FromWorld( "nvl.cannonball.hitground", Transform.Position );
+				Sound.FromWorld( "nvl.explosion.medium", Transform.Position );
 				Particles.Create( "particles/naval_projectile_explosion_medium.vpcf", this, null );
 				DamageExplosion( 170f, 100f, 10f );
+				//distant sound
+				Sound.FromWorld( "nvl.distant.explosion", Transform.Position );
 				break;
 		}
 
