@@ -193,7 +193,7 @@ partial class Flintlock : Weapon
 
 		ViewModelEntity?.SetAnimBool( "shoot", true );
 		(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
-		CrosshairPanel?.OnEvent( "onattack" );
+		//CrosshairPanel?.OnEvent( "onattack" );
 
 		if ( IsLocalPawn )
 		{

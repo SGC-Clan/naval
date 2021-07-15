@@ -7,6 +7,7 @@ public partial class NavalProjectileBase : Prop
 	public Prop CannonParent = null; //a cannon this projectile originated from
 	public Particles GlowEffect = null;
 	public Sound ShellWhine;
+	public Vector3 LastPosition;
 
 	public override void Spawn()
 	{
@@ -21,8 +22,6 @@ public partial class NavalProjectileBase : Prop
 
 		//shell whine
 		//ShellWhine = Sound.FromWorld( "sounds/nvl.shellwhine.sound", Position );
-
-		DebugOverlay.Sphere( Position, 100, Color.Magenta );
 	}
 
 	protected override void OnPhysicsCollision( CollisionEventData eventData )
@@ -67,29 +66,41 @@ public partial class NavalProjectileBase : Prop
 			{
 				ProjectileExplode( "water" );
 			}
+
+			//when projectile is not moving at all we should consider it a dud
+			if ( IsNotMoving() )
+			{
+				ProjectileExplode( "dud" );
+			}
 		}
 		else if ( ShouldEmitTrailParticles ) // if client
 		{
-			Particles.Create( "particles/naval_projectile_small_smoke_trail.vpcf", this, null );
+			//Particles.Create( "particles/naval_projectile_small_smoke_trail.vpcf", this, null );
 		}
 
 	}
 
 	public void ProjectileExplode( string type = "normal" ) 
 	{
+		var waterSurface = MoveToWaterSurface(Position);  
 
 		switch ( type )
 		{
-			case "water":
+			case "water": //when projectile hits water
 				Sound.FromWorld( "nvl.explosion.water", Transform.Position ); 
-				Particles.Create( "particles/water_splash_medium.vpcf", Transform.PointToWorld( new Vector3( 0, 0, 10 ) ) );
-				Particles.Create( "particles/water_splash_medium.vpcf", this, null );
-				DamageExplosion( 120f, 50f, 5f );
+				Particles.Create( "particles/water_splash_medium.vpcf", Transform.PointToWorld( new Vector3( 0, 0, 0 ) ) );
+				DamageExplosion( 120f, 50f, 7f );
 				//distant sound
 				Sound.FromWorld( "nvl.distant.explosion.water", Transform.Position );
 				break;
 
-			default:
+			case "dud": //when projectile is a dud (its velocity is suddenly at near 0)
+				//Sound.FromWorld( "nvl.cannonball.hitground", Transform.Position );
+				Particles.Create( "particles/impact.generic.vpcf", this, null );
+				DamageExplosion( 50f, 30f, 5f );
+				break;
+
+			default: //when projectile explodes on impact
 				Sound.FromWorld( "nvl.explosion.medium", Transform.Position );
 				Particles.Create( "particles/naval_projectile_explosion_medium.vpcf", this, null );
 				DamageExplosion( 170f, 100f, 10f );
@@ -169,6 +180,22 @@ public partial class NavalProjectileBase : Prop
 
 		//ShellWhine.Stop();
 
+	}
+
+	public bool IsNotMoving() 
+	{
+
+		if ( Position == LastPosition )
+			return true;
+
+		LastPosition = Position;
+		return false;
+	}
+
+	public Vector3 MoveToWaterSurface( Vector3 Point ) 
+	{
+
+		return Point;
 	}
 
 }

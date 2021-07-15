@@ -52,7 +52,7 @@ public partial class SpawnMenu : Panel
 						var button = list.Add.Button( entry.Title );
 						button.SetClass( "active", entry.Name == ConsoleSystem.GetValue( "tool_current" ) );
 
-						button.AddEvent( "onclick", () =>
+						button.AddEventListener( "onclick", () =>
 						{
 							ConsoleSystem.Run( "tool_current", entry.Name );
 							ConsoleSystem.Run( "inventory_current", "weapon_tool" );

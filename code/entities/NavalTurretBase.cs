@@ -19,10 +19,11 @@ public partial class NavalTurretBase : Prop, IUse
 	public float Yaw = 55f % 360.0f;
 	public float ShootInterval = 1.2f; //(seconds) delay between shots
 	public float ReloadTime = 4f; //(seconds) how long it takes to reload the turret
-	public bool Fire = false; //toggle turret shooting 
+	public bool Fire; //toggle turret shooting 
 	public float FuzeDelay = 0.1f; //(seconds) how much time should pass between igniting the fuze and firing
 	public float RecoilForce = 100f; //(hu) how much kickback should the cannon recieve after each shoot
 	public float ProjectileVelocity = 5000f; //(hu) how much velocity should be applied to cannon ball upon firing
+	public float ProjectileSpread = 14f; //(degrees) how inaccurate is the turret when firing
 	public bool IsReloaded = true;
 	public override void Spawn()
 	{
@@ -123,23 +124,26 @@ public partial class NavalTurretBase : Prop, IUse
 
 		//new Sandbox.ScreenShake.Perlin( 0.5f, 2.0f, 0.5f );
 
-		Sound.FromEntity( "nvl.deckgun_fire", this ); 
+		Sound.FromEntity( "nvl.deckgun_fire", this );
 
-		// Create the cannon ball entity
+
 
 		//var ShootPos = this.GetAttachment( "muzzle" ).Position; // TO:DO  Oh my fuckin god, API has changed I have no idea how to Fix IT!
 		//var ShootAngle = this.GetAttachment( "muzzle" ).Rotation; // TO:DO  -||-
 
 		var ShootPos = Transform.PointToWorld( new Vector3( 110, 0, 66 ) ); //I had to hardcode positions for now since I cant just use an attachment as reference.. 
 		var ShootAngle = Transform.RotationToWorld( Rotation.From( new Angles( 0, 0, 0 )  ) );
+		ShootAngle *= Rotation.From( Rand.Float( -ProjectileSpread, ProjectileSpread ), Rand.Float( -ProjectileSpread, ProjectileSpread ), Rand.Float( -ProjectileSpread, ProjectileSpread ) );
 		var ProjScale = Scale;
 
+		// Create the projectile entity
 		var ent = new NavalProjectileBase
 		{
 			Position = ShootPos,
 			Rotation = ShootAngle,
 			Scale = ProjScale,
 			Owner = Owner,
+			LastPosition = Position,
 		};
 		ent.SetModel( "models/naval/weapons/shell2.vmdl" );
 		//ent.Velocity += ent.Transform.NormalToWorld( new Vector3( ProjectileVelocity, 0, 0 ) ); // this was working when GetAttachment() was also working correctly
