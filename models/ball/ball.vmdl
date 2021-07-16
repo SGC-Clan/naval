@@ -29,7 +29,7 @@
 					{
 						_class = "PhysicsShapeSphere"
 						parent_bone = ""
-						surface_prop = "rubber"
+						surface_prop = "flesh"
 						collision_prop = "default"
 						radius = 10.0
 						center = [ 0.0, 0.0, 0.0 ]
@@ -44,7 +44,7 @@
 						_class = "RenderPrimitiveSphere"
 						name = "ball"
 						parent_bone = ""
-						material_name = "materials/shiny_white.vmat"
+						material_name = "models/citizen/skin/citizen_skin.vmat"
 						origin = [ 0.0, 0.0, 0.0 ]
 						angles = [ 0.0, 0.0, 0.0 ]
 						max_u = 1.0
