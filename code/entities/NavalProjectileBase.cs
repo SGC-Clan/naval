@@ -4,6 +4,7 @@ using System;
 [Library( "nvl_projectile_base", Title = "Naval Projectile", Spawnable = false )]
 public partial class NavalProjectileBase : Prop
 {
+	public float ProjectileSize = 3f;
 	public Prop CannonParent = null; //a cannon this projectile originated from
 	public Particles GlowEffect = null;
 	public Sound ShellWhine;
@@ -13,7 +14,7 @@ public partial class NavalProjectileBase : Prop
 	{
 		base.Spawn();
 
-		SetModel( "models/naval/weapons/shell2.vmdl" );
+		SetModel( "models/naval/weapons/shell.vmdl" );
 		//SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
 
 		//particle glow
@@ -22,6 +23,9 @@ public partial class NavalProjectileBase : Prop
 
 		//shell whine
 		//ShellWhine = Sound.FromWorld( "sounds/nvl.shellwhine.sound", Position );
+
+		//projectile size
+		Scale = ProjectileSize;
 	}
 
 	protected override void OnPhysicsCollision( CollisionEventData eventData )
@@ -75,7 +79,7 @@ public partial class NavalProjectileBase : Prop
 		}
 		else if ( ShouldEmitTrailParticles ) // if client
 		{
-			//Particles.Create( "particles/naval_projectile_small_smoke_trail.vpcf", this, null );
+			Particles.Create( "particles/naval_projectile_small_smoke_trail.vpcf", this, null );
 		}
 
 	}
