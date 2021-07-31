@@ -7,6 +7,9 @@ public partial class CannonPlatformEntity : Prop, IUse
 {
 	public PhysicsJoint AttachJoint;
 
+	public float AimPitch = 0;
+	public float AimYaw = 0;
+
 	public Entity ConnectedCannon = null;
 	public override void Spawn()
 	{
@@ -22,7 +25,7 @@ public partial class CannonPlatformEntity : Prop, IUse
 		{
 			var Cannon = eventData.Entity;
 			//cordinates from sent_platform.lua
-			Cannon.Position = Transform.PointToWorld( new Vector3( 0, -25.2f, 41.3f ) ); ;
+			Cannon.Position = Transform.PointToWorld( new Vector3( 0, -25.2f, 41.3f ) );
 			Cannon.Rotation = Transform.Rotation;
 
 			// !! this acts as nocolide! what the hell!
@@ -35,11 +38,27 @@ public partial class CannonPlatformEntity : Prop, IUse
 			//		//.WithPivot( Vector3 globalPivot )
 			//		.Create();
 
-			ConnectedCannon = Cannon;
+			this.ConnectedCannon = Cannon; // !!! this does nothing for some reason :(
 
 			Weld( (Prop)Cannon );
 		}
 		
+	}
+
+	[Event.Frame]
+	public void OnFrame()
+	{
+		AimPitch = 25f;
+		AimYaw = 25f;
+
+		//DebugOverlay.Text( Position + Transform.NormalToWorld( new Vector3( 0, 0, 100 ) ), "debug:"+ConnectedCannon.ToString() );
+
+		if ( ConnectedCannon.IsValid() ) 
+		{
+			DebugOverlay.Line( Position, Transform.PointToWorld( new Vector3( 0, -25.2f, 41.3f ) ) );
+			Transform NewTransform = new Transform( Transform.PointToWorld( new Vector3( 0, -25.2f, 41.3f ) ), Transform.RotationToWorld( Rotation.From( 0, AimYaw, AimPitch ) ) );
+			ConnectedCannon.Transform = NewTransform;
+		}
 	}
 
 	public bool IsUsable( Entity user )

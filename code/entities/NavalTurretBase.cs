@@ -4,19 +4,36 @@ using System;
 using System.Runtime.CompilerServices;
 
 [Library( "nvl_turret_base", Title = "Naval Turret Example", Spawnable = true )]
-public partial class NavalTurretBase : Prop, IUse
+public partial class NavalTurretBase : AnimEntity, IUse
 {
+	public bool nvl_debug = true;
+
 	public TimeSince UseDelay;
 	public Vector3 TargetPos = new Vector3( 1000,5000,0 ); //at what position should turret rotate towards
-	public readonly Vector3[] TurretBones = new Vector3[] //array storing original model bone positions so we can transform them
+	public Vector3[] TurretBones = new Vector3[] //array storing original model bone positions so we can transform them
 	{
-			new Vector3( 0, 0, 0 ),
-			new Vector3( 0, 42f, 0 ),
-			new Vector3( 0, 20f, 15f ),
-			new Vector3( 0, 0, 123f )
-	}; 
+		new Vector3( 0, 0, 0 ), //"joint1"
+		new Vector3( 0, 0, 42.5f ), //"joint2"
+		new Vector3( 0, 15f, 42f-18f ), //"joint3"
+		new Vector3( 0f, -126f, 0f )  //"joint4"
+	};
+	public readonly string[] RandomTurretModels = new string[]
+	{
+		"models/courier/88skc30.vmdl",
+		"models/courier/88skc30tur.vmdl",
+		"models/courier/swivel1.vmdl",
+		"models/courier/bofors2.vmdl",
+		"models/courier/pompom.vmdl",
+		"models/courier/pompom2.vmdl",
+		"models/courier/oerlikon.vmdl",
+		"models/courier/type90.vmdl",
+		"models/courier/twinm2.vmdl",
+		"models/courier/grafspee.vmdl",
+		"models/courier/agano.vmdl",
+	};
 	public float Pitch = 30f % 360.0f;
 	public float Yaw = 55f % 360.0f;
+	public float RecoilAnim = 0;
 	public float ShootInterval = 1.2f; //(seconds) delay between shots
 	public float ReloadTime = 4f; //(seconds) how long it takes to reload the turret
 	public bool Fire; //toggle turret shooting 
@@ -29,7 +46,11 @@ public partial class NavalTurretBase : Prop, IUse
 	{
 		base.Spawn();
 
+		//Log.Info( "==== RandomTurretModels ====" );
+		//SetModel( RandomTurretModels[ Rand.Int(0, RandomTurretModels.Length-1 ) ] ); //assign random model
 		SetModel( "models/courier/88skc30.vmdl" );
+		UpdateTurretBones();
+
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
 	}
 
@@ -46,6 +67,9 @@ public partial class NavalTurretBase : Prop, IUse
 			UseDelay = 0;
 			return false;
 		}
+
+		//TEMP set Owner
+		Owner = user;
 
 		//Toggle Fire 
 		Fire = !Fire;
@@ -74,31 +98,19 @@ public partial class NavalTurretBase : Prop, IUse
 	[Event.Frame]
 	public void OnFrame()
 	{
-
 		// ==== Turret Bone Animations ====
+		// BUG: SetBoneTransform() with world = false is broken! https://github.com/Facepunch/sbox-issues/issues/466
 
-		//Yaw += 10.0f * Time.Delta;
-		//Yaw %= 360.0f;
+		Yaw = (float)Math.Sin( 5000 + UseDelay/10 + Time.Delta ) * 150.0f;
+		Yaw %= 360.0f;
 
-		//Pitch += (float)Math.Sin( Time.Delta  ) * 100.0f;
-		//Pitch %= 360.0f;
+		Pitch = 20 + (float)Math.Sin( UseDelay + Time.Delta  ) * 50.0f;
+		Pitch %= 360.0f;
 
-		// Modify Yaw
-		//string YawBoneID = "joint2"; // turret bearing
-		//Vector3 YawBoneOffset = Transform.PointToWorld( TurretBones[1] );
+		//For now im gona use AnimGraph even tho its far from ideal
+		SetAnimVector( "turret_aim_pos", Transform.PointToLocal( new Vector3(100,100,800) ) );
 
-		//var transform = new Transform( YawBoneOffset, Rotation.From( new Angles( 0, Yaw, 90 ) ) , 1 );
-		//SetBoneTransform( YawBoneID, transform );
 
-		// Modify Pitch
-		//string PitchBoneID = "joint3"; // turret elevation
-		//Vector3 PitchBoneOffset = Transform.PointToWorld( TurretBones[2] );
-
-		//transform = new Transform( PitchBoneOffset, Rotation.From( new Angles( Pitch, 0, 0 ) ), 1 );
-		//SetBoneTransform( PitchBoneID, transform );
-
-		// Modify Recoil
-		//int boneID = 3; //joint4 - turret recoil animation
 	}
 
 	public async void ShootProjectile() 
@@ -131,16 +143,17 @@ public partial class NavalTurretBase : Prop, IUse
 		//var ShootPos = this.GetAttachment( "muzzle" ).Position; // TO:DO  Oh my fuckin god, API has changed I have no idea how to Fix IT!
 		//var ShootAngle = this.GetAttachment( "muzzle" ).Rotation; // TO:DO  -||-
 
-		var ShootPos = Transform.PointToWorld( new Vector3( 110, 0, 66 ) ); //I had to hardcode positions for now since I cant just use an attachment as reference.. 
-		var ShootAngle = Transform.RotationToWorld( Rotation.From( new Angles( 0, 0, 0 )  ) );
-		ShootAngle *= Rotation.From( Rand.Float( -ProjectileSpread, ProjectileSpread ), Rand.Float( -ProjectileSpread, ProjectileSpread ), Rand.Float( -ProjectileSpread, ProjectileSpread ) );
+		var MuzzleBoneTransform = GetBoneTransform( "joint4", true );
+		var ShootPos = MuzzleBoneTransform.Position; //Transform.PointToWorld( new Vector3( 110, 0, 66 ) ); //I had to hardcode positions for now since I cant just use an attachment as reference.. 
+		var ShootRot = MuzzleBoneTransform.Rotation; //Transform.RotationToWorld( Rotation.From( new Angles( 0, 0, 0 )  ) );
+		ShootRot *= Rotation.From( Rand.Float( -ProjectileSpread, ProjectileSpread ), Rand.Float( -ProjectileSpread, ProjectileSpread ), Rand.Float( -ProjectileSpread, ProjectileSpread ) );
 		var ProjScale = Scale;
 
 		// Create the projectile entity
 		var ent = new NavalProjectileBase
 		{
 			Position = ShootPos,
-			Rotation = ShootAngle,
+			Rotation = ShootRot,
 			Scale = ProjScale,
 			Owner = Owner,
 			LastPosition = Position,
@@ -149,10 +162,14 @@ public partial class NavalTurretBase : Prop, IUse
 		//ent.Velocity += ent.Transform.NormalToWorld( new Vector3( ProjectileVelocity, 0, 0 ) ); // this was working when GetAttachment() was also working correctly
 		ent.Velocity += Transform.NormalToWorld( new Vector3( ProjectileVelocity, 0, 0 ) );
 
-		ent.CannonParent = this;
+		ent.TurretParent = this;
 
 		//recoil
 		this.Velocity += this.Transform.NormalToWorld( new Vector3( -RecoilForce, 0, 0) );
+		SetAnimBool( "turret_recoil_anim", true ); 
+		SetAnimFloat( "turret_recoil_strenght", 4f );
+		SetAnimVector( "turret_recoil_offset", Position );
+
 		//screen shake
 		if ( IsLocalPawn )
 		{
@@ -167,12 +184,29 @@ public partial class NavalTurretBase : Prop, IUse
 
 	}
 
-	//public override void OnNewModel( Model model )
-	//{
-	//	base.OnNewModel( model );
-	//	Log.Info( model.GetBodyPartForName( "joint2" ) );
-	//  // var pos = ent.GetBonePhysicsBody(ent.GetBoneIndex(bone)).Position;
-	//}
+	public void UpdateTurretBones()
+	{
+
+		this.TurretBones = new Vector3[] //array storing original model bone positions so we can transform them
+		{
+			GetBoneTransform("joint1").Position,
+			GetBoneTransform("joint2").Position,
+			GetBoneTransform("joint3").Position,
+			GetBoneTransform("joint4").Position
+		};
+
+		Log.Info( "===============" );
+		for ( int i = 0; i < TurretBones.Length; ++i )
+		{
+			Log.Info( TurretBones[i] );
+		}
+		Log.Info( "===============" );
+	}
+
+	public override void OnNewModel( Model model )
+	{
+		base.OnNewModel( model );
+	}
 
 	public void Remove()
 	{

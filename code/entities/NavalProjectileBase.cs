@@ -5,7 +5,7 @@ using System;
 public partial class NavalProjectileBase : Prop
 {
 	public float ProjectileSize = 3f;
-	public Prop CannonParent = null; //a cannon this projectile originated from
+	public NavalTurretBase TurretParent = null; //a cannon this projectile originated from
 	public Particles GlowEffect = null;
 	public Sound ShellWhine;
 	public Vector3 LastPosition;
@@ -30,14 +30,14 @@ public partial class NavalProjectileBase : Prop
 
 	protected override void OnPhysicsCollision( CollisionEventData eventData )
 	{
-		if ( eventData.Entity != CannonParent ) //eventData.Speed > 550f 
+		if ( eventData.Entity != TurretParent ) //eventData.Speed > 550f 
 		{
 			//simple explosion damage to hit entity
 			if ( eventData.Entity.IsValid() )
 			{
 					var damage = DamageInfo.Explosion( eventData.Pos, eventData.PreVelocity * 2, 100 )
-					.WithAttacker( CannonParent.Owner )
-					.WithWeapon( CannonParent );
+					.WithAttacker( TurretParent.Owner )
+					.WithWeapon( TurretParent );
 
 				eventData.Entity.TakeDamage( damage );
 			}
