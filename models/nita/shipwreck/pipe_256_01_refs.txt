@@ -1,4 +1,0 @@
-importfilelist
-{
-	"file"	"materials\nita\shipwreck\pipe_01_256.vmt"
-}

@@ -1,4 +1,0 @@
-importfilelist
-{
-	"file"	"materials\nita\shipwreck\winch_deck.vmt"
-}

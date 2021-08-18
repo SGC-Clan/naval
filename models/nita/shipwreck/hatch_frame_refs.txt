@@ -1,4 +1,0 @@
-importfilelist
-{
-	"file"	"materials\nita\shipwreck\hatch_frame.vmt"
-}
