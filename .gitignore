@@ -16,3 +16,4 @@ tools_thumbnail_cache.bin
 *.vvd
 *.qc
 .intermediate/net5.0/sandbox.deps.json
+
