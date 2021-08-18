@@ -1,0 +1,4 @@
+importfilelist
+{
+	"file"	"materials\nita\shipwreck\sub_pipe_02.vmt"
+}

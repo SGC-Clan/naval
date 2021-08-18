@@ -1,0 +1,4 @@
+importfilelist
+{
+	"file"	"materials\nita\shipwreck\shipwreck_part02.vmt"
+}

@@ -1,0 +1,4 @@
+importfilelist
+{
+	"file"	"bofors2_is_unused.vmt"
+}

@@ -1,0 +1,4 @@
+importfilelist
+{
+	"file"	"m8_is_unused.vmt"
+}

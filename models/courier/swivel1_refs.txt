@@ -1,0 +1,4 @@
+importfilelist
+{
+	"file"	"swivel1_is_unused.vmt"
+}

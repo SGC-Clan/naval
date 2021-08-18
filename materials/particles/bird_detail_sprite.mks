@@ -1,0 +1,6 @@
+sequence 0
+loop
+frame bird_detail_sprite1.png 1
+frame bird_detail_sprite2.png 1
+frame bird_detail_sprite3.png 1
+frame bird_detail_sprite2.png 1

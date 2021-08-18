@@ -1,0 +1,161 @@
+<!-- kv3 encoding:text:version{e21c7f3c-8a33-41c5-9977-a76d3a32aa0d} format:generic:version{7412167c-06e9-4698-aff2-e63eb59037e7} -->
+{
+	m_nCounterMin = 1
+	m_nCounterMax = 1
+	m_flSpacing = 256.0
+	m_flRadius = 398.0
+	m_flEraseAmount = 1.0
+	m_bConstantDensity = false
+	m_bOnlyHitMeshes = false
+	m_bRadialFalloff = true
+	m_elements = 
+	[
+		{
+			m_assetName = "models/foliage/tree_maple_01.vmdl"
+			m_vBoundsMin = [ 340282346638528859811704183484516925440.0, 340282346638528859811704183484516925440.0, 340282346638528859811704183484516925440.0 ]
+			m_vBoundsMax = [ -340282346638528859811704183484516925440.0, -340282346638528859811704183484516925440.0, -340282346638528859811704183484516925440.0 ]
+			m_settings = 
+			{
+				m_flMinDensity = 1.0
+				m_flMaxDensity = 1.0
+				m_flMinScale = 0.5
+				m_flMaxScale = 1.0
+				m_vMinAngle = [ 0.0, 0.0, 0.0 ]
+				m_vMaxAngle = [ 0.0, 360.0, 0.0 ]
+				m_vMinColor = [ 1.0, 1.0, 1.0 ]
+				m_vMaxColor = [ 1.0, 1.0, 1.0 ]
+				m_flSpacingMul = 1.0
+				m_flSlopeThreshold = 100000.0
+				m_vMasterDirection = [ 0.0, 0.0, 1.0 ]
+				m_flMasterDirectionInfluence = 0.62
+				m_bEnabled = true
+			}
+		},
+		{
+			m_assetName = "models/foliage/tree_maple_02.vmdl"
+			m_vBoundsMin = [ 340282346638528859811704183484516925440.0, 340282346638528859811704183484516925440.0, 340282346638528859811704183484516925440.0 ]
+			m_vBoundsMax = [ -340282346638528859811704183484516925440.0, -340282346638528859811704183484516925440.0, -340282346638528859811704183484516925440.0 ]
+			m_settings = 
+			{
+				m_flMinDensity = 1.0
+				m_flMaxDensity = 1.0
+				m_flMinScale = 0.5
+				m_flMaxScale = 1.0
+				m_vMinAngle = [ 0.0, 0.0, 0.0 ]
+				m_vMaxAngle = [ 0.0, 360.0, 0.0 ]
+				m_vMinColor = [ 1.0, 1.0, 1.0 ]
+				m_vMaxColor = [ 1.0, 1.0, 1.0 ]
+				m_flSpacingMul = 1.0
+				m_flSlopeThreshold = 100000.0
+				m_vMasterDirection = [ 0.0, 0.0, 1.0 ]
+				m_flMasterDirectionInfluence = 0.6
+				m_bEnabled = true
+			}
+		},
+		{
+			m_assetName = "models/foliage/tree_maple_small_01.vmdl"
+			m_vBoundsMin = [ 340282346638528859811704183484516925440.0, 340282346638528859811704183484516925440.0, 340282346638528859811704183484516925440.0 ]
+			m_vBoundsMax = [ -340282346638528859811704183484516925440.0, -340282346638528859811704183484516925440.0, -340282346638528859811704183484516925440.0 ]
+			m_settings = 
+			{
+				m_flMinDensity = 1.0
+				m_flMaxDensity = 1.0
+				m_flMinScale = 0.5
+				m_flMaxScale = 1.0
+				m_vMinAngle = [ 0.0, 0.0, 0.0 ]
+				m_vMaxAngle = [ 0.0, 360.0, 0.0 ]
+				m_vMinColor = [ 1.0, 1.0, 1.0 ]
+				m_vMaxColor = [ 1.0, 1.0, 1.0 ]
+				m_flSpacingMul = 1.0
+				m_flSlopeThreshold = 100000.0
+				m_vMasterDirection = [ 0.0, 0.0, 1.0 ]
+				m_flMasterDirectionInfluence = 0.61
+				m_bEnabled = true
+			}
+		},
+		{
+			m_assetName = "models/foliage/tree_maple_small_02.vmdl"
+			m_vBoundsMin = [ 340282346638528859811704183484516925440.0, 340282346638528859811704183484516925440.0, 340282346638528859811704183484516925440.0 ]
+			m_vBoundsMax = [ -340282346638528859811704183484516925440.0, -340282346638528859811704183484516925440.0, -340282346638528859811704183484516925440.0 ]
+			m_settings = 
+			{
+				m_flMinDensity = 1.18
+				m_flMaxDensity = 1.0
+				m_flMinScale = 0.5
+				m_flMaxScale = 1.0
+				m_vMinAngle = [ 0.0, 0.0, 0.0 ]
+				m_vMaxAngle = [ 0.0, 360.0, 0.0 ]
+				m_vMinColor = [ 1.0, 1.0, 1.0 ]
+				m_vMaxColor = [ 1.0, 1.0, 1.0 ]
+				m_flSpacingMul = 1.0
+				m_flSlopeThreshold = 100000.0
+				m_vMasterDirection = [ 0.0, 0.0, 1.0 ]
+				m_flMasterDirectionInfluence = 0.5
+				m_bEnabled = true
+			}
+		},
+		{
+			m_assetName = "models/foliage/tree_maple_winter_01.vmdl"
+			m_vBoundsMin = [ 340282346638528859811704183484516925440.0, 340282346638528859811704183484516925440.0, 340282346638528859811704183484516925440.0 ]
+			m_vBoundsMax = [ -340282346638528859811704183484516925440.0, -340282346638528859811704183484516925440.0, -340282346638528859811704183484516925440.0 ]
+			m_settings = 
+			{
+				m_flMinDensity = 0.62
+				m_flMaxDensity = 1.0
+				m_flMinScale = 0.5
+				m_flMaxScale = 1.0
+				m_vMinAngle = [ 0.0, 0.0, 0.0 ]
+				m_vMaxAngle = [ 0.0, 360.0, 0.0 ]
+				m_vMinColor = [ 1.0, 1.0, 1.0 ]
+				m_vMaxColor = [ 1.0, 1.0, 1.0 ]
+				m_flSpacingMul = 1.0
+				m_flSlopeThreshold = 100000.0
+				m_vMasterDirection = [ 0.0, 0.0, 1.0 ]
+				m_flMasterDirectionInfluence = 0.35
+				m_bEnabled = true
+			}
+		},
+		{
+			m_assetName = "models/foliage/tree_white_oak_01.vmdl"
+			m_vBoundsMin = [ 340282346638528859811704183484516925440.0, 340282346638528859811704183484516925440.0, 340282346638528859811704183484516925440.0 ]
+			m_vBoundsMax = [ -340282346638528859811704183484516925440.0, -340282346638528859811704183484516925440.0, -340282346638528859811704183484516925440.0 ]
+			m_settings = 
+			{
+				m_flMinDensity = 0.47
+				m_flMaxDensity = 1.0
+				m_flMinScale = 0.5
+				m_flMaxScale = 1.0
+				m_vMinAngle = [ 0.0, 0.0, 0.0 ]
+				m_vMaxAngle = [ 0.0, 360.0, 0.0 ]
+				m_vMinColor = [ 1.0, 1.0, 1.0 ]
+				m_vMaxColor = [ 1.0, 1.0, 1.0 ]
+				m_flSpacingMul = 1.0
+				m_flSlopeThreshold = 100000.0
+				m_vMasterDirection = [ 0.0, 0.0, 1.0 ]
+				m_flMasterDirectionInfluence = 0.65
+				m_bEnabled = true
+			}
+		},
+		{
+			m_assetName = "models/foliage/tree_white_oak_02.vmdl"
+			m_vBoundsMin = [ 340282346638528859811704183484516925440.0, 340282346638528859811704183484516925440.0, 340282346638528859811704183484516925440.0 ]
+			m_vBoundsMax = [ -340282346638528859811704183484516925440.0, -340282346638528859811704183484516925440.0, -340282346638528859811704183484516925440.0 ]
+			m_settings = 
+			{
+				m_flMinDensity = 0.63
+				m_flMaxDensity = 1.0
+				m_flMinScale = 0.5
+				m_flMaxScale = 1.0
+				m_vMinAngle = [ 0.0, 0.0, 0.0 ]
+				m_vMaxAngle = [ 0.0, 360.0, 0.0 ]
+				m_vMinColor = [ 1.0, 1.0, 1.0 ]
+				m_vMaxColor = [ 1.0, 1.0, 1.0 ]
+				m_flSpacingMul = 1.0
+				m_flSlopeThreshold = 100000.0
+				m_vMasterDirection = [ 0.0, 0.0, 1.0 ]
+				m_flMasterDirectionInfluence = 0.59
+				m_bEnabled = true
+			}
+		},
+	]
+}

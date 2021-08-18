@@ -1,0 +1,4 @@
+importfilelist
+{
+	"file"	"materials\nita\shipwreck\float02a.vmt"
+}

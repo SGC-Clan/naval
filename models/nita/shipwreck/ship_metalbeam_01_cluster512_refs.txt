@@ -1,0 +1,4 @@
+importfilelist
+{
+	"file"	"materials\nita\shipwreck\ship_metalbeam_01.vmt"
+}

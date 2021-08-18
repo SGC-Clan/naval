@@ -1,0 +1,4 @@
+importfilelist
+{
+	"file"	"materials\nita\shipwreck\stairs_diffuse.vmt"
+}

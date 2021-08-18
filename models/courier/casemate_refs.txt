@@ -1,0 +1,4 @@
+importfilelist
+{
+	"file"	"casemate_is_unused.vmt"
+}
