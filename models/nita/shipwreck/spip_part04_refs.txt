@@ -1,8 +1,0 @@
-importfilelist
-{
-	"file"	"materials\nita\shipwreck\ship_metalhull_01.vmt"
-	"file"	"materials\nita\shipwreck\ship_metalbeam_01.vmt"
-	"file"	"materials\nita\shipwreck\ship_hull_01.vmt"
-	"file"	"materials\nita\shipwreck\shipwreck_part01b.vmt"
-	"file"	"materials\nita\shipwreck\toolsblack.vmt"
-}

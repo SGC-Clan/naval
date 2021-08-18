@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>naval</name>
+    </assembly>
+    <members>
+        <member name="M:Weapon.ShootBullet(Vector3,Vector3,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Shoot a single bullet
+            </summary>
+        </member>
+        <member name="M:Weapon.ShootBullet(System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Shoot a single bullet from owners view point
+            </summary>
+        </member>
+        <member name="M:Weapon.ShootBullets(System.Int32,System.Single,System.Single,System.Single,System.Single)">
+            <summary>
+            Shoot a multiple bullets from owners view point
+            </summary>
+        </member>
+        <member name="M:Flintlock.CanPrimaryAttack">
+            <summary>
+            Lets make primary attack semi automatic
+            </summary>
+        </member>
+    </members>
+</doc>

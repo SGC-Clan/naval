@@ -1,6 +1,0 @@
-importfilelist
-{
-	"file"	"materials\nita\shipwreck\shipwreck_part01a.vmt"
-	"file"	"materials\nita\shipwreck\shipwreck_part01b.vmt"
-	"file"	"materials\nita\shipwreck\shipwreck_part01.vmt"
-}
