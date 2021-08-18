@@ -1,4 +1,0 @@
-importfilelist
-{
-	"file"	"88skc30tur_is_unused.vmt"
-}

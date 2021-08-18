@@ -1,4 +1,0 @@
-importfilelist
-{
-	"file"	"torpedoturret1_is_unused.vmt"
-}

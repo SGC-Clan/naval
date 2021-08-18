@@ -1,4 +1,0 @@
-importfilelist
-{
-	"file"	"caboteur_is_unused.vmt"
-}

@@ -1,5 +1,0 @@
-importfilelist
-{
-	"file"	"materials\nita\shipwreck\light_spotlight01a.vmt"
-	"file"	"light_spotlight01b_is_unused.vmt"
-}
