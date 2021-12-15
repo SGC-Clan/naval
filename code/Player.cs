@@ -72,6 +72,7 @@ public partial class NavalPlayer : Player
 
 		Clothing.DressEntity(this);
 
+		Inventory.Add( new NavalEditor() );
 		Inventory.Add( new PhysGun(), true );
 		Inventory.Add( new GravGun() );
 		Inventory.Add( new Tool() );
