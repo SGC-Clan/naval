@@ -10,6 +10,7 @@ public partial class GravGun : Carriable
 
 	private PhysicsBody holdBody;
 	private WeldJoint holdJoint;
+	private GenericJoint collisionJoint;
 
 	public PhysicsBody HeldBody { get; private set; }
 	public Rotation HeldRot { get; private set; }
@@ -24,7 +25,7 @@ public partial class GravGun : Carriable
 	protected virtual float PullForce => 20.0f;
 	protected virtual float PushForce => 1000.0f;
 	protected virtual float ThrowForce => 2000.0f;
-	protected virtual float HoldDistance => 100.0f;
+	protected virtual float HoldDistance => 50.0f;
 	protected virtual float AttachDistance => 150.0f;
 	protected virtual float DropCooldown => 0.5f;
 	protected virtual float BreakLinearForce => 2000.0f;
@@ -43,9 +44,7 @@ public partial class GravGun : Carriable
 
 	public override void Simulate( Client client )
 	{
-		var owner = Owner;
-		if ( owner == null )
-			return;
+		if ( Owner is not Player owner ) return;
 
 		if ( !IsServer )
 			return;
@@ -97,7 +96,7 @@ public partial class GravGun : Carriable
 
 			var tr = Trace.Ray( eyePos, eyePos + eyeDir * MaxPullDistance )
 				.UseHitboxes()
-				.Ignore( owner )
+				.Ignore( owner, false )
 				.Radius( 2.0f )
 				.HitLayer( CollisionLayer.Debris )
 				.Run();
@@ -133,9 +132,12 @@ public partial class GravGun : Carriable
 						return;
 				}
 
-				if ( eyePos.Distance( body.Position ) <= AttachDistance )
+				var attachPos = body.FindClosestPoint( eyePos );
+
+				if ( eyePos.Distance( attachPos ) <= AttachDistance )
 				{
-					GrabStart( modelEnt, body, eyePos + eyeDir * HoldDistance, eyeRot );
+					var holdDistance = HoldDistance + attachPos.Distance( body.MassCenter );
+					GrabStart( modelEnt, body, eyePos + eyeDir * holdDistance, eyeRot );
 				}
 				else if ( !IsBodyGrabbed( body ) )
 				{
@@ -229,6 +231,11 @@ public partial class GravGun : Carriable
 		HeldBody.Wake();
 		HeldBody.EnableAutoSleeping = false;
 
+		collisionJoint = PhysicsJoint.Generic
+			.From( (Owner as Player).PhysicsBody )
+			.To( HeldBody )
+			.Create();
+
 		holdJoint = PhysicsJoint.Weld
 			.From( holdBody )
 			.To( HeldBody, HeldBody.LocalMassCenter )
@@ -239,8 +246,7 @@ public partial class GravGun : Carriable
 
 		HeldEntity = entity;
 
-		var client = GetClientOwner();
-		client?.Pvs.Add( HeldEntity );
+		Client?.Pvs.Add( HeldEntity );
 	}
 
 	private void GrabEnd()
@@ -250,6 +256,11 @@ public partial class GravGun : Carriable
 			holdJoint.Remove();
 		}
 
+		if ( collisionJoint.IsValid )
+		{
+			collisionJoint.Remove();
+		}
+
 		if ( HeldBody.IsValid() )
 		{
 			HeldBody.EnableAutoSleeping = true;
@@ -257,8 +268,7 @@ public partial class GravGun : Carriable
 
 		if ( HeldEntity.IsValid() )
 		{
-			var client = GetClientOwner();
-			client?.Pvs.Remove( HeldEntity );
+			Client?.Pvs.Remove( HeldEntity );
 		}
 
 		HeldBody = null;
@@ -271,7 +281,10 @@ public partial class GravGun : Carriable
 		if ( !HeldBody.IsValid() )
 			return;
 
-		holdBody.Position = startPos + dir * HoldDistance;
+		var attachPos = HeldBody.FindClosestPoint( startPos );
+		var holdDistance = HoldDistance + attachPos.Distance( HeldBody.MassCenter );
+
+		holdBody.Position = startPos + dir * holdDistance;
 		holdBody.Rotation = rot * HeldRot;
 	}
 

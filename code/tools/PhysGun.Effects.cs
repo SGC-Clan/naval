@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using Sandbox.Component;
 using System.Linq;
 
 public partial class PhysGun
@@ -28,12 +29,20 @@ public partial class PhysGun
 		{
 			foreach ( var child in lastGrabbedEntity.Children.OfType<ModelEntity>() )
 			{
-				child.GlowActive = false;
-				child.GlowState = GlowStates.GlowStateOff;
+				if ( child is Player )
+					continue;
+
+				if ( child.Components.TryGet<Glow>( out var childglow ) )
+				{
+					childglow.Active = false;
+				}
 			}
 
-			lastGrabbedEntity.GlowActive = false;
-			lastGrabbedEntity.GlowState = GlowStates.GlowStateOff;
+			if ( lastGrabbedEntity.Components.TryGet<Glow>( out var glow ) )
+			{
+				glow.Active = false;
+			}
+
 			lastGrabbedEntity = null;
 		}
 	}
@@ -53,7 +62,8 @@ public partial class PhysGun
 
 		var tr = Trace.Ray( startPos, startPos + dir * MaxTargetDistance )
 			.UseHitboxes()
-			.Ignore( owner )
+			.Ignore( owner, false )
+			.HitLayer( CollisionLayer.Debris )
 			.Run();
 
 		if ( Beam == null )
@@ -88,19 +98,23 @@ public partial class PhysGun
 			if ( GrabbedEntity is ModelEntity modelEnt )
 			{
 				lastGrabbedEntity = modelEnt;
-				modelEnt.GlowState = GlowStates.GlowStateOn;
-				modelEnt.GlowDistanceStart = 0;
-				modelEnt.GlowDistanceEnd = 1000;
-				modelEnt.GlowColor = new Color( 0.1f, 1.0f, 1.0f, 1.0f );
-				modelEnt.GlowActive = true;
+
+				var glow = modelEnt.Components.GetOrCreate<Glow>();
+				glow.Active = true;
+				glow.RangeMin = 0;
+				glow.RangeMax = 1000;
+				glow.Color = new Color( 0.1f, 1.0f, 1.0f, 1.0f );
 
 				foreach ( var child in lastGrabbedEntity.Children.OfType<ModelEntity>() )
 				{
-					child.GlowState = GlowStates.GlowStateOn;
-					child.GlowDistanceStart = 0;
-					child.GlowDistanceEnd = 1000;
-					child.GlowColor = new Color( 0.1f, 1.0f, 1.0f, 1.0f );
-					child.GlowActive = true;
+					if ( child is Player )
+						continue;
+
+					glow = child.Components.GetOrCreate<Glow>();
+					glow.Active = true;
+					glow.RangeMin = 0;
+					glow.RangeMax = 1000;
+					glow.Color = new Color( 0.1f, 1.0f, 1.0f, 1.0f );
 				}
 			}
 		}

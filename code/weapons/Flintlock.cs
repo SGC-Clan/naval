@@ -64,7 +64,7 @@ partial class Flintlock : Weapon
 		//
 		// Tell the clients to play the shoot effects
 		//
-		ShootEffects();
+		FlintlockShootEffects();
 
 
 		bool InWater = Physics.TestPointContents( pos, CollisionLayer.Water );
@@ -179,7 +179,7 @@ partial class Flintlock : Weapon
 	//}
 
 	[ClientRpc]
-	public virtual void ShootEffects()
+	public void FlintlockShootEffects()
 	{
 		Host.AssertClient();
 
@@ -199,6 +199,8 @@ partial class Flintlock : Weapon
 		{
 			new Sandbox.ScreenShake.Perlin( 0.5f, 2.0f, 0.5f );
 		}
+
+		CrosshairPanel?.CreateEvent("fire");
 	}
 
 	public override void SimulateAnimator( PawnAnimator anim )

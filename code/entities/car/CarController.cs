@@ -22,17 +22,13 @@ public class CarController : PawnController
 
 		if ( player.Vehicle == null )
 		{
-			Position = car.Position + car.Rotation.Up * 100;
-			Velocity += car.Rotation.Right * 200;
+			Position = car.Position + car.Rotation.Up * (100 * car.Scale);
+			Velocity += car.Rotation.Right * (200 * car.Scale);
 			return;
 		}
 
-		float heightOffset = (20 * car.Scale);
-
-		Position = car.Position + car.Rotation.Up * heightOffset;
-		Rotation = car.Rotation;
 		EyeRot = Input.Rotation;
-		EyePosLocal = Vector3.Up * (64 - heightOffset);
+		EyePosLocal = Vector3.Up * (64 - 10) * car.Scale;
 		Velocity = car.Velocity;
 
 		SetTag( "noclip" );

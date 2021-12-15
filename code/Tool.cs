@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using Sandbox.Tools;
 
-[Library( "weapon_tool", Title = "Tool gun" )]
+[Library( "weapon_tool", Title = "Toolgun" )]
 partial class Tool : Carriable
 {
 	[ConVar.ClientData( "tool_current" )]
@@ -16,7 +16,7 @@ partial class Tool : Carriable
 	{
 		base.Spawn();
 
-		SetModel( "models/gmod/weapons/w_toolgun.vmdl" );
+		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
 	}
 
 	public override void Simulate( Client owner )
@@ -28,7 +28,7 @@ partial class Tool : Carriable
 
 	private void UpdateCurrentTool( Client owner )
 	{
-		var toolName = owner.GetUserString( "tool_current", "tool_boxgun" );
+		var toolName = owner.GetClientData<string>( "tool_current", "tool_boxgun" );
 		if ( toolName == null )
 			return;
 
@@ -85,11 +85,18 @@ partial class Tool : Carriable
 
 		CurrentTool?.OnFrame();
 	}
+
+	public override void SimulateAnimator( PawnAnimator anim )
+	{
+		anim.SetParam( "holdtype", 1 );
+		anim.SetParam( "aimat_weight", 1.0f );
+		anim.SetParam( "holdtype_handedness", 1 );
+	}
 }
 
 namespace Sandbox.Tools
 {
-	public partial class BaseTool : NetworkComponent
+	public partial class BaseTool : BaseNetworkable
 	{
 		public Tool Parent { get; set; }
 		public Player Owner { get; set; }

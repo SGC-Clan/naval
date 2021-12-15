@@ -1,11 +1,6 @@
 ﻿using naval.Teams;
 using Sandbox;
-using Sandbox.UI;
-using Sandbox.UI.Construct;
-using System;
-using System.IO;
-using System.Threading.Tasks;
-using System.Collections.Generic;
+
 public partial class NavalPlayer : Player
 {
 	private TimeSince timeSinceDropped;
@@ -15,22 +10,43 @@ public partial class NavalPlayer : Player
 
 	// For vehicles
 	[Net] public PawnController VehicleController { get; set; }
-	[Net] public ICamera VehicleCamera { get; set; }
-	[Net] public Entity Vehicle { get; set; }
-	[Net] public ICamera MainCamera { get; set; }
+	[Net] public PawnAnimator VehicleAnimator { get; set; }
+	[Net, Predicted] public ICamera VehicleCamera { get; set; }
+	[Net, Predicted] public Entity Vehicle { get; set; }
+	[Net, Predicted] public ICamera MainCamera { get; set; }
 
 	public ICamera LastCamera { get; set; }
 
 	// time since last "FIRE!" scream by the player (when shooting cannons)
 	public TimeSince timeSinceLastFireScream;
 
+	/// <summary>
+	/// The clothing container is what dresses the citizen
+	/// </summary>
+	public Clothing.Container Clothing = new();
+
+	/// <summary>
+	/// Default init
+	/// </summary>
 	public NavalPlayer()
 	{
-		Inventory = new Inventory( this );
+		Inventory = new Inventory(this);
 	}
+
+	/// <summary>
+	/// Initialize using this client
+	/// </summary>
+	public NavalPlayer(Client cl) : this()
+	{
+		// Load clothing from client data
+		Clothing.LoadFromClient(cl);
+	}
+
 	public override void Spawn()
 	{
-		LastCamera = new FirstPersonCamera();
+		MainCamera = new FirstPersonCamera();
+		LastCamera = MainCamera;
+
 		base.Spawn();
 	}
 
@@ -40,7 +56,9 @@ public partial class NavalPlayer : Player
 
 		Controller = new WalkController();
 		Animator = new StandardPlayerAnimator();
-		Camera = LastCamera;
+
+		MainCamera = LastCamera;
+		Camera = MainCamera;
 
 		if ( DevController is NoclipController )
 		{
@@ -52,7 +70,7 @@ public partial class NavalPlayer : Player
 		EnableHideInFirstPerson = true;
 		EnableShadowInFirstPerson = true;
 
-		Dress();
+		Clothing.DressEntity(this);
 
 		Inventory.Add( new PhysGun(), true );
 		Inventory.Add( new GravGun() );
@@ -74,9 +92,23 @@ public partial class NavalPlayer : Player
 	{
 		base.OnKilled();
 
+		if (lastDamage.Flags.HasFlag(DamageFlags.Vehicle))
+		{
+			Particles.Create("particles/impact.flesh.bloodpuff-big.vpcf", lastDamage.Position);
+			Particles.Create("particles/impact.flesh-big.vpcf", lastDamage.Position);
+			PlaySound("kersplat");
+		}
+
+		VehicleController = null;
+		VehicleAnimator = null;
+		VehicleCamera = null;
+		Vehicle = null;
+
 		BecomeRagdollOnClient( Velocity, lastDamage.Flags, lastDamage.Position, lastDamage.Force, GetHitboxBone( lastDamage.HitboxIndex ) );
-		LastCamera = Camera;
-		Camera = new SpectateRagdollCamera();
+
+		LastCamera = MainCamera;
+		MainCamera = new SpectateRagdollCamera();
+		Camera = MainCamera;
 		Controller = null;
 
 		EnableAllCollisions = false;
@@ -88,6 +120,11 @@ public partial class NavalPlayer : Player
 
 	public override void TakeDamage( DamageInfo info )
 	{
+		if (GetHitboxGroup(info.HitboxIndex) == 1)
+		{
+			info.Damage *= 10.0f;
+		}
+
 		lastDamage = info;
 
 		TookDamage( lastDamage.Flags, lastDamage.Position, lastDamage.Force );
@@ -110,6 +147,8 @@ public partial class NavalPlayer : Player
 
 	public override PawnAnimator GetActiveAnimator()
 	{
+		if (VehicleAnimator != null) return VehicleAnimator;
+
 		return base.GetActiveAnimator();
 	}
 
@@ -120,56 +159,67 @@ public partial class NavalPlayer : Player
 		return MainCamera;
 	}
 
-	public override void Simulate( Client cl )
+	public override void Simulate(Client cl)
 	{
-		base.Simulate( cl );
+		base.Simulate(cl);
 
-		if ( Input.ActiveChild != null )
+		if (Input.ActiveChild != null)
 		{
 			ActiveChild = Input.ActiveChild;
 		}
 
-		if ( LifeState != LifeState.Alive )
+		if (LifeState != LifeState.Alive)
 			return;
 
-		TickPlayerUse();
-		SimulateActiveChild( cl, ActiveChild );
-
-		if ( Input.Pressed( InputButton.View ) )
+		if (VehicleController != null && DevController is NoclipController)
 		{
-			if ( Camera is not FirstPersonCamera )
+			DevController = null;
+		}
+
+		var controller = GetActiveController();
+		if (controller != null)
+			EnableSolidCollisions = !controller.HasTag("noclip");
+
+		TickPlayerUse();
+		SimulateActiveChild(cl, ActiveChild);
+
+		if (Input.Pressed(InputButton.View))
+		{
+			if (MainCamera is not FirstPersonCamera)
 			{
-				Camera = new FirstPersonCamera();
+				MainCamera = new FirstPersonCamera();
 			}
 			else
 			{
-				Camera = new ThirdPersonCamera();
+				MainCamera = new ThirdPersonCamera();
 			}
 		}
 
-		if ( Input.Pressed( InputButton.Drop ) )
+		Camera = GetActiveCamera();
+
+		if (Input.Pressed(InputButton.Drop))
 		{
 			var dropped = Inventory.DropActive();
-			if ( dropped != null )
+			if (dropped != null)
 			{
-				dropped.PhysicsGroup.ApplyImpulse( Velocity + EyeRot.Forward * 500.0f + Vector3.Up * 100.0f, true );
-				dropped.PhysicsGroup.ApplyAngularImpulse( Vector3.Random * 100.0f, true );
+				dropped.PhysicsGroup.ApplyImpulse(Velocity + EyeRot.Forward * 500.0f + Vector3.Up * 100.0f, true);
+				dropped.PhysicsGroup.ApplyAngularImpulse(Vector3.Random * 100.0f, true);
 
 				timeSinceDropped = 0;
 			}
 		}
 
-		if ( Input.Released( InputButton.Jump ) )
+		if (Input.Released(InputButton.Jump))
 		{
-			if ( timeSinceJumpReleased < 0.3f )
+			if (timeSinceJumpReleased < 0.3f)
 			{
-				Game.Current?.DoPlayerNoclip( cl );
+				Game.Current?.DoPlayerNoclip(cl);
 			}
 
 			timeSinceJumpReleased = 0;
 		}
 
-		if ( Input.Left != 0 || Input.Forward != 0 )
+		if (Input.Left != 0 || Input.Forward != 0)
 		{
 			timeSinceJumpReleased = 1;
 		}

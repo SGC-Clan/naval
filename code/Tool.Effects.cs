@@ -2,12 +2,6 @@
 
 public partial class Tool
 {
-	static readonly SoundEvent HitSound = new( "sounds/balloon_pop_cute.vsnd" )
-	{
-		Volume = 1,
-		DistanceMax = 500.0f
-	};
-
 	[ClientRpc]
 	public void CreateHitEffects( Vector3 hitPos )
 	{
@@ -15,6 +9,6 @@ public partial class Tool
 		particle.SetPosition( 0, hitPos );
 		particle.Destroy( false );
 
-		PlaySound( HitSound.Name );
+		PlaySound( "balloon_pop_cute" );
 	}
 }

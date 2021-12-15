@@ -1,11 +1,12 @@
 ﻿namespace Sandbox.Tools
 {
-	[Library( "tool_rop", Title = "Rope", Description = "Join two things together with a rope", Group = "construction" )]
+	[Library( "tool_rope", Title = "Rope", Description = "Join two things together with a rope", Group = "construction" )]
 	public partial class RopeTool : BaseTool
 	{
 		private PhysicsBody targetBody;
 		private int targetBone;
-		private Vector3 targetPosition;
+		private Vector3 localOrigin1;
+		private Vector3 globalOrigin1;
 
 		public override void Simulate()
 		{
@@ -40,7 +41,8 @@
 				{
 					targetBody = tr.Body;
 					targetBone = tr.Bone;
-					targetPosition = tr.Body.Transform.PointToLocal( tr.EndPos );
+					globalOrigin1 = tr.EndPos;
+					localOrigin1 = tr.Body.Transform.PointToLocal( globalOrigin1 );
 
 					CreateHitEffects( tr.EndPos );
 
@@ -54,30 +56,32 @@
 
 				if ( targetBody.Entity.IsWorld )
 				{
-					rope.SetPosition( 0, targetPosition );
+					rope.SetPosition( 0, localOrigin1 );
 				}
 				else
 				{
-					rope.SetEntityBone( 0, targetBody.Entity, targetBone, new Transform( targetPosition ) );
+					rope.SetEntityBone( 0, targetBody.Entity, targetBone, new Transform( localOrigin1 * (1.0f / targetBody.Entity.Scale) ) );
 				}
+
+				var localOrigin2 = tr.Body.Transform.PointToLocal( tr.EndPos );
 
 				if ( tr.Entity.IsWorld )
 				{
-					rope.SetPosition( 1, tr.Body.Transform.PointToLocal( tr.EndPos ) );
+					rope.SetPosition( 1, localOrigin2 );
 				}
 				else
 				{
-					rope.SetEntityBone( 1, tr.Entity, tr.Bone, new Transform( tr.Body.Transform.PointToLocal( tr.EndPos ) ) );
+					rope.SetEntityBone( 1, tr.Body.Entity, tr.Bone, new Transform( localOrigin2 * (1.0f / tr.Entity.Scale) ) );
 				}
 
 				var spring = PhysicsJoint.Spring
-					.From( targetBody, targetPosition )
-					.To( tr.Body, tr.Body.Transform.PointToLocal( tr.EndPos ) )
+					.From( targetBody, localOrigin1 )
+					.To( tr.Body, localOrigin2 )
 					.WithFrequency( 5.0f )
 					.WithDampingRatio( 0.7f )
 					.WithReferenceMass( targetBody.Mass )
 					.WithMinRestLength( 0 )
-					.WithMaxRestLength( 200 )
+					.WithMaxRestLength( tr.EndPos.Distance( globalOrigin1 ) )
 					.WithCollisionsEnabled()
 					.Create();
 
@@ -98,7 +102,7 @@
 		{
 			targetBody = null;
 			targetBone = -1;
-			targetPosition = default;
+			localOrigin1 = default;
 		}
 
 		public override void Activate()

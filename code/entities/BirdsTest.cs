@@ -15,7 +15,7 @@ public partial class BirdsTest : Prop
 		SetModel( "models/citizen_props/hotdog01.vmdl" );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
 		PhysicsBody.GravityScale = GravityScale;
-		RenderColor = Color.Random.ToColor32();
+		//RenderColor = Color.Random.ToColor32();
 
 		BirdsParticles = Particles.Create( "particles/birds_flying_flat.vpcf", this, null );
 		BirdsParticles.SetEntity(0, this );

@@ -2,7 +2,7 @@
 
 Layer0
 {
-	shader "sbox_water.vfx"
+	shader "water.vfx"
 
 	//---- Animation ----
 	F_MORPH_SUPPORTED 1
@@ -10,42 +10,44 @@ Layer0
 	//---- Rendering ----
 	F_RENDER_BACKFACES 1
 
-	//---- Ambient Occlusion ----
-	TextureAmbientOcclusion "materials/default/default_ao.tga"
+	//---- Self Illum ----
+	F_BAKED_EMISSIVE 1
+	F_BAKED_SELF_ILLUM 1
 
 	//---- Color ----
 	g_flModelTintAmount "1.000"
-	g_vColorTint "[0.925490 0.925490 0.925490 1.000000]"
-	TextureColor "dev/helper/reflectivity_90b_color.tga"
+	g_vColorTint "[1.000000 1.000000 1.000000 1.000000]"
 
 	//---- Fade ----
-	g_flFadeExponent "1.898"
+	g_flFadeExponent "2.128"
 
 	//---- Fog ----
-	g_bFogEnabled "1"
+	g_vWaterFogColor "[0.000000 0.764706 1.000000 0.000000]"
+	g_vWaterFogDistanceFalloff "[250.000 0.100]"
 
-	//---- Lighting ----
-	g_flDirectionalLightmapMinZ "1.000"
-	g_flDirectionalLightmapStrength "1.000"
+	//---- Material ----
+	TextureColor "materials/water_001_color.jpg"
+	TextureSelfIllum "materials/water_001_disp.png"
+	TextureTintMask "materials/water_001_disp.png"
 
-	//---- Lookup Textures ----
-	g_vAmbientNormalSoftness "[1.000000 0.301961 0.000000 0.000000]"
-	TextureDiffuseFalloff "materials/default/default_skin_diffusewarp.tga"
+	//---- Self Illum ----
+	g_flSelfIllumScale "1.323"
 
-	//---- Metalness ----
-	g_flMetalness "1.000"
+	//---- Tessellation ----
+	fTesselationFalloff "2048.000"
+	sMaxTesselation "50"
 
 	//---- Texture Coordinates ----
 	g_nScaleTexCoordUByModelScaleAxis "0"
 	g_nScaleTexCoordVByModelScaleAxis "0"
 	g_vTexCoordOffset "[0.000 0.000]"
-	g_vTexCoordScale "[1.000 1.000]"
+	g_vTexCoordScale "[0.000 1.000]"
 	g_vTexCoordScrollSpeed "[0.000 0.000]"
 
 	//---- Water ----
-	g_fPhase "0.192"
-	g_fScale "5.174"
-	g_fSpeed "0.479"
-	g_fWeight "0.010"
-	g_vWaterFlowDir "[0.500 0.500]"
+	g_fAmplitude "1.684"
+	g_fPhase "0.361"
+	g_fScale "16.000"
+	g_fSpeed "0.481"
+	g_fWeight "16.000"
 }

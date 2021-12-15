@@ -14,10 +14,12 @@ namespace Sandbox.Tools
 			{
 				var startPos = Owner.EyePos;
 				var dir = Owner.EyeRot.Forward;
+				int resizeDir = 0;
+				var reset = false;
 
-				int resizeDir;
 				if ( Input.Down( InputButton.Attack1 ) ) resizeDir = 1;
 				else if ( Input.Down( InputButton.Attack2 ) ) resizeDir = -1;
+				else if ( Input.Pressed( InputButton.Reload ) ) reset = true;
 				else return;
 
 				var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
@@ -26,23 +28,38 @@ namespace Sandbox.Tools
 				   .HitLayer( CollisionLayer.Debris )
 				   .Run();
 
-				if ( !tr.Hit || !tr.Entity.IsValid() || tr.Entity.PhysicsGroup == null )
+				if ( !tr.Hit || !tr.Entity.IsValid() )
 					return;
 
-				// Disable resizing lights for now
-				if ( tr.Entity is LightEntity || tr.Entity is LampEntity )
+				var entity = tr.Entity.Root;
+				if ( !entity.IsValid() )
 					return;
 
-				var scale = Math.Clamp( tr.Entity.Scale + ((0.5f * Time.Delta) * resizeDir), 0.4f, 4.0f );
+				if ( entity.PhysicsGroup == null )
+					return;
 
-				if ( tr.Entity.Scale != scale )
+				var scale = reset ? 1.0f : Math.Clamp( entity.Scale + ((0.5f * Time.Delta) * resizeDir), 0.4f, 4.0f );
+
+				if ( entity.Scale != scale )
 				{
-					tr.Entity.Scale = scale;
-					tr.Entity.PhysicsGroup.RebuildMass();
-					tr.Entity.PhysicsGroup.Wake();
+					entity.Scale = scale;
+					entity.PhysicsGroup.RebuildMass();
+					entity.PhysicsGroup.Wake();
+
+					foreach ( var child in entity.Children )
+					{
+						if ( !child.IsValid() )
+							continue;
+
+						if ( child.PhysicsGroup == null )
+							continue;
+
+						child.PhysicsGroup.RebuildMass();
+						child.PhysicsGroup.Wake();
+					}
 				}
 
-				if ( Input.Pressed( InputButton.Attack1 ) || Input.Pressed( InputButton.Attack2 ) )
+				if ( Input.Pressed( InputButton.Attack1 ) || Input.Pressed( InputButton.Attack2 ) || reset )
 				{
 					CreateHitEffects( tr.EndPos );
 				}

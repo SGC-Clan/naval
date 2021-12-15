@@ -3,15 +3,6 @@
 [Library( "ent_balloon", Title = "Balloon", Spawnable = true )]
 public partial class BalloonEntity : Prop
 {
-	static SoundEvent PopSound = new( "sounds/balloon_pop_cute.vsnd" )
-	{
-		Volume = 1,
-		DistanceMax = 500.0f
-	};
-
-	public PhysicsJoint AttachJoint;
-	public Particles AttachRope;
-
 	private static float GravityScale => -0.2f;
 
 	public override void Spawn()
@@ -21,32 +12,18 @@ public partial class BalloonEntity : Prop
 		SetModel( "models/citizen_props/balloonregular01.vmdl" );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
 		PhysicsBody.GravityScale = GravityScale;
-		RenderColor = Color.Random.ToColor32();
-	}
-
-	protected override void OnDestroy()
-	{
-		base.OnDestroy();
-
-		if ( AttachJoint.IsValid() )
-		{
-			AttachJoint.Remove();
-		}
-
-		if ( AttachRope != null )
-		{
-			AttachRope.Destroy( true );
-		}
+		RenderColor = Color.Random;
 	}
 
 	public override void OnKilled()
 	{
 		base.OnKilled();
 
-		PlaySound( PopSound.Name );
+		PlaySound( "balloon_pop_cute" );
 	}
 
-	public void OnPostPhysicsStep( float dt )
+	[Event.Physics.PostStep]
+	protected void UpdateGravity()
 	{
 		if ( !this.IsValid() )
 			return;
@@ -54,6 +31,7 @@ public partial class BalloonEntity : Prop
 		var body = PhysicsBody;
 		if ( !body.IsValid() )
 			return;
+
 
 		body.GravityScale = GravityScale;
 	}

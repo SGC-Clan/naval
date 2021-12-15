@@ -67,7 +67,7 @@
 							},
 						]
 						origin = [ 0.0, 0.0, 0.0 ]
-						angles = [ -0.0, 0.0, 89.999985 ]
+						angles = [ 0.0, 0.0, 90.0 ]
 						do_not_discard = true
 					},
 				]
@@ -194,7 +194,7 @@
 						name = "88skc30_bg_88skc30_lod0"
 						filename = "models/courier/88skc30_refs/mesh/88skc30_bg_88skc30_lod0.dmx"
 						import_translation = [ 0.0, 0.0, 0.0 ]
-						import_rotation = [ 0.0, 90.0, 0.0 ]
+						import_rotation = [ 0.0, 0.0, 0.0 ]
 						import_scale = 1.0
 						align_origin_x_type = "None"
 						align_origin_y_type = "None"
@@ -232,28 +232,68 @@
 						framerate = 30.0
 						reverse = false
 					},
-					{
-						_class = "AnimFile"
-						name = "@idle_0"
-						activity_name = ""
-						activity_weight = 1
-						weight_list_name = ""
-						fade_in_time = 0.2
-						fade_out_time = 0.2
-						looping = false
-						delta = false
-						worldSpace = false
-						hidden = false
-						anim_markup_ordered = false
-						disable_compression = false
-						source_filename = "models/courier/88skc30_refs/anim/_idle_0.dmx"
-						start_frame = 0
-						end_frame = 0
-						framerate = 30.0
-						reverse = false
-					},
 				]
 				default_root_bone_name = ""
+			},
+			{
+				_class = "GameDataList"
+				children = 
+				[
+					{
+						_class = "LookAtChain"
+						name = "turret_aim_yaw"
+						lookat_chain = 
+						{
+							name = ""
+							bones = 
+							[
+								{
+									name = "joint2"
+									weight = 1.0
+								},
+							]
+						}
+					},
+					{
+						_class = "LookAtChain"
+						name = "turret_aim_pitch"
+						lookat_chain = 
+						{
+							name = ""
+							bones = 
+							[
+								{
+									name = "joint3"
+									weight = 1.0
+								},
+							]
+						}
+					},
+				]
+			},
+			{
+				_class = "AttachmentList"
+				children = 
+				[
+					{
+						_class = "Attachment"
+						name = "muzzle"
+						parent_bone = "joint4"
+						relative_origin = [ 0.0, 0.0, 0.0 ]
+						relative_angles = [ 0.0, 0.0, 0.0 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+					{
+						_class = "Attachment"
+						name = "turret_aim_reference"
+						parent_bone = "joint1"
+						relative_origin = [ 0.0, 16.979721, 0.0 ]
+						relative_angles = [ 0.0, 0.0, 0.0 ]
+						weight = 1.0
+						ignore_rotation = false
+					},
+				]
 			},
 		]
 		model_archetype = ""

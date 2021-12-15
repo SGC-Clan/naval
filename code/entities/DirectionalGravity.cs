@@ -41,7 +41,8 @@ public partial class DirectionalGravity : Prop
 		enabled = false;
 	}
 
-	public void OnPostPhysicsStep( float dt )
+	[Event.Physics.PostStep]
+	protected void UpdateGravity()
 	{
 		if ( !IsServer )
 			return;

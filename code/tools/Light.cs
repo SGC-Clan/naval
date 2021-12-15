@@ -68,6 +68,7 @@
 					QuadraticAttenuation = 1.0f,
 					Brightness = 1,
 					Color = Color.Random,
+					//LightCookie = Texture.Load( "materials/effects/lightcookie.vtex" )
 				};
 
 				light.UseFogNoShadows();
@@ -82,7 +83,7 @@
 				rope.SetEntity( 0, light, Vector3.Down * 6.5f ); // Should be an attachment point
 
 				var attachEnt = tr.Body.IsValid() ? tr.Body.Entity : tr.Entity;
-				var attachLocalPos = tr.Body.Transform.PointToLocal( tr.EndPos );
+				var attachLocalPos = tr.Body.Transform.PointToLocal( tr.EndPos ) * (1.0f / tr.Entity.Scale);
 
 				if ( attachEnt.IsWorld )
 				{
@@ -93,19 +94,23 @@
 					rope.SetEntityBone( 1, attachEnt, tr.Bone, new Transform( attachLocalPos ) );
 				}
 
-				light.AttachRope = rope;
-
-				light.AttachJoint = PhysicsJoint.Spring
-					.From( light.PhysicsBody )
-					.To( tr.Body )
-					.WithPivot( light.Position + Vector3.Down * 6.5f )
+				var spring = PhysicsJoint.Spring
+					.From( light.PhysicsBody, Vector3.Down * 6.5f )
+					.To( tr.Body, tr.Body.Transform.PointToLocal( tr.EndPos ) )
 					.WithFrequency( 5.0f )
 					.WithDampingRatio( 0.7f )
-					.WithReferenceMass( 0 )
+					.WithReferenceMass( light.PhysicsBody.Mass )
 					.WithMinRestLength( 0 )
 					.WithMaxRestLength( 100 )
 					.WithCollisionsEnabled()
 					.Create();
+
+				spring.EnableAngularConstraint = false;
+				spring.OnBreak( () =>
+				{
+					rope?.Destroy( true );
+					spring.Remove();
+				} );
 			}
 		}
 	}

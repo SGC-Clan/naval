@@ -1,6 +1,6 @@
 ﻿using Sandbox;
 
-public partial class NavalPlayer
+partial class NavalPlayer
 {
 	[ClientRpc]
 	private void BecomeRagdollOnClient( Vector3 velocity, DamageFlags damageFlags, Vector3 forcePos, Vector3 force, int bone )
@@ -21,7 +21,7 @@ public partial class NavalPlayer
 		ent.EnableHitboxes = true;
 		ent.EnableAllCollisions = true;
 		ent.SurroundingBoundsMode = SurroundingBoundsType.Physics;
-		ent.RenderColorAndAlpha = RenderColorAndAlpha;
+		ent.RenderColor = RenderColor;
 		ent.PhysicsGroup.Velocity = velocity;
 
 		if ( Local.Pawn == this )
@@ -35,37 +35,31 @@ public partial class NavalPlayer
 
 		foreach ( var child in Children )
 		{
-			if ( child is ModelEntity e )
-			{
-				var model = e.GetModelName();
-				if ( model != null && !model.Contains( "clothes" ) )
-					continue;
+			if ( !child.Tags.Has( "clothes" ) ) continue;
+			if ( child is not ModelEntity e ) continue;
 
-				var clothing = new ModelEntity();
-				clothing.SetModel( model );
-				clothing.SetParent( ent, true );
-				clothing.RenderColorAndAlpha = e.RenderColorAndAlpha;
+			var model = e.GetModelName();
 
-				if ( Local.Pawn == this )
-				{
-					//	clothing.EnableDrawing = false; wtf
-				}
-			}
+			var clothing = new ModelEntity();
+			clothing.SetModel( model );
+			clothing.SetParent( ent, true );
+			clothing.RenderColor = e.RenderColor;
+			clothing.CopyBodyGroups( e );
+			clothing.CopyMaterialGroup( e );
 		}
 
-		if ( damageFlags.HasFlag( DamageFlags.Bullet ) )
+		if ( damageFlags.HasFlag( DamageFlags.Bullet ) ||
+			 damageFlags.HasFlag( DamageFlags.PhysicsImpact ) )
 		{
-			if ( bone >= 0 )
+			PhysicsBody body = bone > 0 ? ent.GetBonePhysicsBody( bone ) : null;
+
+			if ( body != null )
 			{
-				var body = ent.GetBonePhysicsBody( bone );
-				if ( body != null )
-				{
-					body.ApplyImpulseAt( forcePos, force * body.Mass );
-				}
-				else
-				{
-					ent.PhysicsGroup.ApplyImpulse( force );
-				}
+				body.ApplyImpulseAt( forcePos, force * body.Mass );
+			}
+			else
+			{
+				ent.PhysicsGroup.ApplyImpulse( force );
 			}
 		}
 

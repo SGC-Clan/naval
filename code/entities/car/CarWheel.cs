@@ -3,32 +3,33 @@ using System;
 
 struct CarWheel
 {
-	private readonly CarEntity _parent;
+	private readonly CarEntity parent;
 
 	private float _previousLength;
 	private float _currentLength;
 
 	public CarWheel( CarEntity parent )
 	{
-		_parent = parent;
+		this.parent = parent;
 		_previousLength = 0;
 		_currentLength = 0;
 	}
 
 	public bool Raycast( float length, bool doPhysics, Vector3 offset, ref float wheel, float dt )
 	{
-		var position = _parent.Position;
-		var rotation = _parent.Rotation;
+		var position = parent.Position;
+		var rotation = parent.Rotation;
 
 		var wheelAttachPos = position + offset;
-		var wheelExtend = wheelAttachPos - rotation.Up * (length * _parent.Scale);
+		var wheelExtend = wheelAttachPos - rotation.Up * (length * parent.Scale);
 
 		var tr = Trace.Ray( wheelAttachPos, wheelExtend )
-			.Ignore( _parent )
+			.Ignore( parent )
+			.Ignore( parent.driver )
 			.Run();
 
 		wheel = length * tr.Fraction;
-		var wheelRadius = (14 * _parent.Scale);
+		var wheelRadius = (14 * parent.Scale);
 
 		if ( !doPhysics && CarEntity.debug_car )
 		{
@@ -52,10 +53,10 @@ struct CarWheel
 			return tr.Hit;
 		}
 
-		var body = _parent.PhysicsBody;
+		var body = parent.PhysicsBody.SelfOrParent;
 
 		_previousLength = _currentLength;
-		_currentLength = (length * _parent.Scale) - tr.Distance;
+		_currentLength = (length * parent.Scale) - tr.Distance;
 
 		var springVelocity = (_currentLength - _previousLength) / dt;
 		var springForce = body.Mass * 50.0f * _currentLength;

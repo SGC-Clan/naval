@@ -1,5 +1,4 @@
 ﻿using Sandbox;
-using Sandbox.Tools;
 
 [Library( "ent_lamp", Title = "Lamp", Spawnable = true )]
 public partial class LampEntity : SpotLightEntity, IUse
