@@ -32,9 +32,9 @@
 						parent_bone = ""
 						surface_prop = "default"
 						collision_prop = "default"
-						origin = [ 20.704412, -0.230542, 42.376873 ]
+						origin = [ 27.086147, 0.365026, -17.309641 ]
 						angles = [ -25.0, 0.0, 0.0 ]
-						dimensions = [ 19.334562, 20.442484, 1.155323 ]
+						dimensions = [ 41.214828, 48.5429, 1.648882 ]
 					},
 				]
 			},
@@ -45,9 +45,9 @@
 					{
 						_class = "RenderMeshFile"
 						filename = "models/sernikb/serns blueprint tool.fbx"
-						import_translation = [ 350.0, 0.0, 700.0 ]
+						import_translation = [ 210.0, 0.0, -135.0 ]
 						import_rotation = [ 0.0, 90.0, -25.0 ]
-						import_scale = 0.06
+						import_scale = 0.04
 						align_origin_x_type = "None"
 						align_origin_y_type = "None"
 						align_origin_z_type = "None"

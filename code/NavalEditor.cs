@@ -5,7 +5,7 @@ using Sandbox.Tools;
 partial class NavalEditor : Carriable
 {
 
-	public override string ViewModelPath => "models/sernikb/serns_blueprint_tool.vmdl_c";
+	public override string ViewModelPath => "models/sernikb/serns_blueprint_tool_v.vmdl_c";
 
 	public override void Spawn()
 	{
@@ -50,8 +50,8 @@ partial class NavalEditor : Carriable
 
 	public override void SimulateAnimator(PawnAnimator anim)
 	{
-		anim.SetParam("holdtype", 1);
+		anim.SetParam("holdtype", 4);
 		anim.SetParam("aimat_weight", 1.0f);
-		anim.SetParam("holdtype_handedness", 1);
+		anim.SetParam("holdtype_handedness", 0);
 	}
 }
