@@ -14,12 +14,12 @@
 
 			using ( Prediction.Off() )
 			{
-				bool push = Input.Down( InputButton.Attack1 );
-				if ( !push && !Input.Down( InputButton.Attack2 ) )
+				bool push = Input.Down( InputButton.PrimaryAttack );
+				if ( !push && !Input.Down( InputButton.SecondaryAttack ) )
 					return;
 
-				var startPos = Owner.EyePos;
-				var dir = Owner.EyeRot.Forward;
+				var startPos = Owner.EyePosition;
+				var dir = Owner.EyeRotation.Forward;
 
 				var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
 					.Ignore( Owner )
@@ -40,7 +40,7 @@
 				if ( !body.IsValid() )
 					return;
 
-				var direction = tr.EndPos - tr.StartPos;
+				var direction = tr.EndPosition - tr.StartPosition;
 				var distance = direction.Length;
 				var ratio = (1.0f - (distance / MaxDistance)).Clamp( 0, 1 ) * (push ? 1.0f : -1.0f);
 				var force = direction * (Force * ratio);
@@ -50,7 +50,7 @@
 					force *= body.Mass;
 				}
 
-				body.ApplyForceAt( tr.EndPos, force );
+				body.ApplyForceAt( tr.EndPosition, force );
 			}
 		}
 	}

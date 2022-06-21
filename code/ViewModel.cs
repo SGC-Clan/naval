@@ -15,6 +15,11 @@ public class ViewModel : BaseViewModel
 
 	private bool activated = false;
 
+	public bool EnableSwingAndBob = true;
+
+	public float YawInertia { get; private set; }
+	public float PitchInertia { get; private set; }
+
 	public override void PostCameraSetup( ref CameraSetup camSetup )
 	{
 		base.PostCameraSetup( ref camSetup );
@@ -27,30 +32,56 @@ public class ViewModel : BaseViewModel
 			lastPitch = camSetup.Rotation.Pitch();
 			lastYaw = camSetup.Rotation.Yaw();
 
+			YawInertia = 0;
+			PitchInertia = 0;
+
 			activated = true;
 		}
 
 		Position = camSetup.Position;
 		Rotation = camSetup.Rotation;
 
-		camSetup.ViewModel.FieldOfView = FieldOfView;
+		var cameraBoneIndex = GetBoneIndex( "camera" );
+		if ( cameraBoneIndex != -1 )
+		{
+			camSetup.Rotation *= (Rotation.Inverse * GetBoneTransform( cameraBoneIndex ).Rotation);
+		}
 
 		var newPitch = Rotation.Pitch();
 		var newYaw = Rotation.Yaw();
 
-		var pitchDelta = Angles.NormalizeAngle( newPitch - lastPitch );
-		var yawDelta = Angles.NormalizeAngle( lastYaw - newYaw );
+		PitchInertia = Angles.NormalizeAngle( newPitch - lastPitch );
+		YawInertia = Angles.NormalizeAngle( lastYaw - newYaw );
 
-		var playerVelocity = Local.Pawn.Velocity;
-		var verticalDelta = playerVelocity.z * Time.Delta;
-		var viewDown = Rotation.FromPitch( newPitch ).Up * -1.0f;
-		verticalDelta *= (1.0f - System.MathF.Abs( viewDown.Cross( Vector3.Down ).y ));
-		pitchDelta -= verticalDelta * 1;
+		if ( EnableSwingAndBob )
+		{
+			var playerVelocity = Local.Pawn.Velocity;
 
-		var offset = CalcSwingOffset( pitchDelta, yawDelta );
-		offset += CalcBobbingOffset( playerVelocity );
+			if ( Local.Pawn is Player player )
+			{
+				var controller = player.GetActiveController();
+				if ( controller != null && controller.HasTag( "noclip" ) )
+				{
+					playerVelocity = Vector3.Zero;
+				}
+			}
 
-		Position += Rotation * offset;
+			var verticalDelta = playerVelocity.z * Time.Delta;
+			var viewDown = Rotation.FromPitch( newPitch ).Up * -1.0f;
+			verticalDelta *= (1.0f - System.MathF.Abs( viewDown.Cross( Vector3.Down ).y ));
+			var pitchDelta = PitchInertia - verticalDelta * 1;
+			var yawDelta = YawInertia;
+
+			var offset = CalcSwingOffset( pitchDelta, yawDelta );
+			offset += CalcBobbingOffset( playerVelocity );
+
+			Position += Rotation * offset;
+		}
+		else
+		{
+			SetAnimParameter( "aim_yaw_inertia", YawInertia );
+			SetAnimParameter( "aim_pitch_inertia", PitchInertia );
+		}
 
 		lastPitch = newPitch;
 		lastYaw = newYaw;

@@ -1,10 +1,9 @@
 ﻿using Sandbox;
-using Sandbox.Tools;
 using System;
-using System.Runtime.CompilerServices;
 
-[Library( "nvl_turret_base", Title = "Naval Turret Example", Spawnable = true )]
-public partial class NavalTurretBase : AnimEntity, IUse
+[Spawnable]
+[Library( "nvl_turret_base", Title = "Naval Turret Example" )]
+public partial class NavalTurretBase : AnimatedEntity, IUse
 {
 	public bool nvl_debug = true;
 
@@ -108,7 +107,7 @@ public partial class NavalTurretBase : AnimEntity, IUse
 		Pitch %= 360.0f;
 
 		//For now im gona use AnimGraph even tho its far from ideal
-		SetAnimVector( "turret_aim_pos", Transform.PointToLocal( new Vector3(100,100,800) ) );
+		SetAnimParameter( "turret_aim_pos", Transform.PointToLocal( new Vector3(100,100,800) ) );
 
 
 	}
@@ -166,14 +165,15 @@ public partial class NavalTurretBase : AnimEntity, IUse
 
 		//recoil
 		this.Velocity += this.Transform.NormalToWorld( new Vector3( -RecoilForce, 0, 0) );
-		SetAnimBool( "turret_recoil_anim", true ); 
-		SetAnimFloat( "turret_recoil_strenght", 4f );
-		SetAnimVector( "turret_recoil_offset", Position );
+		SetAnimParameter( "turret_recoil_anim", true );
+		SetAnimParameter( "turret_recoil_strenght", 4f );
+		SetAnimParameter( "turret_recoil_offset", Position );
 
 		//screen shake
 		if ( IsLocalPawn )
 		{
-			new Sandbox.ScreenShake.Perlin( 0.5f, 2.0f, 0.5f );
+			//new Sandbox.ScreenShake.Perlin( 0.5f, 2.0f, 0.5f );  //screen shake got removed for some reason ?
+
 		}
 
 		// Reload
@@ -210,7 +210,7 @@ public partial class NavalTurretBase : AnimEntity, IUse
 
 	public void Remove()
 	{
-		PhysicsGroup?.Wake();
+		//PhysicsGroup?.Wake();
 		Delete();
 	}
 

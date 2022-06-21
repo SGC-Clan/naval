@@ -18,12 +18,12 @@ namespace Sandbox.Tools
 			if ( RelativeToNormal )
 			{
 				Rotation = Rotation.LookAt( tr.Normal, tr.Direction ) * RotationOffset;
-				Position = tr.EndPos + Rotation * PositionOffset;
+				Position = tr.EndPosition + Rotation * PositionOffset;
 			}
 			else
 			{
 				Rotation = Rotation.Identity * RotationOffset;
-				Position = tr.EndPos + PositionOffset;
+				Position = tr.EndPosition + PositionOffset;
 			}
 
 			if ( OffsetBounds )

@@ -30,8 +30,8 @@ public class Compass : Panel
 		if ( player == null ) return;
 
 
-		var bearing = -player.EyeRot.Angles().yaw - 180;
-		var pov = Math.Clamp( -(player.EyeRot.Angles().pitch + 28) / 90, -1, 1 );
+		var bearing = -player.EyeRotation.Angles().yaw - 180;
+		var pov = Math.Clamp( -(player.EyeRotation.Angles().pitch + 28) / 90, -1, 1 );
 
 		if ( Math.Round( bearing ) < 0)
 		{

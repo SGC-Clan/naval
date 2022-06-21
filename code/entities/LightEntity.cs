@@ -1,6 +1,7 @@
 ﻿using Sandbox;
 
-[Library( "ent_light", Title = "Light", Spawnable = true )]
+[Spawnable]
+[Library( "ent_light", Title = "Light" )]
 public partial class LightEntity : PointLightEntity, IUse
 {
 	public override void Spawn()
@@ -27,7 +28,6 @@ public partial class LightEntity : PointLightEntity, IUse
 
 	public void Remove()
 	{
-		PhysicsGroup?.Wake();
 		Delete();
 	}
 }

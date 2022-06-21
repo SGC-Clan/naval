@@ -1,6 +1,7 @@
 ﻿using Sandbox;
 
-[Library( "ent_balloon", Title = "Balloon", Spawnable = true )]
+[Spawnable]
+[Library( "ent_balloon", Title = "Balloon" )]
 public partial class BalloonEntity : Prop
 {
 	private static float GravityScale => -0.2f;

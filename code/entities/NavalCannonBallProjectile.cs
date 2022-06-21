@@ -1,7 +1,8 @@
 ﻿using Sandbox;
 using System;
 
-[Library( "nvl_cannon_ball_projectile", Title = "Cannon Ball", Spawnable = false )]
+//[Spawnable]
+[Library( "nvl_cannon_ball_projectile", Title = "Cannon Ball" )]
 public partial class NavalCannonBallProjectile : Prop
 {
 	public Prop CannonParent = null; //a cannon this projectile originated from
@@ -21,7 +22,7 @@ public partial class NavalCannonBallProjectile : Prop
 			//simple explosion damage to hit entity
 			if ( eventData.Entity.IsValid() )
 			{
-					var damage = DamageInfo.Explosion( eventData.Pos, eventData.PreVelocity * 2, 100 )
+					var damage = DamageInfo.Explosion( eventData.Position, eventData.PreVelocity * 2, 100 )
 					.WithAttacker( CannonParent.Owner )
 					.WithWeapon( CannonParent );
 
@@ -93,10 +94,10 @@ public partial class NavalCannonBallProjectile : Prop
 		if ( Radius > 0.0f )
 		{
 			var sourcePos = PhysicsBody.MassCenter;
-			var overlaps = Physics.GetEntitiesInSphere( sourcePos, Radius );
+			var overlaps = FindInSphere( sourcePos, Radius );
 
 			if ( debug )
-				DebugOverlay.Sphere( sourcePos, Radius, Color.Orange, true, 5 );
+				DebugOverlay.Sphere( sourcePos, Radius, Color.Orange, 5 );
 
 			foreach ( var overlap in overlaps )
 			{
@@ -126,7 +127,7 @@ public partial class NavalCannonBallProjectile : Prop
 				if ( tr.Fraction < 1.0f )
 				{
 					if ( debug )
-						DebugOverlay.Line( sourcePos, tr.EndPos, Color.Red, 5, true );
+						DebugOverlay.Line( sourcePos, tr.EndPosition, Color.Red, 5, true );
 
 					continue;
 				}

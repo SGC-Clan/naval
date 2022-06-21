@@ -18,12 +18,12 @@ namespace Sandbox.Tools
 			using ( Prediction.Off() )
 			{
 
-				if ( Input.Pressed( InputButton.Attack1 ) )
+				if ( Input.Pressed( InputButton.PrimaryAttack ) )
 				{
 					Paste();
 				}
 
-				if ( Input.Pressed( InputButton.Attack2 ) )
+				if ( Input.Pressed( InputButton.SecondaryAttack ) )
 				{
 					Copy();
 				}
@@ -33,8 +33,8 @@ namespace Sandbox.Tools
 
 		public void Copy()
 		{
-			var startPos = Owner.EyePos;
-			var dir = Owner.EyeRot.Forward;
+			var startPos = Owner.EyePosition;
+			var dir = Owner.EyeRotation.Forward;
 
 			var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
 				.Ignore( Owner )
@@ -47,18 +47,18 @@ namespace Sandbox.Tools
 			if ( tr.Entity is Player )
 				return;
 
-			CreateHitEffects( tr.EndPos );
+			CreateHitEffects( tr.EndPosition );
 
 			if ( tr.Entity.IsWorld )
 				return;
 
-			TempSavedEntClass = tr.Entity.ClassInfo.FullName;
+			TempSavedEntClass = tr.Entity.ClassName;
 			Log.Info( TempSavedEntClass );
 
 			TempSavedEntModel = (tr.Entity as ModelEntity)?.GetModelName();
 			Log.Info( TempSavedEntModel );
 
-			TempSavedEntRotation = tr.Entity.WorldAng;
+			TempSavedEntRotation = tr.Entity.Rotation.Angles();
 
 			TempSavedEntScale = tr.Entity.Scale;
 
@@ -69,8 +69,8 @@ namespace Sandbox.Tools
 		public void Paste() 
 		{
 
-			var startPos = Owner.EyePos;
-			var dir = Owner.EyeRot.Forward;
+			var startPos = Owner.EyePosition;
+			var dir = Owner.EyeRotation.Forward;
 
 			var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
 				.Ignore( Owner )
@@ -82,10 +82,10 @@ namespace Sandbox.Tools
 			if ( TempSavedEntModel == null )
 				return;
 
-			CreateHitEffects( tr.EndPos );
+			CreateHitEffects( tr.EndPosition );
 
-			var ent = Library.Create<Entity>( TempSavedEntClass );
-			ent.Position = tr.EndPos;
+			var ent = TypeLibrary.Create<Entity>( TempSavedEntClass );
+			ent.Position = tr.EndPosition;
 			ent.Rotation = Rotation.From( TempSavedEntRotation );
 			ent.Scale = TempSavedEntScale;
 			( ent as ModelEntity )?.SetModel( TempSavedEntModel );

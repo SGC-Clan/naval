@@ -1,6 +1,7 @@
 ﻿using Sandbox;
 
-[Library( "weapon_flintlock", Title = "Flintlock Pistol", Spawnable = true )]
+[Spawnable]
+[Library( "weapon_flintlock", Title = "Flintlock Pistol" )]
 partial class Flintlock : Weapon
 {
 	public override string ViewModelPath => "models/naval/weapons/v_pistol.vmdl";
@@ -23,7 +24,7 @@ partial class Flintlock : Weapon
 	/// </summary>
 	public override bool CanPrimaryAttack()
 	{
-		if ( !Input.Pressed( InputButton.Attack1 ) )
+		if ( !Input.Pressed( InputButton.PrimaryAttack ) )
 			return false;
 
 		return base.CanPrimaryAttack();
@@ -33,7 +34,7 @@ partial class Flintlock : Weapon
 	{
 		base.Reload();
 
-		ViewModelEntity?.SetAnimBool( "reload", true );
+		ViewModelEntity?.SetAnimParameter( "reload", true );
 
 		Sound.FromEntity( "nvl.flintlock.reloadflock", this );
 
@@ -50,7 +51,7 @@ partial class Flintlock : Weapon
 		{
 			//Shoot the gun
 			BulletIsLoaded = false;
-			Shoot( Owner.EyePos, Owner.EyeRot.Forward );
+			Shoot( Owner.EyePosition, Owner.EyeRotation.Forward );
 		}
 		else
 		{
@@ -67,7 +68,9 @@ partial class Flintlock : Weapon
 		FlintlockShootEffects();
 
 
-		bool InWater = Physics.TestPointContents( pos, CollisionLayer.Water );
+		//bool InWater = Physics.TestPointContents( pos, CollisionLayer.Water ); this function got removed ?
+		bool InWater = WaterLevel != 0;
+
 		var forward = dir * (InWater ? 500 : 4000);
 
 		//
@@ -77,7 +80,7 @@ partial class Flintlock : Weapon
 		foreach ( var tr in TraceBullet( pos, pos + dir * 4000 ) )
 		{
 			//make a bulletpass sound
-			Sound.FromWorld( "nvl.bulletpass", tr.EndPos );
+			Sound.FromWorld( "nvl.bulletpass", tr.EndPosition );
 
 			//custom bullet tracer effects
 			//var tracer = Particles.Create( "particles/naval_hitscan_projectile_small.vpcf", this, "muzzle" );
@@ -93,7 +96,7 @@ partial class Flintlock : Weapon
 			//
 			using ( Prediction.Off() )
 			{
-				var damage = DamageInfo.FromBullet( tr.EndPos, forward.Normal * 20, 60 )
+				var damage = DamageInfo.FromBullet( tr.EndPosition, forward.Normal * 20, 60 )
 					.UsingTraceResult( tr )
 					.WithAttacker( Owner )
 					.WithWeapon( this );
@@ -113,7 +116,7 @@ partial class Flintlock : Weapon
 			Particles.Create( "particles/naval_fuze_sparks.vpcf", EffectEntity, "spark" );
 		}
 
-		ViewModelEntity?.SetAnimBool( "shootempty", true );
+		ViewModelEntity?.SetAnimParameter( "shootempty", true );
 	}
 
 	private void Discharge()
@@ -191,23 +194,23 @@ partial class Flintlock : Weapon
 		Particles.Create( "particles/naval_fuze_sparks.vpcf", EffectEntity, "spark" );
 		Particles.Create( "particles/pistol_muzzleflash.vpcf", this, "muzzle" );
 
-		ViewModelEntity?.SetAnimBool( "shoot", true );
-		(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
+		ViewModelEntity?.SetAnimParameter( "shoot", true );
+		(Owner as AnimatedEntity)?.SetAnimParameter( "b_attack", true );
 		//CrosshairPanel?.OnEvent( "onattack" );
 
 		if ( IsLocalPawn )
 		{
-			new Sandbox.ScreenShake.Perlin( 0.5f, 2.0f, 0.5f );
+			//new Sandbox.ScreenShake.Perlin( 0.5f, 2.0f, 0.5f );
 		}
 
-		CrosshairPanel?.CreateEvent("fire");
+		//CrosshairPanel?.CreateEvent("fire");
 	}
 
 	public override void SimulateAnimator( PawnAnimator anim )
 	{
-		anim.SetParam( "holdtype", 1 );
-		anim.SetParam( "holdtype_pose_hand", 0.06f );
-		anim.SetParam( "aimat_weight", 1.0f );
+		anim.SetAnimParameter( "holdtype", 1 );
+		anim.SetAnimParameter( "holdtype_pose_hand", 0.06f );
+		anim.SetAnimParameter( "aimat_weight", 1.0f );
 	}
 
 }

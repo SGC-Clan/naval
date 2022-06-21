@@ -15,12 +15,12 @@ namespace Sandbox.Tools
 			using ( Prediction.Off() )
 			{
 
-				if ( Input.Pressed( InputButton.Attack1 ) )
+				if ( Input.Pressed( InputButton.PrimaryAttack ) )
 				{
 					CreateShip();
 				}
 
-				if ( Input.Pressed( InputButton.Attack2 ) )
+				if ( Input.Pressed( InputButton.SecondaryAttack ) )
 				{
 					
 				}
@@ -34,7 +34,7 @@ namespace Sandbox.Tools
 
 			Entity SpawnEnt( Vector3 entPos, Angles entRot, string entModel, string entClass )
 			{
-				var ent = Library.Create<Entity>( entClass );
+				var ent = TypeLibrary.Create<Entity>( entClass );
 				ent.Position = entPos;
 				ent.Rotation = Rotation.From( entRot );
 				(ent as ModelEntity)?.SetModel( entModel );
@@ -42,18 +42,18 @@ namespace Sandbox.Tools
 				return ent;
 			}
 
-			var startPos = Owner.EyePos;
-			var dir = Owner.EyeRot.Forward;
+			var startPos = Owner.EyePosition;
+			var dir = Owner.EyeRotation.Forward;
 
 			var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
 				.Ignore( Owner )
 				.HitLayer( CollisionLayer.Debris )
 				.Run();
-			var SpawnPos = tr.EndPos + new Vector3( 0, 0, 50 );
+			var SpawnPos = tr.EndPosition + new Vector3( 0, 0, 50 );
 
 			CreateHitEffects( SpawnPos );
 
-			SpawnEnt( SpawnPos, Owner.WorldAng, "models/rust_vehicles/rowboat/rowboat.vmdl", "Sandbox.Prop" );
+			SpawnEnt( SpawnPos, Owner.Rotation.Angles(), "models/rust_vehicles/rowboat/rowboat.vmdl", "Sandbox.Prop" );
 
 		}
 	}	

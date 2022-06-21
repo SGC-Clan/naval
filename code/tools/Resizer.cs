@@ -12,13 +12,13 @@ namespace Sandbox.Tools
 
 			using ( Prediction.Off() )
 			{
-				var startPos = Owner.EyePos;
-				var dir = Owner.EyeRot.Forward;
+				var startPos = Owner.EyePosition;
+				var dir = Owner.EyeRotation.Forward;
 				int resizeDir = 0;
 				var reset = false;
 
-				if ( Input.Down( InputButton.Attack1 ) ) resizeDir = 1;
-				else if ( Input.Down( InputButton.Attack2 ) ) resizeDir = -1;
+				if ( Input.Down( InputButton.PrimaryAttack ) ) resizeDir = 1;
+				else if ( Input.Down( InputButton.SecondaryAttack ) ) resizeDir = -1;
 				else if ( Input.Pressed( InputButton.Reload ) ) reset = true;
 				else return;
 
@@ -44,7 +44,7 @@ namespace Sandbox.Tools
 				{
 					entity.Scale = scale;
 					entity.PhysicsGroup.RebuildMass();
-					entity.PhysicsGroup.Wake();
+					entity.PhysicsGroup.Sleeping = false;
 
 					foreach ( var child in entity.Children )
 					{
@@ -55,13 +55,13 @@ namespace Sandbox.Tools
 							continue;
 
 						child.PhysicsGroup.RebuildMass();
-						child.PhysicsGroup.Wake();
+						child.PhysicsGroup.Sleeping = false;
 					}
 				}
 
-				if ( Input.Pressed( InputButton.Attack1 ) || Input.Pressed( InputButton.Attack2 ) || reset )
+				if ( Input.Pressed( InputButton.PrimaryAttack ) || Input.Pressed( InputButton.SecondaryAttack ) || reset )
 				{
-					CreateHitEffects( tr.EndPos );
+					CreateHitEffects( tr.EndPosition );
 				}
 			}
 		}

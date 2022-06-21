@@ -2,7 +2,8 @@
 using System;
 using System.Collections.Generic;
 
-[Library( "nvl_contraption_base", Title = "Naval Contraption Base", Spawnable = true )]
+[Spawnable]
+[Library( "nvl_contraption_base", Title = "Naval Contraption Base" )]
 public partial class NavalContraptions : Prop
 {
 	//public Prop[] HullProps { get; set; } //list of props this contraption is build of
@@ -10,19 +11,43 @@ public partial class NavalContraptions : Prop
 
 	public NavalPlayer ContraptionOwner; //current owner of contraption
 
-
 	public override void Spawn()
 	{
 		base.Spawn();
 
 		SetModel( "models/courier/platform1s.vmdl" );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
-		SetInteractsExclude( CollisionLayer.Player );
+		//SetInteractsExclude( CollisionLayer.Player );
+
+		PhysicsGroup.SetSurface( "concrete" ); //"wood"
 
 		//lest test if this even works at all shall we ?
 		RandomlyGenerateHull( Rand.Int( 5, 8 ), Rand.Float( 0.5f, 3 ), true );
-		PhysicsGroup.SetSurface( "wood" );
+		
 	}
+
+	// Movement system for vehicles
+	[Event.Physics.PostStep]
+	protected void ApplyForces()
+	{
+		if ( !PhysicsBody.IsValid() )
+		{
+			return;
+		}
+
+		var body = PhysicsBody;
+		var tf = Transform;
+
+		// those stats should change depending on contraption min max demensions and type 
+		body.LinearDrag = 1.0f;
+		body.AngularDrag = 1.0f;
+		body.LinearDamping = 4.0f;
+		body.AngularDamping = 4.0f;
+
+		//TO:DO movement system 
+
+	}
+
 
 	public void RandomlyGenerateHull( int Props, float Scale, bool Symetry )
 	{
@@ -77,28 +102,28 @@ public partial class NavalContraptions : Prop
 				"courier/tower1m.vmdl",
 				"courier/tower1s.vmdl",
 				"nita/shipwreck/ship_metalgrate_01.vmdl",
-				"nita/shipwreck/cliffside_pipe_01.vmdl",
+				//"nita/shipwreck/cliffside_pipe_01.vmdl",
 				"nita/shipwreck/float02a.vmdl",
 				"nita/shipwreck/float03a.vmdl",
 				"nita/shipwreck/float01a.vmdl",
-				"nita/shipwreck/pipe_256_01.vmdl",
-				"nita/shipwreck/ship_metalbeam_01.vmdl",
-				"nita/shipwreck/ship_metalbeam_01_cluster512.vmdl",
-				"nita/shipwreck/submarine_ceiling_01a.vmdl",
-				"nita/shipwreck/submarine_ceiling_01.vmdl",
-				"nita/shipwreck/sub_pipe_02b.vmdl",
-				"nita/shipwreck/sub_pipe_02.vmdl",
-				"nita/shipwreck/submarine_ceiling_01b.vmdl",
+				//"nita/shipwreck/pipe_256_01.vmdl",
+				//"nita/shipwreck/ship_metalbeam_01.vmdl",
+				//"nita/shipwreck/ship_metalbeam_01_cluster512.vmdl",
+				//"nita/shipwreck/submarine_ceiling_01a.vmdl",
+				//"nita/shipwreck/submarine_ceiling_01.vmdl",
+				//"nita/shipwreck/sub_pipe_02b.vmdl",
+				//"nita/shipwreck/sub_pipe_02.vmdl",
+				//"nita/shipwreck/submarine_ceiling_01b.vmdl",
 				"nita/shipwreck/substation_transformer01c.vmdl",
-				"nita/shipwreck/wallwebbing_01.vmdl",
-				"nita/shipwreck/wallwebbing_01b.vmdl",
+				//"nita/shipwreck/wallwebbing_01.vmdl",
+				//"nita/shipwreck/wallwebbing_01b.vmdl",
 				"nita/shipwreck/watertank_02.vmdl",
 				"nita/shipwreck/ship_crane_01.vmdl",
-				"nita/shipwreck/spip_part04.vmdl",
+				//"nita/shipwreck/spip_part04.vmdl",
 				//"nita/shipwreck/shipwreck_part02.vmdl",
 				//"nita/shipwreck/shipwreck_part03.vmdl",
 				//"nita/shipwreck/shipwreck_part01.vmdl",
-				"nita/shipwreck/submarine_ladder_01.vmdl",
+				//"nita/shipwreck/submarine_ladder_01.vmdl",
 				"courier/type90.vmdl",
 				"courier/twinm2.vmdl",
 				"courier/radial2.vmdl",
@@ -119,6 +144,7 @@ public partial class NavalContraptions : Prop
 				this.Weld( ent );
 				ent.LocalPosition = base.Position + PositionOffset;
 				ent.LocalRotation = Rotation.From( this.Rotation.Angles() + RotationOffset );
+				HullProps.Add( ent );
 			}
 
 			if ( !Symetry || IsPropCentered ) continue;
@@ -134,8 +160,22 @@ public partial class NavalContraptions : Prop
 				this.Weld( ent );
 				ent.LocalPosition = base.Position + PositionOffset;
 				ent.LocalRotation = Rotation.From( this.Rotation.Angles() + RotationOffset );
+				HullProps.Add( ent );
 			}
 		}
+	}
+
+	public override void OnKilled() {
+
+		HullProps.ForEach( delegate ( Prop Hull )
+		{
+
+			Hull.Unweld();
+			Hull.Delete(); // why the fuck its not working 
+
+		} );
+
+		base.OnKilled();
 	}
 
 }

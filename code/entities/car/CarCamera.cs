@@ -1,7 +1,7 @@
 ﻿using Sandbox;
 using System;
 
-public class CarCamera : Camera
+public class CarCamera : CameraMode
 {
 	protected virtual float MinFov => 80.0f;
 	protected virtual float MaxFov => 100.0f;
@@ -33,13 +33,9 @@ public class CarCamera : Camera
 	private Rotation orbitPitchRot;
 	private float currentFov;
 	private float carPitch;
-	private bool firstPerson;
 
 	public override void Activated()
 	{
-		var pawn = Local.Pawn;
-		if ( pawn == null ) return;
-
 		orbitEnabled = false;
 		timeSinceOrbit = 0.0f;
 		orbitAngles = Angles.Zero;
@@ -47,27 +43,19 @@ public class CarCamera : Camera
 		orbitPitchRot = Rotation.Identity;
 		currentFov = MinFov;
 		carPitch = 0;
-		firstPerson = false;
 
-		var car = (pawn as NavalPlayer)?.Vehicle as CarEntity;
-		if ( !car.IsValid() ) return;
-
-		orbitYawRot = firstPerson ? Rotation.Identity : Rotation.FromYaw( car.Rotation.Yaw() );
-		orbitPitchRot = firstPerson ? Rotation.FromPitch( FirstPersonPitch ) : Rotation.Identity;
+		orbitYawRot = Rotation.FromYaw( Entity.Rotation.Yaw() );
+		orbitPitchRot = Rotation.Identity;
 		orbitAngles = (orbitYawRot * orbitPitchRot).Angles();
 	}
 
 	public override void Update()
 	{
-		var pawn = Local.Pawn;
-		if ( pawn == null ) return;
-
-		var car = (pawn as NavalPlayer)?.Vehicle as CarEntity;
+		var car = Entity as CarEntity;
 		if ( !car.IsValid() ) return;
 
 		var body = car.PhysicsBody;
-		if ( !body.IsValid() )
-			return;
+		if ( !body.IsValid() ) return;
 
 		var speed = car.MovementSpeed;
 		var speedAbs = Math.Abs( speed );
@@ -87,54 +75,24 @@ public class CarCamera : Camera
 		}
 		else
 		{
-			if ( firstPerson )
-			{
-				var targetYaw = 0;
-				var targetPitch = FirstPersonPitch;
-				var slerpAmount = Time.Delta * OrbitReturnSmoothingSpeed;
+			var targetPitch = FixedOrbitPitch.Clamp( MinOrbitPitch, MaxOrbitPitch );
+			var targetYaw = speed < 0.0f ? carRot.Yaw() + 180.0f : carRot.Yaw();
+			var slerpAmount = MaxOrbitReturnSpeed > 0.0f ? Time.Delta * (speedAbs / MaxOrbitReturnSpeed).Clamp( 0.0f, OrbitReturnSmoothingSpeed ) : 1.0f;
 
-				orbitYawRot = Rotation.Slerp( orbitYawRot, Rotation.FromYaw( targetYaw ), slerpAmount );
-				orbitPitchRot = Rotation.Slerp( orbitPitchRot, Rotation.FromPitch( targetPitch ), slerpAmount );
-			}
-			else
-			{
-				var targetPitch = FixedOrbitPitch.Clamp( MinOrbitPitch, MaxOrbitPitch );
-				var targetYaw = !firstPerson && speed < 0.0f ? carRot.Yaw() + 180.0f : carRot.Yaw();
-				var slerpAmount = MaxOrbitReturnSpeed > 0.0f ? Time.Delta * (speedAbs / MaxOrbitReturnSpeed).Clamp( 0.0f, OrbitReturnSmoothingSpeed ) : 1.0f;
-
-				orbitYawRot = Rotation.Slerp( orbitYawRot, Rotation.FromYaw( targetYaw ), slerpAmount );
-				orbitPitchRot = Rotation.Slerp( orbitPitchRot, Rotation.FromPitch( targetPitch + carPitch ), slerpAmount );
-			}
+			orbitYawRot = Rotation.Slerp( orbitYawRot, Rotation.FromYaw( targetYaw ), slerpAmount );
+			orbitPitchRot = Rotation.Slerp( orbitPitchRot, Rotation.FromPitch( targetPitch + carPitch ), slerpAmount );
 
 			orbitAngles.pitch = orbitPitchRot.Pitch();
 			orbitAngles.yaw = orbitYawRot.Yaw();
 			orbitAngles = orbitAngles.Normal;
 		}
 
-		if ( firstPerson )
-		{
-			DoFirstPerson();
-		}
-		else
-		{
-			DoThirdPerson( car, body );
-		}
+		DoThirdPerson( car, body );
 
 		currentFov = MaxFovSpeed > 0.0f ? currentFov.LerpTo( MinFov.LerpTo( MaxFov, speedAbs / MaxFovSpeed ), Time.Delta * FovSmoothingSpeed ) : MaxFov;
 		FieldOfView = currentFov;
 
 		ApplyShake( speedAbs );
-	}
-
-	private void DoFirstPerson()
-	{
-		var pawn = Local.Pawn;
-		if ( pawn == null ) return;
-
-		Position = pawn.EyePos;
-		Rotation = pawn.Rotation * (orbitYawRot * orbitPitchRot);
-
-		Viewer = pawn;
 	}
 
 	private void DoThirdPerson( CarEntity car, PhysicsBody body )
@@ -151,7 +109,7 @@ public class CarCamera : Camera
 			.WorldOnly()
 			.Run();
 
-		Position = tr.EndPos;
+		Position = tr.EndPosition;
 
 		Viewer = null;
 	}
@@ -162,19 +120,6 @@ public class CarCamera : Camera
 
 		var pawn = Local.Pawn;
 		if ( pawn == null ) return;
-
-		var car = (pawn as NavalPlayer)?.Vehicle as CarEntity;
-		if ( !car.IsValid() ) return;
-
-		if ( input.Pressed( InputButton.View ) )
-		{
-			firstPerson = !firstPerson;
-			orbitYawRot = firstPerson ? Rotation.Identity : Rotation.FromYaw( car.Rotation.Yaw() );
-			orbitPitchRot = firstPerson ? Rotation.FromPitch( FirstPersonPitch ) : Rotation.Identity;
-			orbitAngles = (orbitYawRot * orbitPitchRot).Angles();
-			orbitEnabled = false;
-			timeSinceOrbit = 0.0f;
-		}
 
 		if ( (Math.Abs( input.AnalogLook.pitch ) + Math.Abs( input.AnalogLook.yaw )) > 0.0f )
 		{
@@ -196,15 +141,7 @@ public class CarCamera : Camera
 			orbitAngles.pitch = orbitAngles.pitch.Clamp( MinOrbitPitch, MaxOrbitPitch );
 		}
 
-		if ( firstPerson )
-		{
-			input.ViewAngles = (car.Rotation * Rotation.From( orbitAngles )).Angles();
-		}
-		else
-		{
-			input.ViewAngles = orbitEnabled ? orbitAngles : car.Rotation.Angles();
-		}
-
+		input.ViewAngles = orbitEnabled ? orbitAngles : Entity.Rotation.Angles();
 		input.ViewAngles = input.ViewAngles.Normal;
 	}
 

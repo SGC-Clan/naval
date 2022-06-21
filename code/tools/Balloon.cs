@@ -49,12 +49,12 @@
 
 			using ( Prediction.Off() )
 			{
-				bool useRope = Input.Pressed( InputButton.Attack1 );
-				if ( !useRope && !Input.Pressed( InputButton.Attack2 ) )
+				bool useRope = Input.Pressed( InputButton.PrimaryAttack );
+				if ( !useRope && !Input.Pressed( InputButton.SecondaryAttack ) )
 					return;
 
-				var startPos = Owner.EyePos;
-				var dir = Owner.EyeRot.Forward;
+				var startPos = Owner.EyePosition;
+				var dir = Owner.EyeRotation.Forward;
 
 				var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
 					.Ignore( Owner )
@@ -66,14 +66,14 @@
 				if ( !tr.Entity.IsValid() )
 					return;
 
-				CreateHitEffects( tr.EndPos );
+				CreateHitEffects( tr.EndPosition );
 
 				if ( tr.Entity is BalloonEntity )
 					return;
 
 				var ent = new BalloonEntity
 				{
-					Position = tr.EndPos,
+					Position = tr.EndPosition,
 				};
 
 				ent.SetModel( "models/citizen_props/balloonregular01.vmdl" );
@@ -88,8 +88,8 @@
 				var rope = Particles.Create( "particles/rope.vpcf" );
 				rope.SetEntity( 0, ent );
 
-				var attachEnt = tr.Body.IsValid() ? tr.Body.Entity : tr.Entity;
-				var attachLocalPos = tr.Body.Transform.PointToLocal( tr.EndPos ) * (1.0f / tr.Entity.Scale);
+				var attachEnt = tr.Body.IsValid() ? tr.Body.GetEntity() : tr.Entity;
+				var attachLocalPos = tr.Body.Transform.PointToLocal( tr.EndPosition ) * (1.0f / tr.Entity.Scale);
 
 				if ( attachEnt.IsWorld )
 				{
@@ -100,23 +100,15 @@
 					rope.SetEntityBone( 1, attachEnt, tr.Bone, new Transform( attachLocalPos ) );
 				}
 
-				var spring = PhysicsJoint.Spring
-					.From( ent.PhysicsBody )
-					.To( tr.Body, tr.Body.Transform.PointToLocal( tr.EndPos ) )
-					.WithFrequency( 5.0f )
-					.WithDampingRatio( 0.7f )
-					.WithReferenceMass( ent.PhysicsBody.Mass )
-					.WithMinRestLength( 0 )
-					.WithMaxRestLength( 100 )
-					.WithCollisionsEnabled()
-					.Create();
-
+				var spring = PhysicsJoint.CreateLength( ent.PhysicsBody, PhysicsPoint.World( tr.Body, tr.EndPosition ), 100 );
+				spring.SpringLinear = new( 5, 0.7f );
+				spring.Collisions = true;
 				spring.EnableAngularConstraint = false;
-				spring.OnBreak( () =>
+				spring.OnBreak += () =>
 				{
 					rope?.Destroy( true );
 					spring.Remove();
-				} );
+				};
 			}
 		}
 	}

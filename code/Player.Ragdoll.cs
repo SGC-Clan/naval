@@ -24,11 +24,6 @@ partial class NavalPlayer
 		ent.RenderColor = RenderColor;
 		ent.PhysicsGroup.Velocity = velocity;
 
-		if ( Local.Pawn == this )
-		{
-			//ent.EnableDrawing = false; wtf
-		}
-
 		ent.SetInteractsAs( CollisionLayer.Debris );
 		ent.SetInteractsWith( CollisionLayer.WORLD_GEOMETRY );
 		ent.SetInteractsExclude( CollisionLayer.Player | CollisionLayer.Debris );

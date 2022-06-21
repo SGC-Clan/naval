@@ -21,14 +21,16 @@ public class CurrentTool : Panel
 
 		if ( tool != null )
 		{
-			Title.SetText( tool.ClassInfo.Title );
-			Description.SetText( tool.ClassInfo.Description );
+			var display = DisplayInfo.For( tool );
+
+			Title.SetText( display.Name );
+			Description.SetText( display.Description );
 		}
 	}
 
 	BaseTool GetCurrentTool()
 	{
-		var player = Local.Pawn;
+		var player = Local.Pawn as Player;
 		if ( player == null ) return null;
 
 		var inventory = player.Inventory;

@@ -1,8 +1,7 @@
 ﻿using Sandbox;
-using Sandbox.Tools;
-using System.Runtime.CompilerServices;
 
-[Library( "nvl_blackpowder_cannon", Title = "Blackpowder Cannon", Spawnable = true )]
+[Spawnable]
+[Library( "nvl_blackpowder_cannon", Title = "Blackpowder Cannon" )]
 public partial class BlackpowderCannonEntity : Prop, IUse
 {
 	public float WickTime = 1.2f; //(seconds) how long the wick burns before shooting the cannonball
@@ -100,7 +99,7 @@ public partial class BlackpowderCannonEntity : Prop, IUse
 		//screen shake
 		if ( IsLocalPawn )
 		{
-			new Sandbox.ScreenShake.Perlin( 0.5f, 2.0f, 0.5f );
+			//new Sandbox.ScreenShake.Perlin( 0.5f, 2.0f, 0.5f );
 		}
 
 		// Reload
@@ -113,7 +112,7 @@ public partial class BlackpowderCannonEntity : Prop, IUse
 
 	public void Remove()
 	{
-		PhysicsGroup?.Wake();
+		//PhysicsGroup?.Wake();
 		Delete();
 	}
 

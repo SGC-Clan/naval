@@ -1,6 +1,7 @@
 ﻿using Sandbox;
 
-[Library( "nvl_birdstest", Title = "Birds Test", Spawnable = true )]
+[Spawnable]
+[Library( "nvl_birdstest", Title = "Birds Test" )]
 public partial class BirdsTest : Prop
 {
 

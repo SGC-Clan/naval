@@ -1,7 +1,8 @@
 ﻿using Sandbox;
 using System;
 
-[Library( "weapon_cutlass", Title = "Sword (Cutlass)", Spawnable = true )]
+[Spawnable]
+[Library( "weapon_cutlass", Title = "Sword (Cutlass)" )]
 partial class Cutlass : Weapon
 {
 	public override string ViewModelPath => "models/naval/weapons/cutlass2.vmdl";
@@ -23,7 +24,7 @@ partial class Cutlass : Weapon
 	{
 		base.ActiveStart( ent );
 		PlaySound( "nvl.sword.draw" );
-		ViewModelEntity?.SetAnimBool( "Draw", true );
+		ViewModelEntity?.SetAnimParameter( "Draw", true );
 	}
 
 	public override void CreateViewModel()
@@ -44,9 +45,9 @@ partial class Cutlass : Weapon
 	{
 		IsBlocking = false;
 
-		ViewModelEntity?.SetAnimBool( "AttackPrimary", true );
+		ViewModelEntity?.SetAnimParameter( "AttackPrimary", true );
 
-		(Owner as AnimEntity)?.SetAnimBool( "b_attack", true );
+		(Owner as AnimatedEntity)?.SetAnimParameter( "b_attack", true );
 
 		await GameTask.DelayRealtimeSeconds( 0.4f );
 
@@ -65,29 +66,29 @@ partial class Cutlass : Weapon
 
 	private bool MeleeAttack()
 	{
-		var forward = Owner.EyeRot.Forward;
+		var forward = Owner.EyeRotation.Forward;
 		forward = forward.Normal;
 
 		bool hit = false;
-		ViewModelEntity?.SetAnimBool( "Miss", true );
+		ViewModelEntity?.SetAnimParameter( "Miss", true );
 
 		//World model animations
-		(Owner as AnimEntity)?.SetAnimBool( "hit", true );
-		(Owner as AnimEntity)?.SetAnimFloat( "hit_strenght", 0.5f );
+		( Owner as AnimatedEntity)?.SetAnimParameter( "hit", true );
+		(Owner as AnimatedEntity)?.SetAnimParameter( "hit_strenght", 0.5f );
 
 		Random rand = new Random();
 		float RandAttackAnim = (float)rand.Next( 3 );
-		(Owner as AnimEntity)?.SetAnimFloat( "holdtype_attack", RandAttackAnim );
+		(Owner as AnimatedEntity)?.SetAnimParameter( "holdtype_attack", RandAttackAnim );
 
-		foreach ( var tr in TraceBullet( Owner.EyePos, Owner.EyePos + forward * 80, 20.0f ) )
+		foreach ( var tr in TraceBullet( Owner.EyePosition, Owner.EyePosition + forward * 80, 20.0f ) )
 		{
 			if ( !tr.Entity.IsValid() ) continue;
 
 			if ( tr.Entity.IsWorld )
 			{
 				PlaySound( "nvl.sword.clash" ); // Only make this annoying sound when you hit ground or something static
-				ViewModelEntity?.SetAnimBool( "Stun", true );//temp stun code 
-				ViewModelEntity?.SetAnimBool( "Miss", false );
+				ViewModelEntity?.SetAnimParameter( "Stun", true );//temp stun code 
+				ViewModelEntity?.SetAnimParameter( "Miss", false );
 			}
 
 			tr.Surface.DoBulletImpact( tr );
@@ -98,7 +99,7 @@ partial class Cutlass : Weapon
 
 			using ( Prediction.Off() )
 			{
-				var damageInfo = DamageInfo.FromBullet( tr.EndPos, forward * 100, 25 )
+				var damageInfo = DamageInfo.FromBullet( tr.EndPosition, forward * 100, 25 )
 					.UsingTraceResult( tr )
 					.WithAttacker( Owner )
 					.WithWeapon( this );
@@ -118,7 +119,7 @@ partial class Cutlass : Weapon
 
 		if ( IsLocalPawn )
 		{
-			_ = new Sandbox.ScreenShake.Perlin();
+			//_ = new Sandbox.ScreenShake.Perlin();
 		}
 	}
 
@@ -129,13 +130,13 @@ partial class Cutlass : Weapon
 
 		if ( IsLocalPawn )
 		{
-			_ = new Sandbox.ScreenShake.Perlin( 1.0f, 1.0f, 3.0f );
+			//_ = new Sandbox.ScreenShake.Perlin( 1.0f, 1.0f, 3.0f );
 		}
 	}
 
 	public override void AttackSecondary()
 	{
-		ViewModelEntity?.SetAnimBool( "Block", true );
+		ViewModelEntity?.SetAnimParameter( "Block", true );
 		IsBlocking = true;
 	}
 
@@ -146,15 +147,15 @@ partial class Cutlass : Weapon
 
 	public override void SimulateAnimator( PawnAnimator anim )
 	{
-		anim.SetParam( "holdtype", 4 );
-		anim.SetParam( "holdtype_pose_hand", 0.06f ); //nearly pinched fingers
-		anim.SetParam( "aimat_weight", 1.0f );
+		anim.SetAnimParameter( "holdtype", 4 );
+		anim.SetAnimParameter( "holdtype_pose_hand", 0.06f ); //nearly pinched fingers
+		anim.SetAnimParameter( "aimat_weight", 1.0f );
 
 		//if blocking set animation to 2 handed
 		if ( IsBlocking ) {
-			anim.SetParam( "holdtype_handedness", 0 );
+			anim.SetAnimParameter( "holdtype_handedness", 0 );
 		} else {
-			anim.SetParam( "holdtype_handedness", 1 );
+			anim.SetAnimParameter( "holdtype_handedness", 1 );
 		}
 	}
 

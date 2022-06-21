@@ -19,7 +19,7 @@ namespace naval.Teams
 		{
 			if ( !Players.Contains( player ) )
 			{
-				Log.Info( $"Player `{player.GetClientOwner().Name}` joined team `{TeamName}` IsServer: {Host.IsServer}" );
+				Log.Info( $"Player `{player.Client.Name}` joined team `{TeamName}` IsServer: {Host.IsServer}" );
 				Players.Add( player );
 			}
 
@@ -29,7 +29,7 @@ namespace naval.Teams
 		{
 			if ( !Players.Contains( player ) )
 			{
-				Log.Info( $"Player `{player.GetClientOwner().Name}` left team `{TeamName}` IsServer: {Host.IsServer}" );
+				Log.Info( $"Player `{player.Client.Name}` left team `{TeamName}` IsServer: {Host.IsServer}" );
 				Players.Remove( player );
 			}
 		}

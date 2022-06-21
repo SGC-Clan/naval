@@ -12,8 +12,8 @@
 
 			using ( Prediction.Off() )
 			{
-				var startPos = Owner.EyePos;
-				var dir = Owner.EyeRot.Forward;
+				var startPos = Owner.EyePosition;
+				var dir = Owner.EyeRotation.Forward;
 
 				var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
 					.Ignore( Owner )
@@ -28,7 +28,7 @@
 				if ( tr.Entity is not Prop prop )
 					return;
 
-				if ( Input.Pressed( InputButton.Attack1 ) )
+				if ( Input.Pressed( InputButton.PrimaryAttack ) )
 				{
 
 					//var CurMass = prop.PhysicsGroup.Mass;
@@ -36,11 +36,11 @@
 					//prop.PhysicsGroup.Mass = CurMass / 2;
 					prop.PhysicsGroup.SetSurface( "wood" );
 
-					CreateHitEffects( tr.EndPos );
+					CreateHitEffects( tr.EndPosition );
 					//ViewModelEntity?.SetAnimBool( "reload", true );
 
 				}
-				else if ( Input.Down( InputButton.Attack2 ) )
+				else if ( Input.Down( InputButton.SecondaryAttack ) )
 				{
 
 					//DebugOverlay.Text( prop.Position, "Mass: " + prop.PhysicsGroup.Mass );

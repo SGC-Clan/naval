@@ -1,12 +1,16 @@
 ﻿using Sandbox;
 using Sandbox.Tools;
 
+[Spawnable]
 [Library("weapon_navaleditor", Title = "Contraption Editor")]
 partial class NavalEditor : Carriable
 {
 	private TimeSince timeSinceUse;
 
 	private int UseDistance = 1500;
+
+	[Net, Local, Predicted]
+	private bool RenderPreviewArea { get; set; } = false;
 
 	protected virtual float UseCooldown => 0.5f;
 	public override string ViewModelPath => "models/sernikb/serns_blueprint_tool_v.vmdl_c";
@@ -30,13 +34,13 @@ partial class NavalEditor : Carriable
 
 		using ( Prediction.Off() )
 		{
-			if ( Input.Pressed( InputButton.Attack1 ) )
+			if ( Input.Pressed( InputButton.PrimaryAttack ) )
 			{
 				timeSinceUse = 0;
 
 				var MaxTraceDistance = UseDistance;
-				var startPos = Owner.EyePos;
-				var dir = Owner.EyeRot.Forward;
+				var startPos = Owner.EyePosition;
+				var dir = Owner.EyeRotation.Forward;
 
 				var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
 					.UseHitboxes()
@@ -47,10 +51,10 @@ partial class NavalEditor : Carriable
 				//if ( !tr.Hit || !tr.Entity.IsValid() )
 					//return;
 
-				var ent = Library.Create<Entity>( "nvl_contraption_base" );
+				var ent = TypeLibrary.Create<Entity>( "nvl_contraption_base" );
 
-				ent.Position = tr.EndPos + new Vector3(0,0,40);
-				ent.Rotation = Rotation.From( new Angles( 0, Owner.EyeRot.Angles().yaw, 0 ) );
+				ent.Position = tr.EndPosition + new Vector3(0,0,40);
+				ent.Rotation = Rotation.From( new Angles( 0, Owner.EyeRotation.Angles().yaw, 0 ) );
 
 			}
 		}
@@ -60,11 +64,21 @@ partial class NavalEditor : Carriable
 	{
 		base.ActiveStart(ent);
 
+		if ( IsServer )
+		{
+			RenderPreviewArea = true;
+		}
+
 	}
 
 	public override void ActiveEnd(Entity ent, bool dropped)
 	{
 		base.ActiveEnd(ent, dropped);
+
+		if ( IsServer )
+		{
+			RenderPreviewArea = false;
+		}
 
 	}
 
@@ -81,25 +95,29 @@ partial class NavalEditor : Carriable
 	[Event.Frame]
 	public void OnFrame()
 	{
-		if (!IsActiveChild()) return;
+		if ( RenderPreviewArea )
+		{
+			//if (!IsActiveChild()) return; this function got removed ?
 
-		var tr = Trace.Ray( Owner.EyePos, Owner.EyePos + Owner.EyeRot.Forward * UseDistance )
-			.UseHitboxes()
-			.Size( 2 )
-			.Ignore( Owner )
-			.Run();
+			var tr = Trace.Ray( Owner.EyePosition, Owner.EyePosition + Owner.EyeRotation.Forward * UseDistance )
+				.UseHitboxes()
+				.Size( 2 )
+				.Ignore( Owner )
+				.Run();
 
-		//if ( !tr.Hit )
+			//if ( !tr.Hit )
 			//return;
 
-		DebugOverlay.Box( tr.EndPos + new Vector3( 50, -50, 10 ) , tr.EndPos + new Vector3( -50, 50, 10 ) );
-		DebugOverlay.Box( tr.EndPos + new Vector3( 50, -50, 40 ), tr.EndPos + new Vector3( -50, 50, 40 ) );
+			DebugOverlay.Box( tr.EndPosition + new Vector3( 50, -50, 10 ), tr.EndPosition + new Vector3( -50, 50, 10 ) );
+			DebugOverlay.Box( tr.EndPosition + new Vector3( 50, -50, 40 ), tr.EndPosition + new Vector3( -50, 50, 40 ) );
+		}
 	}
+
 
 	public override void SimulateAnimator(PawnAnimator anim)
 	{
-		anim.SetParam("holdtype", 4);
-		anim.SetParam("aimat_weight", 1.0f);
-		anim.SetParam("holdtype_handedness", 0);
+		anim.SetAnimParameter( "holdtype", 4);
+		anim.SetAnimParameter( "aimat_weight", 1.0f);
+		anim.SetAnimParameter( "holdtype_handedness", 0);
 	}
 }

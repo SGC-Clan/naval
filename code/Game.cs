@@ -1,15 +1,10 @@
 ﻿using naval.Teams;
 using Sandbox;
-using Sandbox.UI;
-using Sandbox.UI.Construct;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-
-
-namespace naval
+namespace Sandbox
 {
 	[Library( "naval", Title = "Naval" )]
 	public partial class NavalGame : Game
@@ -83,65 +78,102 @@ namespace naval
 			base.OnDestroy();
 		}
 
-		[ServerCmd( "spawn" )]
-		public static void Spawn( string modelname )
+		[ConCmd.Server( "spawn" )]
+		public static async Task Spawn( string modelname )
 		{
 			var owner = ConsoleSystem.Caller?.Pawn;
 
 			if ( ConsoleSystem.Caller == null )
 				return;
 
-			var tr = Trace.Ray( owner.EyePos, owner.EyePos + owner.EyeRot.Forward * 500 )
+			var tr = Trace.Ray( owner.EyePosition, owner.EyePosition + owner.EyeRotation.Forward * 500 )
 				.UseHitboxes()
 				.Ignore( owner )
-				.Size( 2 )
 				.Run();
 
-			var ent = new Prop();
-			ent.Position = tr.EndPos;
-			ent.Rotation = Rotation.From( new Angles( 0, owner.EyeRot.Angles().yaw, 0 ) ) * Rotation.FromAxis( Vector3.Up, 180 );
-			ent.SetModel( modelname );
+			var modelRotation = Rotation.From( new Angles( 0, owner.EyeRotation.Angles().yaw, 0 ) ) * Rotation.FromAxis( Vector3.Up, 180 );
 
-			// Drop to floor
-			if ( ent.PhysicsBody != null && ent.PhysicsGroup.BodyCount == 1 )
+			//
+			// Does this look like a package?
+			//
+			if ( modelname.Count( x => x == '.' ) == 1 && !modelname.EndsWith( ".vmdl", System.StringComparison.OrdinalIgnoreCase ) && !modelname.EndsWith( ".vmdl_c", System.StringComparison.OrdinalIgnoreCase ) )
 			{
-				var p = ent.PhysicsBody.FindClosestPoint( tr.EndPos );
-
-				var delta = p - tr.EndPos;
-				ent.PhysicsBody.Position -= delta;
-				//DebugOverlay.Line( p, tr.EndPos, 10, false );
+				modelname = await SpawnPackageModel( modelname, tr.EndPosition, modelRotation, owner );
+				if ( modelname == null )
+					return;
 			}
 
+			var model = Model.Load( modelname );
+			if ( model == null || model.IsError )
+				return;
+
+			var ent = new Prop
+			{
+				Position = tr.EndPosition + Vector3.Down * model.PhysicsBounds.Mins.z,
+				Rotation = modelRotation,
+				Model = model
+			};
+
+			// Let's make sure physics are ready to go instead of waiting
+			ent.SetupPhysicsFromModel( PhysicsMotionType.Dynamic );
+
+			// If there's no physics model, create a simple OBB
+			if ( !ent.PhysicsBody.IsValid() )
+			{
+				ent.SetupPhysicsFromOBB( PhysicsMotionType.Dynamic, ent.CollisionBounds.Mins, ent.CollisionBounds.Maxs );
+			}
 		}
 
-		[ServerCmd( "spawn_entity" )]
+		static async Task<string> SpawnPackageModel( string packageName, Vector3 pos, Rotation rotation, Entity source )
+		{
+			var package = await Package.Fetch( packageName, false );
+			if ( package == null || package.PackageType != Package.Type.Model || package.Revision == null )
+			{
+				// spawn error particles
+				return null;
+			}
+
+			if ( !source.IsValid ) return null; // source entity died or disconnected or something
+
+			var model = package.GetMeta( "PrimaryAsset", "models/dev/error.vmdl" );
+			var mins = package.GetMeta( "RenderMins", Vector3.Zero );
+			var maxs = package.GetMeta( "RenderMaxs", Vector3.Zero );
+
+			// downloads if not downloads, mounts if not mounted
+			await package.MountAsync();
+
+			return model;
+		}
+
+		[ConCmd.Server( "spawn_entity" )]
 		public static void SpawnEntity( string entName )
 		{
-			var owner = ConsoleSystem.Caller.Pawn;
+			var owner = ConsoleSystem.Caller.Pawn as Player;
 
 			if ( owner == null )
 				return;
 
-			var attribute = Library.GetAttribute( entName );
+			var entityType = TypeLibrary.GetTypeByName<Entity>( entName );
+			if ( entityType == null )
 
-			if ( attribute == null || !attribute.Spawnable )
-				return;
+				if ( !TypeLibrary.Has<SpawnableAttribute>( entityType ) )
+					return;
 
-			var tr = Trace.Ray( owner.EyePos, owner.EyePos + owner.EyeRot.Forward * 200 )
+			var tr = Trace.Ray( owner.EyePosition, owner.EyePosition + owner.EyeRotation.Forward * 200 )
 				.UseHitboxes()
 				.Ignore( owner )
 				.Size( 2 )
 				.Run();
 
-			var ent = Library.Create<Entity>( entName );
+			var ent = TypeLibrary.Create<Entity>( entityType );
 			if ( ent is BaseCarriable && owner.Inventory != null )
 			{
 				if ( owner.Inventory.Add( ent, true ) )
 					return;
 			}
 
-			ent.Position = tr.EndPos;
-			ent.Rotation = Rotation.From( new Angles( 0, owner.EyeRot.Angles().yaw, 0 ) );
+			ent.Position = tr.EndPosition;
+			ent.Rotation = Rotation.From( new Angles( 0, owner.EyeRotation.Angles().yaw, 0 ) );
 
 			//Log.Info( $"ent: {ent}" );
 		}

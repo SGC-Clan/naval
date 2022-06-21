@@ -7,7 +7,7 @@ partial class Tool : Carriable
 	[ConVar.ClientData( "tool_current" )]
 	public static string UserToolCurrent { get; set; } = "tool_boxgun";
 
-	public override string ViewModelPath => "models/gmod/weapons/v_toolgun.vmdl";
+	public override string ViewModelPath => "models/gmod/weapons/v_toolgun.vmdl_c";
 
 	[Net, Predicted]
 	public BaseTool CurrentTool { get; set; }
@@ -33,7 +33,7 @@ partial class Tool : Carriable
 			return;
 
 		// Already the right tool
-		if ( CurrentTool != null && CurrentTool.Parent == this && CurrentTool.Owner == owner.Pawn && CurrentTool.ClassInfo.IsNamed( toolName ) )
+		if ( CurrentTool != null && CurrentTool.Parent == this && CurrentTool.Owner == owner.Pawn && CurrentTool.ClassName == toolName )
 			return;
 
 		if ( CurrentTool != null )
@@ -42,7 +42,7 @@ partial class Tool : Carriable
 			CurrentTool = null;
 		}
 
-		CurrentTool = Library.Create<BaseTool>( toolName, false );
+		CurrentTool = TypeLibrary.Create<BaseTool>( toolName );
 
 		if ( CurrentTool != null )
 		{
@@ -81,16 +81,17 @@ partial class Tool : Carriable
 	[Event.Frame]
 	public void OnFrame()
 	{
-		if ( !IsActiveChild() ) return;
+		if ( Owner is Player player && player.ActiveChild != this )
+			return;
 
 		CurrentTool?.OnFrame();
 	}
 
 	public override void SimulateAnimator( PawnAnimator anim )
 	{
-		anim.SetParam( "holdtype", 1 );
-		anim.SetParam( "aimat_weight", 1.0f );
-		anim.SetParam( "holdtype_handedness", 1 );
+		anim.SetAnimParameter( "holdtype", 1 );
+		anim.SetAnimParameter( "aim_body_weight", 1.0f );
+		anim.SetAnimParameter( "holdtype_handedness", 1 );
 	}
 }
 

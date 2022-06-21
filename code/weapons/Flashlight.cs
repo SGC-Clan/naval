@@ -1,6 +1,7 @@
 ﻿using Sandbox;
 
-[Library( "weapon_flashlight", Title = "Flashlight", Spawnable = true )]
+[Spawnable]
+[Library( "weapon_flashlight", Title = "Flashlight" )]
 partial class Flashlight : Weapon
 {
 	public override string ViewModelPath => "weapons/rust_flashlight/v_rust_flashlight.vmdl";
@@ -25,7 +26,7 @@ partial class Flashlight : Weapon
 		worldLight = CreateLight();
 		worldLight.SetParent( this, "slide", new Transform( LightOffset ) );
 		worldLight.EnableHideInFirstPerson = true;
-		worldLight.Enabled = LightEnabled;
+		worldLight.Enabled = false;
 	}
 
 	public override void CreateViewModel()
@@ -52,11 +53,10 @@ partial class Flashlight : Weapon
 			Color = Color.White,
 			InnerConeAngle = 20,
 			OuterConeAngle = 40,
-			FogStength = 1.0f,
+			FogStrength = 1.0f,
 			Owner = Owner,
+			LightCookie = Texture.Load( "materials/effects/lightcookie.vtex" )
 		};
-
-		light.UseFog();
 
 		return light;
 	}
@@ -68,7 +68,7 @@ partial class Flashlight : Weapon
 
 		base.Simulate( cl );
 
-		bool toggle = Input.Pressed( InputButton.Flashlight ) || Input.Pressed( InputButton.Attack1 );
+		bool toggle = Input.Pressed( InputButton.Flashlight ) || Input.Pressed( InputButton.PrimaryAttack );
 
 		if ( timeSinceLightToggled > 0.1f && toggle )
 		{
@@ -90,6 +90,11 @@ partial class Flashlight : Weapon
 		}
 	}
 
+	public override bool CanReload()
+	{
+		return false;
+	}
+
 	public override void AttackSecondary()
 	{
 		if ( MeleeAttack() )
@@ -106,12 +111,12 @@ partial class Flashlight : Weapon
 
 	private bool MeleeAttack()
 	{
-		var forward = Owner.EyeRot.Forward;
+		var forward = Owner.EyeRotation.Forward;
 		forward = forward.Normal;
 
 		bool hit = false;
 
-		foreach ( var tr in TraceBullet( Owner.EyePos, Owner.EyePos + forward * 80, 20.0f ) )
+		foreach ( var tr in TraceBullet( Owner.EyePosition, Owner.EyePosition + forward * 80, 20.0f ) )
 		{
 			if ( !tr.Entity.IsValid() ) continue;
 
@@ -123,7 +128,7 @@ partial class Flashlight : Weapon
 
 			using ( Prediction.Off() )
 			{
-				var damageInfo = DamageInfo.FromBullet( tr.EndPos, forward * 100, 25 )
+				var damageInfo = DamageInfo.FromBullet( tr.EndPosition, forward * 100, 25 )
 					.UsingTraceResult( tr )
 					.WithAttacker( Owner )
 					.WithWeapon( this );
@@ -140,12 +145,7 @@ partial class Flashlight : Weapon
 	{
 		Host.AssertClient();
 
-		if ( IsLocalPawn )
-		{
-			_ = new Sandbox.ScreenShake.Perlin();
-		}
-
-		ViewModelEntity?.SetAnimBool( "attack", true );
+		ViewModelEntity?.SetAnimParameter( "attack", true );
 	}
 
 	[ClientRpc]
@@ -153,12 +153,7 @@ partial class Flashlight : Weapon
 	{
 		Host.AssertClient();
 
-		if ( IsLocalPawn )
-		{
-			_ = new Sandbox.ScreenShake.Perlin( 1.0f, 1.0f, 3.0f );
-		}
-
-		ViewModelEntity?.SetAnimBool( "attack_hit", true );
+		ViewModelEntity?.SetAnimParameter( "attack_hit", true );
 	}
 
 	private void Activate()
@@ -191,9 +186,16 @@ partial class Flashlight : Weapon
 	{
 		base.ActiveEnd( ent, dropped );
 
-		if ( IsServer && !dropped )
+		if ( IsServer )
 		{
-			Deactivate();
+			if ( dropped )
+			{
+				Activate();
+			}
+			else
+			{
+				Deactivate();
+			}
 		}
 	}
 }

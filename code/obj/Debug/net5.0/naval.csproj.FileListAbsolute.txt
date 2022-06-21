@@ -1,0 +1,14 @@
+C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\code\obj\Debug\net5.0\naval.csproj.AssemblyReference.cache
+C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\code\obj\Debug\net5.0\naval.GeneratedMSBuildEditorConfig.editorconfig
+C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\code\obj\Debug\net5.0\naval.AssemblyInfoInputs.cache
+C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\code\obj\Debug\net5.0\naval.AssemblyInfo.cs
+C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\code\obj\Debug\net5.0\naval.csproj.CoreCompileInputs.cache
+C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\.intermediate\net5.0\naval.deps.json
+C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\.intermediate\net5.0\naval.dll
+C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\.intermediate\net5.0\ref\naval.dll
+C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\.intermediate\net5.0\naval.pdb
+C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\.intermediate\net5.0\naval.xml
+C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\code\obj\Debug\net5.0\naval.csproj.CopyComplete
+C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\code\obj\Debug\net5.0\naval.dll
+C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\code\obj\Debug\net5.0\ref\naval.dll
+C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\code\obj\Debug\net5.0\naval.pdb

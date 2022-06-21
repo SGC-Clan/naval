@@ -12,8 +12,8 @@ public partial class NavalHud : HudEntity<RootPanel>
 
 		RootPanel.StyleSheet.Load( "/ui/NavalHud.scss" );
 
-		RootPanel.AddChild<NameTags>();
-		RootPanel.AddChild<CrosshairCanvas>();
+		//RootPanel.AddChild<NameTags>();
+		//RootPanel.AddChild<CrosshairCanvas>();
 		RootPanel.AddChild<ChatBox>();
 		RootPanel.AddChild<VoiceList>();
 		RootPanel.AddChild<KillFeed>();

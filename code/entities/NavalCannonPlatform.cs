@@ -1,8 +1,8 @@
 ﻿using Sandbox;
 using Sandbox.Tools;
 
-
-[Library( "nvl_cannon_platform", Title = "Cannon Platform", Spawnable = true )]
+[Spawnable]
+[Library( "nvl_cannon_platform", Title = "Cannon Platform" )]
 public partial class CannonPlatformEntity : Prop, IUse
 {
 	public PhysicsJoint AttachJoint;
@@ -21,7 +21,7 @@ public partial class CannonPlatformEntity : Prop, IUse
 
 	protected override void OnPhysicsCollision( CollisionEventData eventData )
 	{
-		if ( eventData.Entity.ClassInfo.Name == "nvl_blackpowder_cannon" )
+		if ( eventData.Entity.Name == "nvl_blackpowder_cannon" ) //eventData.Entity.ClassInfo.Name
 		{
 			var Cannon = eventData.Entity;
 			//cordinates from sent_platform.lua
@@ -73,7 +73,7 @@ public partial class CannonPlatformEntity : Prop, IUse
 
 	public void Remove()
 	{
-		PhysicsGroup?.Wake();
+		//PhysicsGroup?.Wake();
 		Delete();
 	}
 
