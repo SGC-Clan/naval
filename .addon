@@ -1,24 +1,23 @@
 {
-		"name": "Naval",
-		"version": "1.0",
-		"sharedassets": "*.*",
-
-		"depends": 
-		[
-			"base",
-			"citizen",
-			"rust"
-		],
-
-		//
-		// Addons can contain multiple addons, describe them here
-		//
-		"gamemodes":
-		[
-				{
-						"name": "naval",
-						"title": "Naval",
-						"description": "Create a craft ranging from warships to oil transports and submarines. To flying steampunk blimps to acrobatic aircraft and you fight the other team using an array of different weapons from the 18th century black powder cannons to the turrets seen on dreadnoughts and battleships of the 1920's."
-				}
-		]
+  "Title": "Naval",
+  "Type": "game",
+  "Org": "sgcdev",
+  "Ident": "naval",
+  "Schema": 1,
+  "HasAssets": true,
+  "AssetsPath": "",
+  "ResourcePaths": null,
+  "HasCode": true,
+  "CodePath": "code",
+  "RootNamespace": "Sandbox",
+  "Metadata": {
+    "MapList": [],
+    "MinPlayers": 1,
+    "MaxPlayers": 32,
+    "MapSelect": 0,
+    "PerMapRanking": false,
+    "GameNetworkType": 0,
+    "RankType": 0,
+    "LeaderboardType": 0
+  }
 }
