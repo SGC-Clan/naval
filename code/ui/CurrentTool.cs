@@ -30,7 +30,7 @@ public class CurrentTool : Panel
 
 	BaseTool GetCurrentTool()
 	{
-		var player = Local.Pawn as Player;
+		var player = Game.LocalPawn as Player;
 		if ( player == null ) return null;
 
 		var inventory = player.Inventory;

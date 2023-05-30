@@ -61,14 +61,14 @@ partial class Flashlight : Weapon
 		return light;
 	}
 
-	public override void Simulate( Client cl )
+	public override void Simulate( IClient cl )
 	{
 		if ( cl == null )
 			return;
 
 		base.Simulate( cl );
 
-		bool toggle = Input.Pressed( InputButton.Flashlight ) || Input.Pressed( InputButton.PrimaryAttack );
+		bool toggle = Input.Pressed( "flashlight" ) || Input.Pressed( "attack1" );
 
 		if ( timeSinceLightToggled > 0.1f && toggle )
 		{
@@ -111,12 +111,14 @@ partial class Flashlight : Weapon
 
 	private bool MeleeAttack()
 	{
-		var forward = Owner.EyeRotation.Forward;
+		var ray = Owner.AimRay;
+		
+		var forward = ray.Forward;
 		forward = forward.Normal;
 
 		bool hit = false;
 
-		foreach ( var tr in TraceBullet( Owner.EyePosition, Owner.EyePosition + forward * 80, 20.0f ) )
+		foreach ( var tr in TraceMelee( ray.Position, ray.Position + forward * 80, 20.0f ) )
 		{
 			if ( !tr.Entity.IsValid() ) continue;
 
@@ -124,7 +126,7 @@ partial class Flashlight : Weapon
 
 			hit = true;
 
-			if ( !IsServer ) continue;
+			if ( !Game.IsServer ) continue;
 
 			using ( Prediction.Off() )
 			{
@@ -143,7 +145,7 @@ partial class Flashlight : Weapon
 	[ClientRpc]
 	private void OnMeleeMiss()
 	{
-		Host.AssertClient();
+		Game.AssertClient();
 
 		ViewModelEntity?.SetAnimParameter( "attack", true );
 	}
@@ -151,7 +153,7 @@ partial class Flashlight : Weapon
 	[ClientRpc]
 	private void OnMeleeHit()
 	{
-		Host.AssertClient();
+		Game.AssertClient();
 
 		ViewModelEntity?.SetAnimParameter( "attack_hit", true );
 	}
@@ -176,7 +178,7 @@ partial class Flashlight : Weapon
 	{
 		base.ActiveStart( ent );
 
-		if ( IsServer )
+		if ( Game.IsServer )
 		{
 			Activate();
 		}
@@ -186,7 +188,7 @@ partial class Flashlight : Weapon
 	{
 		base.ActiveEnd( ent, dropped );
 
-		if ( IsServer )
+		if ( Game.IsServer )
 		{
 			if ( dropped )
 			{
@@ -197,5 +199,12 @@ partial class Flashlight : Weapon
 				Deactivate();
 			}
 		}
+	}
+
+	public override void SimulateAnimator( CitizenAnimationHelper anim )
+	{
+		anim.HoldType = CitizenAnimationHelper.HoldTypes.Pistol;
+		anim.Handedness = CitizenAnimationHelper.Hand.Right;
+		anim.AimBodyWeight = 1.0f;
 	}
 }

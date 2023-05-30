@@ -66,7 +66,7 @@ partial class Cutlass : Weapon
 
 	private bool MeleeAttack()
 	{
-		var forward = Owner.EyeRotation.Forward;
+		var forward = (Owner as Player).EyeRotation.Forward;
 		forward = forward.Normal;
 
 		bool hit = false;
@@ -80,7 +80,7 @@ partial class Cutlass : Weapon
 		float RandAttackAnim = (float)rand.Next( 3 );
 		(Owner as AnimatedEntity)?.SetAnimParameter( "holdtype_attack", RandAttackAnim );
 
-		foreach ( var tr in TraceBullet( Owner.EyePosition, Owner.EyePosition + forward * 80, 20.0f ) )
+		foreach ( var tr in TraceBullet( (Owner as Player).EyePosition, (Owner as Player).EyePosition + forward * 80, 20.0f ) )
 		{
 			if ( !tr.Entity.IsValid() ) continue;
 
@@ -95,7 +95,7 @@ partial class Cutlass : Weapon
 
 			hit = true;
 
-			if ( !IsServer ) continue;
+			if ( !Game.IsServer ) continue;
 
 			using ( Prediction.Off() )
 			{
@@ -115,7 +115,6 @@ partial class Cutlass : Weapon
 	[ClientRpc]
 	private void OnMeleeMiss()
 	{
-		Host.AssertClient();
 
 		if ( IsLocalPawn )
 		{
@@ -126,7 +125,6 @@ partial class Cutlass : Weapon
 	[ClientRpc]
 	private void OnMeleeHit()
 	{
-		Host.AssertClient();
 
 		if ( IsLocalPawn )
 		{
@@ -145,17 +143,20 @@ partial class Cutlass : Weapon
 		return false;
 	}
 
-	public override void SimulateAnimator( PawnAnimator anim )
+	public override void SimulateAnimator( CitizenAnimationHelper anim )
 	{
-		anim.SetAnimParameter( "holdtype", 4 );
-		anim.SetAnimParameter( "holdtype_pose_hand", 0.06f ); //nearly pinched fingers
-		anim.SetAnimParameter( "aimat_weight", 1.0f );
+		//anim.SetAnimParameter( "holdtype", 4 );
+		//anim.SetAnimParameter( "holdtype_pose_hand", 0.06f ); //nearly pinched fingers
+		//anim.SetAnimParameter( "aimat_weight", 1.0f );
+
+		anim.HoldType = CitizenAnimationHelper.HoldTypes.HoldItem;
+		anim.AimBodyWeight = 1.0f;
 
 		//if blocking set animation to 2 handed
 		if ( IsBlocking ) {
-			anim.SetAnimParameter( "holdtype_handedness", 0 );
+			anim.Handedness = CitizenAnimationHelper.Hand.Both;
 		} else {
-			anim.SetAnimParameter( "holdtype_handedness", 1 );
+			anim.Handedness = CitizenAnimationHelper.Hand.Right;
 		}
 	}
 

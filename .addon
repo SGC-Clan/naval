@@ -3,21 +3,70 @@
   "Type": "game",
   "Org": "sgcdev",
   "Ident": "naval",
+  "Tags": "procedural test",
   "Schema": 1,
   "HasAssets": true,
-  "AssetsPath": "",
-  "ResourcePaths": null,
+  "AssetsPath": "content",
+  "ResourcePaths": [
+    "models_and_materials",
+    "sound",
+    "ui"
+  ],
   "HasCode": true,
-  "CodePath": "code",
-  "RootNamespace": "Sandbox",
+  "CodePath": "/code/",
+  "PackageReferences": [],
+  "EditorReferences": null,
   "Metadata": {
-    "MapList": [],
+    "MaxPlayers": 64,
     "MinPlayers": 1,
-    "MaxPlayers": 32,
-    "MapSelect": 0,
+    "GameNetworkType": "Multiplayer",
+    "MapSelect": "Empty",
+    "MapList": [],
+    "RankType": "None",
     "PerMapRanking": false,
-    "GameNetworkType": 0,
-    "RankType": 0,
-    "LeaderboardType": 0
+    "LeaderboardType": "None",
+    "ProjectTemplate": null,
+    "CsProjName": "",
+    "ParentPackage": "facepunch.sandbox",
+    "Compiler": {
+      "RootNamespace": "Sandbox",
+      "DefineConstants": "SANDBOX;ADDON;DEBUG",
+      "NoWarn": "1701;1702;1591;",
+      "References": []
+    },
+    "PackageSettings": [
+      {
+        "DisplayType": "Integer",
+        "Choices": [],
+        "ConVarName": "proc_gen_world_size",
+        "DisplayName": "World Size",
+        "DefaultValue": "64",
+        "Description": "distance to the world border (just like minecraft lmao)",
+        "Group": "World Settings",
+        "Minimum": 64
+      },
+      {
+        "DisplayType": "Integer",
+        "Choices": [],
+        "ConVarName": "proc_gen_island_density",
+        "DisplayName": "Island Density",
+        "DefaultValue": "3.4739819",
+        "Description": "density of land vs ocean in the world",
+        "Group": "World Settings",
+        "Minimum": 1,
+        "Maximum": 10
+      },
+      {
+        "DisplayType": "Integer",
+        "Choices": [],
+        "ConVarName": "proc_gen_seed",
+        "DisplayName": "Seed",
+        "DefaultValue": "4580.9897",
+        "Description": "procedural world seed",
+        "Group": "World Settings",
+        "Maximum": 9999
+      }
+    ],
+    "HttpAllowList": null
   }
 }

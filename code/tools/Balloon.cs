@@ -1,115 +1,111 @@
-﻿namespace Sandbox.Tools
+﻿using Sandbox.Physics;
+
+namespace Sandbox.Tools;
+
+[Library( "tool_balloon", Title = "Balloons", Description = "Create Balloons!", Group = "construction" )]
+public partial class BalloonTool : BaseTool
 {
-	[Library( "tool_balloon", Title = "Balloons", Description = "Create Balloons!", Group = "construction" )]
-	public partial class BalloonTool : BaseTool
+	[Net]
+	public Color Tint { get; set; }
+
+	PreviewEntity previewModel;
+
+	public override void Activate()
 	{
-		[Net]
-		public Color Tint { get; set; }
+		base.Activate();
 
-		PreviewEntity previewModel;
-
-		public override void Activate()
+		if ( Game.IsServer )
 		{
-			base.Activate();
+			Tint = Color.Random;
+		}
+	}
 
-			if ( Host.IsServer )
-			{
-				Tint = Color.Random;
-			}
+	protected override bool IsPreviewTraceValid( TraceResult tr )
+	{
+		if ( !base.IsPreviewTraceValid( tr ) )
+			return false;
+
+		if ( tr.Entity is BalloonEntity )
+			return false;
+
+		return true;
+	}
+
+	public override void CreatePreviews()
+	{
+		if ( TryCreatePreview( ref previewModel, "models/citizen_props/balloonregular01.vmdl" ) )
+		{
+			previewModel.RelativeToNormal = false;
+		}
+	}
+
+	public override void Simulate()
+	{
+		if ( previewModel.IsValid() )
+		{
+			previewModel.RenderColor = Tint;
 		}
 
-		protected override bool IsPreviewTraceValid( TraceResult tr )
+		if ( !Game.IsServer )
+			return;
+
+		using ( Prediction.Off() )
 		{
-			if ( !base.IsPreviewTraceValid( tr ) )
-				return false;
-
-			if ( tr.Entity is BalloonEntity )
-				return false;
-
-			return true;
-		}
-
-		public override void CreatePreviews()
-		{
-			if ( TryCreatePreview( ref previewModel, "models/citizen_props/balloonregular01.vmdl" ) )
-			{
-				previewModel.RelativeToNormal = false;
-			}
-		}
-
-		public override void Simulate()
-		{
-			if ( previewModel.IsValid() )
-			{
-				previewModel.RenderColor = Tint;
-			}
-
-			if ( !Host.IsServer )
+			bool useRope = Input.Pressed( "attack1" );
+			if ( !useRope && !Input.Pressed( "attack2" ) )
 				return;
 
-			using ( Prediction.Off() )
+			var tr = DoTrace();
+
+			if ( !tr.Hit )
+				return;
+
+			if ( !tr.Entity.IsValid() )
+				return;
+
+			CreateHitEffects( tr.EndPosition );
+
+			if ( tr.Entity is BalloonEntity )
+				return;
+
+			var ent = new BalloonEntity
 			{
-				bool useRope = Input.Pressed( InputButton.PrimaryAttack );
-				if ( !useRope && !Input.Pressed( InputButton.SecondaryAttack ) )
-					return;
+				Position = tr.EndPosition,
+			};
 
-				var startPos = Owner.EyePosition;
-				var dir = Owner.EyeRotation.Forward;
+			ent.SetModel( "models/citizen_props/balloonregular01.vmdl" );
+			ent.PhysicsBody.GravityScale = -0.2f;
+			ent.RenderColor = Tint;
 
-				var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
-					.Ignore( Owner )
-					.Run();
+			Tint = Color.Random;
 
-				if ( !tr.Hit )
-					return;
+			if ( !useRope )
+				return;
 
-				if ( !tr.Entity.IsValid() )
-					return;
+			var rope = Particles.Create( "particles/rope.vpcf" );
+			rope.SetEntity( 0, ent );
 
-				CreateHitEffects( tr.EndPosition );
+			var attachEnt = tr.Body.IsValid() ? tr.Body.GetEntity() : tr.Entity;
+			var attachLocalPos = tr.Body.Transform.PointToLocal( tr.EndPosition ) * (1.0f / tr.Entity.Scale);
 
-				if ( tr.Entity is BalloonEntity )
-					return;
-
-				var ent = new BalloonEntity
-				{
-					Position = tr.EndPosition,
-				};
-
-				ent.SetModel( "models/citizen_props/balloonregular01.vmdl" );
-				ent.PhysicsBody.GravityScale = -0.2f;
-				ent.RenderColor = Tint;
-
-				Tint = Color.Random;
-
-				if ( !useRope )
-					return;
-
-				var rope = Particles.Create( "particles/rope.vpcf" );
-				rope.SetEntity( 0, ent );
-
-				var attachEnt = tr.Body.IsValid() ? tr.Body.GetEntity() : tr.Entity;
-				var attachLocalPos = tr.Body.Transform.PointToLocal( tr.EndPosition ) * (1.0f / tr.Entity.Scale);
-
-				if ( attachEnt.IsWorld )
-				{
-					rope.SetPosition( 1, attachLocalPos );
-				}
-				else
-				{
-					rope.SetEntityBone( 1, attachEnt, tr.Bone, new Transform( attachLocalPos ) );
-				}
-
-				var spring = PhysicsJoint.CreateLength( ent.PhysicsBody, PhysicsPoint.World( tr.Body, tr.EndPosition ), 100 );
-				spring.SpringLinear = new( 5, 0.7f );
-				spring.Collisions = true;
-				spring.EnableAngularConstraint = false;
-				spring.OnBreak += () =>
-				{
-					rope?.Destroy( true );
-					spring.Remove();
-				};
+			if ( attachEnt.IsWorld )
+			{
+				rope.SetPosition( 1, attachLocalPos );
 			}
+			else
+			{
+				rope.SetEntityBone( 1, attachEnt, tr.Bone, new Transform( attachLocalPos ) );
+			}
+
+			var spring = PhysicsJoint.CreateLength( ent.PhysicsBody, PhysicsPoint.World( tr.Body, tr.EndPosition ), 100 );
+			spring.SpringLinear = new( 5, 0.7f );
+			spring.Collisions = true;
+			spring.EnableAngularConstraint = false;
+			spring.OnBreak += () =>
+			{
+				rope?.Destroy( true );
+				spring.Remove();
+			};
 		}
 	}
 }

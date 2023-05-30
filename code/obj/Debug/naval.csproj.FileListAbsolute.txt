@@ -1,5 +1,0 @@
-C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\code\obj\Debug\naval.csproj.AssemblyReference.cache
-C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\code\obj\Debug\naval.GeneratedMSBuildEditorConfig.editorconfig
-C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\code\obj\Debug\naval.AssemblyInfoInputs.cache
-C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\code\obj\Debug\naval.AssemblyInfo.cs
-C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\naval\code\obj\Debug\naval.csproj.CoreCompileInputs.cache

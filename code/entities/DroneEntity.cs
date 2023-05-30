@@ -91,18 +91,18 @@ public partial class DroneEntity : Prop
 		}
 	}
 
-	public override void Simulate( Client owner )
+	public override void Simulate( IClient owner )
 	{
 		if ( owner == null ) return;
-		if ( !IsServer ) return;
+		if ( !Game.IsServer ) return;
 
 		using ( Prediction.Off() )
 		{
 			currentInput.Reset();
-			var x = (Input.Down( InputButton.Forward ) ? -1 : 0) + (Input.Down( InputButton.Back ) ? 1 : 0);
-			var y = (Input.Down( InputButton.Right ) ? 1 : 0) + (Input.Down( InputButton.Left ) ? -1 : 0);
+			var x = (Input.Down( "forward" ) ? -1 : 0) + (Input.Down( "back" ) ? 1 : 0);
+			var y = (Input.Down( "right" ) ? 1 : 0) + (Input.Down( "left" ) ? -1 : 0);
 			currentInput.movement = new Vector3( x, y, 0 ).Normal;
-			currentInput.throttle = (Input.Down( InputButton.Run ) ? 1 : 0) + (Input.Down( InputButton.Duck ) ? -1 : 0);
+			currentInput.throttle = (Input.Down( "run" ) ? 1 : 0) + (Input.Down( "duck" ) ? -1 : 0);
 			currentInput.yaw = -Input.MouseDelta.x;
 		}
 	}
@@ -124,14 +124,14 @@ public partial class DroneEntity : Prop
 	{
 		base.OnNewModel( model );
 
-		if ( IsClient )
+		if ( Game.IsClient )
 		{
 		}
 	}
 
 	private float spinAngle;
 
-	[Event.Frame]
+	[Event.Client.Frame]
 	public void OnFrame()
 	{
 		spinAngle += 10000.0f * Time.Delta;

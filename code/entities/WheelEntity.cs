@@ -1,4 +1,5 @@
-﻿using Sandbox;
+﻿using Sandbox.Physics;
+using Sandbox;
 
 [Library( "ent_wheel" )]
 public partial class WheelEntity : Prop

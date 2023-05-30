@@ -1,4 +1,0 @@
-importfilelist
-{
-	"file"	"radial1_is_unused.vmt"
-}

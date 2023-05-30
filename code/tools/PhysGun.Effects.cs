@@ -10,7 +10,7 @@ public partial class PhysGun
 	Vector3 lastBeamPos;
 	ModelEntity lastGrabbedEntity;
 
-	[Event.Frame]
+	[Event.Client.Frame]
 	public void OnFrame()
 	{
 		UpdateEffects();
@@ -34,13 +34,13 @@ public partial class PhysGun
 
 				if ( child.Components.TryGet<Glow>( out var childglow ) )
 				{
-					childglow.Active = false;
+					childglow.Enabled = false;
 				}
 			}
 
 			if ( lastGrabbedEntity.Components.TryGet<Glow>( out var glow ) )
 			{
-				glow.Active = false;
+				glow.Enabled = false;
 			}
 
 			lastGrabbedEntity = null;
@@ -63,7 +63,7 @@ public partial class PhysGun
 		var tr = Trace.Ray( startPos, startPos + dir * MaxTargetDistance )
 			.UseHitboxes()
 			.Ignore( owner, false )
-			.HitLayer( CollisionLayer.Debris )
+			.WithAllTags( "solid" )
 			.Run();
 
 		if ( Beam == null )
@@ -100,10 +100,10 @@ public partial class PhysGun
 				lastGrabbedEntity = modelEnt;
 
 				var glow = modelEnt.Components.GetOrCreate<Glow>();
-				glow.Active = true;
-				glow.RangeMin = 0;
-				glow.RangeMax = 1000;
-				glow.Color = new Color( 0.1f, 1.0f, 1.0f, 1.0f );
+				glow.Enabled = true;
+				glow.Width = 0.25f;
+				glow.Color = new Color( 4f, 50.0f, 70.0f, 1.0f );
+				glow.ObscuredColor = new Color( 4f, 50.0f, 70.0f, 0.0005f );
 
 				foreach ( var child in lastGrabbedEntity.Children.OfType<ModelEntity>() )
 				{
@@ -111,9 +111,7 @@ public partial class PhysGun
 						continue;
 
 					glow = child.Components.GetOrCreate<Glow>();
-					glow.Active = true;
-					glow.RangeMin = 0;
-					glow.RangeMax = 1000;
+					glow.Enabled = true;
 					glow.Color = new Color( 0.1f, 1.0f, 1.0f, 1.0f );
 				}
 			}

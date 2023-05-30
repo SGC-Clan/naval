@@ -7,7 +7,7 @@ namespace Sandbox.Tools
 	{
 		public override void Simulate()
 		{
-			if ( !Host.IsServer )
+			if ( !Game.IsServer )
 				return;
 
 			using ( Prediction.Off() )
@@ -15,13 +15,9 @@ namespace Sandbox.Tools
 				var startPos = Owner.EyePosition;
 				var dir = Owner.EyeRotation.Forward;
 
-				if ( !Input.Pressed( InputButton.PrimaryAttack ) ) return;
+				if ( !Input.Pressed( "attack1" ) ) return;
 
-				var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
-				   .Ignore( Owner )
-				   .UseHitboxes()
-				   .HitLayer( CollisionLayer.Debris )
-				   .Run();
+				var tr = DoTrace();
 
 				if ( !tr.Hit || !tr.Entity.IsValid() )
 					return;

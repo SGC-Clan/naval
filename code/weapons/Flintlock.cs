@@ -51,7 +51,7 @@ partial class Flintlock : Weapon
 		{
 			//Shoot the gun
 			BulletIsLoaded = false;
-			Shoot( Owner.EyePosition, Owner.EyeRotation.Forward );
+			Shoot( (Owner as Player).EyePosition, (Owner as Player).EyeRotation.Forward );
 		}
 		else
 		{
@@ -69,7 +69,7 @@ partial class Flintlock : Weapon
 
 
 		//bool InWater = Physics.TestPointContents( pos, CollisionLayer.Water ); this function got removed ?
-		bool InWater = WaterLevel != 0;
+		bool InWater = this.GetNavalWaterLevel() != 0;
 
 		var forward = dir * (InWater ? 500 : 4000);
 
@@ -88,7 +88,7 @@ partial class Flintlock : Weapon
 
 			tr.Surface.DoBulletImpact( tr );
 
-			if ( !IsServer ) continue;
+			if ( !Game.IsServer ) continue;
 			if ( !tr.Entity.IsValid() ) continue;
 
 			//
@@ -111,7 +111,7 @@ partial class Flintlock : Weapon
 	{
 
 		Sound.FromEntity( "nvl.flintlock.blankshot", this );
-		if ( IsClient )
+		if ( Game.IsClient )
 		{
 			Particles.Create( "particles/naval_fuze_sparks.vpcf", EffectEntity, "spark" );
 		}
@@ -143,7 +143,7 @@ partial class Flintlock : Weapon
 		}
 	}
 
-	public override void Simulate( Client owner )
+	public override void Simulate( IClient owner )
 	{
 		base.Simulate( owner );
 
@@ -184,7 +184,6 @@ partial class Flintlock : Weapon
 	[ClientRpc]
 	public void FlintlockShootEffects()
 	{
-		Host.AssertClient();
 
 		var muzzle = EffectEntity.GetAttachment( "muzzle" );
 		//bool InWater = Physics.TestPointContents( muzzle.Position, CollisionLayer.Water );
@@ -206,11 +205,15 @@ partial class Flintlock : Weapon
 		//CrosshairPanel?.CreateEvent("fire");
 	}
 
-	public override void SimulateAnimator( PawnAnimator anim )
+	public override void SimulateAnimator( CitizenAnimationHelper anim )
 	{
-		anim.SetAnimParameter( "holdtype", 1 );
-		anim.SetAnimParameter( "holdtype_pose_hand", 0.06f );
-		anim.SetAnimParameter( "aimat_weight", 1.0f );
+		//anim.SetAnimParameter( "holdtype", 1 );
+		//anim.SetAnimParameter( "holdtype_pose_hand", 0.06f );
+		//anim.SetAnimParameter( "aimat_weight", 1.0f );
+
+		anim.HoldType = CitizenAnimationHelper.HoldTypes.Pistol;
+		anim.Handedness = CitizenAnimationHelper.Hand.Left;
+		anim.AimBodyWeight = 1.0f;
 	}
 
 }

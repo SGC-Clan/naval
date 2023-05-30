@@ -1,5 +1,4 @@
 ﻿using Sandbox;
-using Sandbox.Tools;
 
 [Spawnable]
 [Library("weapon_navaleditor", Title = "Contraption Editor")]
@@ -22,11 +21,11 @@ partial class NavalEditor : Carriable
 		SetModel("models/sernikb/serns_blueprint_tool.vmdl_c"); 
 	}
 
-	public override void Simulate( Client client )
+	public override void Simulate( IClient client )
 	{
-		if ( Owner is not Player owner ) return;
+		if ( Owner is not Player ) return;
 
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		if ( timeSinceUse < UseCooldown )
@@ -39,8 +38,8 @@ partial class NavalEditor : Carriable
 				timeSinceUse = 0;
 
 				var MaxTraceDistance = UseDistance;
-				var startPos = Owner.EyePosition;
-				var dir = Owner.EyeRotation.Forward;
+				var startPos = (Owner as Player).EyePosition;
+				var dir = (Owner as Player).EyeRotation.Forward;
 
 				var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
 					.UseHitboxes()
@@ -54,7 +53,7 @@ partial class NavalEditor : Carriable
 				var ent = TypeLibrary.Create<Entity>( "nvl_contraption_base" );
 
 				ent.Position = tr.EndPosition + new Vector3(0,0,40);
-				ent.Rotation = Rotation.From( new Angles( 0, Owner.EyeRotation.Angles().yaw, 0 ) );
+				ent.Rotation = Rotation.From( new Angles( 0, Owner.AimRay.Forward.EulerAngles.yaw, 0 ) );
 
 			}
 		}
@@ -64,7 +63,7 @@ partial class NavalEditor : Carriable
 	{
 		base.ActiveStart(ent);
 
-		if ( IsServer )
+		if ( Game.IsServer )
 		{
 			RenderPreviewArea = true;
 		}
@@ -75,7 +74,7 @@ partial class NavalEditor : Carriable
 	{
 		base.ActiveEnd(ent, dropped);
 
-		if ( IsServer )
+		if ( Game.IsServer )
 		{
 			RenderPreviewArea = false;
 		}
@@ -92,14 +91,14 @@ partial class NavalEditor : Carriable
 	{
 	}
 
-	[Event.Frame]
+	[Event.Client.Frame]
 	public void OnFrame()
 	{
 		if ( RenderPreviewArea )
 		{
 			//if (!IsActiveChild()) return; this function got removed ?
 
-			var tr = Trace.Ray( Owner.EyePosition, Owner.EyePosition + Owner.EyeRotation.Forward * UseDistance )
+			var tr = Trace.Ray( (Owner as Player).EyePosition, (Owner as Player).EyePosition + (Owner as Player).EyeRotation.Forward * UseDistance )
 				.UseHitboxes()
 				.Size( 2 )
 				.Ignore( Owner )
@@ -114,10 +113,14 @@ partial class NavalEditor : Carriable
 	}
 
 
-	public override void SimulateAnimator(PawnAnimator anim)
+	public override void SimulateAnimator( CitizenAnimationHelper anim )
 	{
-		anim.SetAnimParameter( "holdtype", 4);
-		anim.SetAnimParameter( "aimat_weight", 1.0f);
-		anim.SetAnimParameter( "holdtype_handedness", 0);
+		//anim.SetAnimParameter( "holdtype", 4);
+		//anim.SetAnimParameter( "aimat_weight", 1.0f);
+		//anim.SetAnimParameter( "holdtype_handedness", 0);
+
+		anim.HoldType = CitizenAnimationHelper.HoldTypes.HoldItem;
+		anim.Handedness = CitizenAnimationHelper.Hand.Both;
+		anim.AimBodyWeight = 1.0f;
 	}
 }

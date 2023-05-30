@@ -1,4 +1,0 @@
-importfilelist
-{
-	"file"	"materials\nita\shipwreck\pipemetal_cluster01a.vmt"
-}

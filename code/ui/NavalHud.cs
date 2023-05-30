@@ -1,28 +1,25 @@
 ﻿using Sandbox;
 using Sandbox.UI;
-using naval.Teams;
 
 [Library]
 public partial class NavalHud : HudEntity<RootPanel>
 {
 	public NavalHud()
 	{
-		if ( !IsClient )
+		if ( !Game.IsClient )
 			return;
 
-		RootPanel.StyleSheet.Load( "/ui/NavalHud.scss" );
+		RootPanel.StyleSheet.Load( "/Styles/sandbox.scss" );
 
-		//RootPanel.AddChild<NameTags>();
-		//RootPanel.AddChild<CrosshairCanvas>();
-		RootPanel.AddChild<ChatBox>();
+		RootPanel.AddChild<Chat>();
 		RootPanel.AddChild<VoiceList>();
+		RootPanel.AddChild<VoiceSpeaker>();
 		RootPanel.AddChild<KillFeed>();
 		RootPanel.AddChild<Scoreboard<ScoreboardEntry>>();
+		RootPanel.AddChild<Health>();
 		RootPanel.AddChild<InventoryBar>();
 		RootPanel.AddChild<CurrentTool>();
-		RootPanel.AddChild<VersionString>();
-		RootPanel.AddChild<StatusBar>();
-		RootPanel.AddChild<Compass>();
 		RootPanel.AddChild<SpawnMenu>();
+		RootPanel.AddChild<Crosshair>();
 	}
 }

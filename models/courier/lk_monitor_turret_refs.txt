@@ -1,7 +1,0 @@
-importfilelist
-{
-	"file"	"steel_black_is_unused.vmt"
-	"file"	"metalpipelight001_is_unused.vmt"
-	"file"	"steel_dkgray_is_unused.vmt"
-	"file"	"defgun_metal1_s_is_unused.vmt"
-}

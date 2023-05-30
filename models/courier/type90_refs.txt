@@ -1,4 +1,0 @@
-importfilelist
-{
-	"file"	"type90_is_unused.vmt"
-}

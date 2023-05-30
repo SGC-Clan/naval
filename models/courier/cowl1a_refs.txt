@@ -1,4 +1,0 @@
-importfilelist
-{
-	"file"	"cowl1a_is_unused.vmt"
-}

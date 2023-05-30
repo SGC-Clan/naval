@@ -1,4 +1,0 @@
-importfilelist
-{
-	"file"	"bk37_is_unused.vmt"
-}

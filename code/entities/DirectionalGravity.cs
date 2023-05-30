@@ -33,7 +33,7 @@ public partial class DirectionalGravity : Prop
 	{
 		base.OnDestroy();
 
-		Map.Physics.Gravity = Vector3.Down * 800.0f;
+		Game.PhysicsWorld.Gravity = Vector3.Down * 800.0f;
 
 		enabled = false;
 	}
@@ -41,7 +41,7 @@ public partial class DirectionalGravity : Prop
 	[Event.Tick]
 	protected void UpdateGravity()
 	{
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		if ( !enabled )
@@ -50,6 +50,6 @@ public partial class DirectionalGravity : Prop
 		if ( !this.IsValid() )
 			return;
 
-		Map.Physics.Gravity = Rotation.Down * 800.0f;
+		Game.PhysicsWorld.Gravity = Rotation.Down * 800.0f;
 	}
 }

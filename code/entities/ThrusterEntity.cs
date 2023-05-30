@@ -13,7 +13,7 @@ public partial class ThrusterEntity : Prop, IUse
 	[Event.Physics.PostStep]
 	protected void ApplyForces()
 	{
-		if ( IsServer && Enabled )
+		if ( Game.IsServer && Enabled )
 		{
 			if ( TargetBody.IsValid() )
 			{
@@ -42,7 +42,7 @@ public partial class ThrusterEntity : Prop, IUse
 	{
 		base.OnDestroy();
 
-		if ( IsClient )
+		if ( Game.IsClient )
 		{
 			KillEffects();
 		}

@@ -7,12 +7,12 @@ public partial class GravGun : Carriable
 {
 	public override string ViewModelPath => "weapons/rust_pistol/v_rust_pistol.vmdl";
 
-	private PhysicsBody holdBody;
-	private FixedJoint holdJoint;
-
 	public PhysicsBody HeldBody { get; private set; }
+	public Vector3 HeldPos { get; private set; }
 	public Rotation HeldRot { get; private set; }
 	public ModelEntity HeldEntity { get; private set; }
+	public Vector3 HoldPos { get; private set; }
+	public Rotation HoldRot { get; private set; }
 
 	protected virtual float MaxPullDistance => 2000.0f;
 	protected virtual float MaxPushDistance => 500.0f;
@@ -30,21 +30,21 @@ public partial class GravGun : Carriable
 
 	private TimeSince timeSinceDrop;
 
+	private const string grabbedTag = "grabbed";
+
 	public override void Spawn()
 	{
 		base.Spawn();
 
+		Tags.Add( "weapon" );
 		SetModel( "weapons/rust_pistol/rust_pistol.vmdl" );
-
-		CollisionGroup = CollisionGroup.Weapon;
-		SetInteractsAs( CollisionLayer.Debris );
 	}
 
-	public override void Simulate( Client client )
+	public override void Simulate( IClient client )
 	{
 		if ( Owner is not Player owner ) return;
 
-		if ( !IsServer )
+		if ( !Game.IsServer )
 			return;
 
 		using ( Prediction.Off() )
@@ -55,11 +55,7 @@ public partial class GravGun : Carriable
 
 			if ( HeldBody.IsValid() && HeldBody.PhysicsGroup != null )
 			{
-				if ( holdJoint.IsValid() && !holdJoint.IsActive )
-				{
-					GrabEnd();
-				}
-				else if ( Input.Pressed( InputButton.PrimaryAttack ) )
+				if ( Input.Pressed( "attack1" ) )
 				{
 					if ( HeldBody.PhysicsGroup.BodyCount > 1 )
 					{
@@ -75,10 +71,8 @@ public partial class GravGun : Carriable
 
 					GrabEnd();
 				}
-				else if ( Input.Pressed( InputButton.SecondaryAttack ) )
+				else if ( Input.Pressed( "attack2" ) )
 				{
-					timeSinceDrop = 0;
-
 					GrabEnd();
 				}
 				else
@@ -94,9 +88,9 @@ public partial class GravGun : Carriable
 
 			var tr = Trace.Ray( eyePos, eyePos + eyeDir * MaxPullDistance )
 				.UseHitboxes()
-				.Ignore( owner, false )
+				.WithAnyTags( "solid", "debris" )
+				.Ignore( this )
 				.Radius( 2.0f )
-				.HitLayer( CollisionLayer.Debris )
 				.Run();
 
 			if ( !tr.Hit || !tr.Body.IsValid() || !tr.Entity.IsValid() || tr.Entity.IsWorld )
@@ -109,17 +103,23 @@ public partial class GravGun : Carriable
 			if ( !modelEnt.IsValid() )
 				return;
 
+			if ( modelEnt.Tags.Has( grabbedTag ) )
+				return;
+
 			var body = tr.Body;
 
-			if ( Input.Pressed( InputButton.PrimaryAttack ) )
+			if ( body.BodyType != PhysicsBodyType.Dynamic )
+				return;
+
+			if ( Input.Pressed( "attack1" ) )
 			{
-				if ( tr.Distance < MaxPushDistance && !IsBodyGrabbed( body ) )
+				if ( tr.Distance < MaxPushDistance )
 				{
 					var pushScale = 1.0f - Math.Clamp( tr.Distance / MaxPushDistance, 0.0f, 1.0f );
 					body.ApplyImpulseAt( tr.EndPosition, eyeDir * (body.Mass * (PushForce * pushScale)) );
 				}
 			}
-			else if ( Input.Down( InputButton.SecondaryAttack ) )
+			else if ( Input.Down( "attack2" ) )
 			{
 				var physicsGroup = tr.Entity.PhysicsGroup;
 
@@ -137,7 +137,7 @@ public partial class GravGun : Carriable
 					var holdDistance = HoldDistance + attachPos.Distance( body.MassCenter );
 					GrabStart( modelEnt, body, eyePos + eyeDir * holdDistance, eyeRot );
 				}
-				else if ( !IsBodyGrabbed( body ) )
+				else
 				{
 					physicsGroup.ApplyImpulse( eyeDir * -PullForce, true );
 				}
@@ -147,28 +147,18 @@ public partial class GravGun : Carriable
 
 	private void Activate()
 	{
-		if ( !holdBody.IsValid() )
-		{
-			holdBody = new PhysicsBody( Map.Physics )
-			{
-				BodyType = PhysicsBodyType.Keyframed
-			};
-		}
 	}
 
 	private void Deactivate()
 	{
 		GrabEnd();
-
-		holdBody?.Remove();
-		holdBody = null;
 	}
 
 	public override void ActiveStart( Entity ent )
 	{
 		base.ActiveStart( ent );
 
-		if ( IsServer )
+		if ( Game.IsServer )
 		{
 			Activate();
 		}
@@ -178,7 +168,7 @@ public partial class GravGun : Carriable
 	{
 		base.ActiveEnd( ent, dropped );
 
-		if ( IsServer )
+		if ( Game.IsServer )
 		{
 			Deactivate();
 		}
@@ -188,7 +178,7 @@ public partial class GravGun : Carriable
 	{
 		base.OnDestroy();
 
-		if ( IsServer )
+		if ( Game.IsServer )
 		{
 			Deactivate();
 		}
@@ -198,13 +188,25 @@ public partial class GravGun : Carriable
 	{
 	}
 
-	private static bool IsBodyGrabbed( PhysicsBody body )
+	[Event.Physics.PreStep]
+	public void OnPrePhysicsStep()
 	{
-		// There for sure is a better way to deal with this
-		if ( All.OfType<PhysGun>().Any( x => x?.HeldBody?.PhysicsGroup == body?.PhysicsGroup ) ) return true;
-		if ( All.OfType<GravGun>().Any( x => x?.HeldBody?.PhysicsGroup == body?.PhysicsGroup ) ) return true;
+		if ( !Game.IsServer )
+			return;
 
-		return false;
+		if ( !HeldBody.IsValid() )
+			return;
+
+		if ( HeldEntity is Player )
+			return;
+
+		var velocity = HeldBody.Velocity;
+		Vector3.SmoothDamp( HeldBody.Position, HoldPos, ref velocity, 0.1f, Time.Delta );
+		HeldBody.Velocity = velocity;
+
+		var angularVelocity = HeldBody.AngularVelocity;
+		Rotation.SmoothDamp( HeldBody.Rotation, HoldRot, ref angularVelocity, 0.1f, Time.Delta );
+		HeldBody.AngularVelocity = angularVelocity;
 	}
 
 	private void GrabStart( ModelEntity entity, PhysicsBody body, Vector3 grabPos, Rotation grabRot )
@@ -215,34 +217,27 @@ public partial class GravGun : Carriable
 		if ( body.PhysicsGroup == null )
 			return;
 
-		if ( IsBodyGrabbed( body ) )
-			return;
-
 		GrabEnd();
 
 		HeldBody = body;
+		HeldPos = HeldBody.LocalMassCenter;
 		HeldRot = grabRot.Inverse * HeldBody.Rotation;
 
-		holdBody.Position = grabPos;
-		holdBody.Rotation = HeldBody.Rotation;
+		HoldPos = HeldBody.Position;
+		HoldRot = HeldBody.Rotation;
 
 		HeldBody.Sleeping = false;
 		HeldBody.AutoSleep = false;
 
-		holdJoint = PhysicsJoint.CreateFixed( holdBody, HeldBody.MassCenterPoint() );
-		holdJoint.SpringLinear = new( LinearFrequency, LinearDampingRatio );
-		holdJoint.SpringAngular = new( AngularFrequency, AngularDampingRatio );
-		holdJoint.Strength = HeldBody.Mass * BreakLinearForce;
-
 		HeldEntity = entity;
+		HeldEntity.Tags.Add( grabbedTag );
 
 		Client?.Pvs.Add( HeldEntity );
 	}
 
 	private void GrabEnd()
 	{
-		holdJoint?.Remove();
-		holdJoint = null;
+		timeSinceDrop = 0;
 
 		if ( HeldBody.IsValid() )
 		{
@@ -256,7 +251,12 @@ public partial class GravGun : Carriable
 
 		HeldBody = null;
 		HeldRot = Rotation.Identity;
-		HeldEntity = null;
+
+		if ( HeldEntity.IsValid() )
+		{
+			HeldEntity.Tags.Remove( grabbedTag );
+			HeldEntity = null;
+		}
 	}
 
 	private void GrabMove( Vector3 startPos, Vector3 dir, Rotation rot )
@@ -267,8 +267,8 @@ public partial class GravGun : Carriable
 		var attachPos = HeldBody.FindClosestPoint( startPos );
 		var holdDistance = HoldDistance + attachPos.Distance( HeldBody.MassCenter );
 
-		holdBody.Position = startPos + dir * holdDistance;
-		holdBody.Rotation = rot * HeldRot;
+		HoldPos = startPos - HeldPos * HeldBody.Rotation + dir * holdDistance;
+		HoldRot = rot * HeldRot;
 	}
 
 	public override bool IsUsable( Entity user )

@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System.Collections.Generic;
 
 partial class NavalPlayer : Player
 {
@@ -7,7 +8,8 @@ partial class NavalPlayer : Player
 
 	private DamageInfo lastDamage;
 
-	public TimeSince timeSinceLastFireScream;
+	[Net, Predicted]
+	public bool ThirdPersonCamera { get; set; }
 
 	/// <summary>
 	/// The clothing container is what dresses the citizen
@@ -25,7 +27,7 @@ partial class NavalPlayer : Player
 	/// <summary>
 	/// Initialize using this client
 	/// </summary>
-	public NavalPlayer( Client cl ) : this()
+	public NavalPlayer( IClient cl ) : this()
 	{
 		// Load clothing from client data
 		Clothing.LoadFromClient( cl );
@@ -35,14 +37,18 @@ partial class NavalPlayer : Player
 	{
 		SetModel( "models/citizen/citizen.vmdl" );
 
-		Controller = new WalkController();
-		Animator = new StandardPlayerAnimator();
+		Controller = new WalkController
+		{
+			WalkSpeed = 60f,
+			DefaultSpeed = 180.0f
+		};
 
-		if ( DevController is NoclipController )
+		if ( DevController is NavalNoclipController )
 		{
 			DevController = null;
 		}
 
+		this.ClearNavalWaterLevel();
 		EnableAllCollisions = true;
 		EnableDrawing = true;
 		EnableHideInFirstPerson = true;
@@ -54,13 +60,8 @@ partial class NavalPlayer : Player
 		Inventory.Add( new Flintlock() );
 		Inventory.Add( new PhysGun(), true );
 		Inventory.Add( new GravGun() );
-		Inventory.Add( new Tool() );
+		//Inventory.Add( new Tool() );
 		Inventory.Add( new NavalEditor() );
-		//Inventory.Add( new Pistol() );
-		//Inventory.Add( new Flashlight() );
-		//Inventory.Add( new Fists() );
-
-		CameraMode = new FirstPersonCamera();
 
 		base.Respawn();
 	}
@@ -69,21 +70,19 @@ partial class NavalPlayer : Player
 	{
 		base.OnKilled();
 
-		if ( lastDamage.Flags.HasFlag( DamageFlags.Vehicle ) )
+		if ( lastDamage.HasTag( "vehicle" ) )
 		{
 			Particles.Create( "particles/impact.flesh.bloodpuff-big.vpcf", lastDamage.Position );
 			Particles.Create( "particles/impact.flesh-big.vpcf", lastDamage.Position );
 			PlaySound( "kersplat" );
 		}
 
-		BecomeRagdollOnClient( Velocity, lastDamage.Flags, lastDamage.Position, lastDamage.Force, GetHitboxBone( lastDamage.HitboxIndex ) );
+		BecomeRagdollOnClient( Velocity, lastDamage.Position, lastDamage.Force, lastDamage.BoneIndex, lastDamage.HasTag( "bullet" ), lastDamage.HasTag( "blast" ) );
 
 		Controller = null;
 
 		EnableAllCollisions = false;
 		EnableDrawing = false;
-
-		CameraMode = new SpectateRagdollCamera();
 
 		foreach ( var child in Children )
 		{
@@ -96,21 +95,20 @@ partial class NavalPlayer : Player
 
 	public override void TakeDamage( DamageInfo info )
 	{
-		if ( GetHitboxGroup( info.HitboxIndex ) == 1 )
+		if ( info.Attacker.IsValid() )
+		{
+			if ( info.Attacker.Tags.Has( $"{PhysGun.GrabbedTag}{Client.SteamId}" ) )
+				return;
+		}
+
+		if ( info.Hitbox.HasTag( "head" ) )
 		{
 			info.Damage *= 10.0f;
 		}
 
 		lastDamage = info;
 
-		TookDamage( lastDamage.Flags, lastDamage.Position, lastDamage.Force );
-
 		base.TakeDamage( info );
-	}
-
-	[ClientRpc]
-	public void TookDamage( DamageFlags damageFlags, Vector3 forcePos, Vector3 force )
-	{
 	}
 
 	public override PawnController GetActiveController()
@@ -120,38 +118,30 @@ partial class NavalPlayer : Player
 		return base.GetActiveController();
 	}
 
-	public override void Simulate( Client cl )
+	public override void Simulate( IClient cl )
 	{
 		base.Simulate( cl );
-
-		if ( Input.ActiveChild != null )
-		{
-			ActiveChild = Input.ActiveChild;
-		}
 
 		if ( LifeState != LifeState.Alive )
 			return;
 
 		var controller = GetActiveController();
 		if ( controller != null )
+		{
 			EnableSolidCollisions = !controller.HasTag( "noclip" );
+
+			SimulateAnimation( controller );
+		}
 
 		TickPlayerUse();
 		SimulateActiveChild( cl, ActiveChild );
 
-		if ( Input.Pressed( InputButton.View ) )
+		if ( Input.Pressed( "view" ) )
 		{
-			if ( CameraMode is ThirdPersonCamera )
-			{
-				CameraMode = new FirstPersonCamera();
-			}
-			else
-			{
-				CameraMode = new ThirdPersonCamera();
-			}
+			ThirdPersonCamera = !ThirdPersonCamera;
 		}
 
-		if ( Input.Pressed( InputButton.Drop ) )
+		if ( Input.Pressed( "drop" ) )
 		{
 			var dropped = Inventory.DropActive();
 			if ( dropped != null )
@@ -163,20 +153,108 @@ partial class NavalPlayer : Player
 			}
 		}
 
-		if ( Input.Released( InputButton.Jump ) )
+		if ( Input.Released( "jump" ) )
 		{
 			if ( timeSinceJumpReleased < 0.3f )
 			{
-				Game.Current?.DoPlayerNoclip( cl );
+				if ( DevController is NavalNoclipController )
+				{
+					DevController = null;
+				}
+				else
+				{
+					DevController = new NavalNoclipController();
+				}
 			}
 
 			timeSinceJumpReleased = 0;
 		}
 
-		if ( Input.Left != 0 || Input.Forward != 0 )
+		if ( InputDirection.y != 0 || InputDirection.x != 0f )
 		{
 			timeSinceJumpReleased = 1;
 		}
+	}
+
+	[ConCmd.Admin( "noclip" )]
+	static void DoPlayerNoclip()
+	{
+		if ( ConsoleSystem.Caller.Pawn is NavalPlayer basePlayer )
+		{
+			if ( basePlayer.DevController is NavalNoclipController )
+			{
+				basePlayer.DevController = null;
+			}
+			else
+			{
+				basePlayer.DevController = new NavalNoclipController();
+			}
+		}
+	}
+
+	[ConCmd.Admin( "kill" )]
+	static void DoPlayerSuicide()
+	{
+		if ( ConsoleSystem.Caller.Pawn is NavalPlayer basePlayer )
+		{
+			basePlayer.TakeDamage( new DamageInfo { Damage = basePlayer.Health * 99 } );
+		}
+	}
+
+
+	Entity lastWeapon;
+
+	void SimulateAnimation( PawnController controller )
+	{
+		if ( controller == null )
+			return;
+
+		// where should we be rotated to
+		var turnSpeed = 0.02f;
+
+		Rotation rotation;
+
+		// If we're a bot, spin us around 180 degrees.
+		if ( Client.IsBot )
+			rotation = ViewAngles.WithYaw( ViewAngles.yaw + 180f ).ToRotation();
+		else
+			rotation = ViewAngles.ToRotation();
+
+		var idealRotation = Rotation.LookAt( rotation.Forward.WithZ( 0 ), Vector3.Up );
+		Rotation = Rotation.Slerp( Rotation, idealRotation, controller.WishVelocity.Length * Time.Delta * turnSpeed );
+		Rotation = Rotation.Clamp( idealRotation, 45.0f, out var shuffle ); // lock facing to within 45 degrees of look direction
+
+		CitizenAnimationHelper animHelper = new CitizenAnimationHelper( this );
+
+		animHelper.WithWishVelocity( controller.WishVelocity );
+		animHelper.WithVelocity( controller.Velocity );
+		animHelper.WithLookAt( EyePosition + EyeRotation.Forward * 100.0f, 1.0f, 1.0f, 0.5f );
+		animHelper.AimAngle = rotation;
+		animHelper.FootShuffle = shuffle;
+		animHelper.DuckLevel = MathX.Lerp( animHelper.DuckLevel, controller.HasTag( "ducked" ) ? 1 : 0, Time.Delta * 10.0f );
+		animHelper.VoiceLevel = (Game.IsClient && Client.IsValid()) ? Client.Voice.LastHeard < 0.5f ? Client.Voice.CurrentLevel : 0.0f : 0.0f;
+		animHelper.IsGrounded = GroundEntity != null;
+		animHelper.IsSitting = controller.HasTag( "sitting" );
+		animHelper.IsNoclipping = controller.HasTag( "noclip" );
+		animHelper.IsClimbing = controller.HasTag( "climbing" );
+		animHelper.IsSwimming = this.GetNavalWaterLevel() >= 0.5f;
+		animHelper.IsWeaponLowered = false;
+		animHelper.MoveStyle = Input.Down( "run" ) ? CitizenAnimationHelper.MoveStyles.Run : CitizenAnimationHelper.MoveStyles.Walk;
+
+		if ( controller.HasEvent( "jump" ) ) animHelper.TriggerJump();
+		if ( ActiveChild != lastWeapon ) animHelper.TriggerDeploy();
+
+		if ( ActiveChild is BaseCarriable carry )
+		{
+			carry.SimulateAnimator( animHelper );
+		}
+		else
+		{
+			animHelper.HoldType = CitizenAnimationHelper.HoldTypes.None;
+			animHelper.AimBodyWeight = 0.5f;
+		}
+
+		lastWeapon = ActiveChild;
 	}
 
 	public override void StartTouch( Entity other )
@@ -184,6 +262,11 @@ partial class NavalPlayer : Player
 		if ( timeSinceDropped < 1 ) return;
 
 		base.StartTouch( other );
+	}
+
+	public override float FootstepVolume()
+	{
+		return Velocity.WithZ( 0 ).Length.LerpInverse( 0.0f, 200.0f ) * 5.0f;
 	}
 
 	[ConCmd.Server( "inventory_current" )]
@@ -208,6 +291,59 @@ partial class NavalPlayer : Player
 			inventory.SetActiveSlot( i, false );
 
 			break;
+		}
+	}
+
+	public override void FrameSimulate( IClient cl )
+	{
+		Camera.Rotation = ViewAngles.ToRotation();
+		Camera.FieldOfView = Screen.CreateVerticalFieldOfView( Game.Preferences.FieldOfView );
+
+		Camera.ZFar = 100000; //25000;
+
+		if ( ThirdPersonCamera )
+		{
+			Camera.FirstPersonViewer = null;
+
+			Vector3 targetPos;
+			var center = Position + Vector3.Up * 64;
+
+			var pos = center;
+			var rot = Camera.Rotation * Rotation.FromAxis( Vector3.Up, -16 );
+
+			float distance = 130.0f * Scale;
+			targetPos = pos + rot.Right * ((CollisionBounds.Mins.x + 32) * Scale);
+			targetPos += rot.Forward * -distance;
+
+			var tr = Trace.Ray( pos, targetPos )
+				.WithAnyTags( "solid" )
+				.Ignore( this )
+				.Radius( 8 )
+				.Run();
+
+			Camera.Position = tr.EndPosition;
+		}
+		else if ( LifeState != LifeState.Alive && Corpse.IsValid() )
+		{
+			Corpse.EnableDrawing = true;
+
+			var pos = Corpse.GetBoneTransform( 0 ).Position + Vector3.Up * 10;
+			var targetPos = pos + Camera.Rotation.Backward * 100;
+
+			var tr = Trace.Ray( pos, targetPos )
+				.WithAnyTags( "solid" )
+				.Ignore( this )
+				.Radius( 8 )
+				.Run();
+
+			Camera.Position = tr.EndPosition;
+			Camera.FirstPersonViewer = null;
+		}
+		else
+		{
+			Camera.Position = EyePosition;
+			Camera.FirstPersonViewer = this;
+			Camera.Main.SetViewModelCamera( 90f );
 		}
 	}
 

@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using Sandbox.Utility;
 
 [Spawnable]
 [Library( "noise_test", Title = "Noise Test" )]
@@ -12,7 +13,7 @@ public partial class NoiseTest : Prop
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
 	}
 
-	[Event.Frame]
+	[Event.Client.Frame]
 	public void OnFrame()
 	{
 		var pos = Position;

@@ -14,14 +14,14 @@ public partial class BouncyBallEntity : Prop, IUse
 
 		SetModel( "models/ball/ball.vmdl" );
 		SetupPhysicsFromModel( PhysicsMotionType.Dynamic, false );
-		Scale = Rand.Float( 0.5f, 2.0f );
+		Scale = Game.Random.Float( 0.5f, 2.0f );
 		RenderColor = Color.Random;
 	}
 
 	protected override void OnPhysicsCollision( CollisionEventData eventData )
 	{
-		var speed = eventData.PreVelocity.Length;
-		var direction = Vector3.Reflect( eventData.PreVelocity.Normal, eventData.Normal.Normal ).Normal;
+		var speed = eventData.This.PreVelocity.Length;
+		var direction = Vector3.Reflect( eventData.This.PreVelocity.Normal, eventData.Normal.Normal ).Normal;
 		Velocity = direction * MathF.Min( speed * SpeedMul, MaxSpeed );
 	}
 

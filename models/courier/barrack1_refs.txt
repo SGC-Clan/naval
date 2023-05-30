@@ -1,4 +1,0 @@
-importfilelist
-{
-	"file"	"barrack_is_unused.vmt"
-}

@@ -9,22 +9,16 @@
 
 		public override void Simulate()
 		{
-			if ( !Host.IsServer )
+			if ( !Game.IsServer )
 				return;
 
 			using ( Prediction.Off() )
 			{
-				bool push = Input.Down( InputButton.PrimaryAttack );
-				if ( !push && !Input.Down( InputButton.SecondaryAttack ) )
+				bool push = Input.Down( "attack1" );
+				if ( !push && !Input.Down( "attack2" ) )
 					return;
 
-				var startPos = Owner.EyePosition;
-				var dir = Owner.EyeRotation.Forward;
-
-				var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
-					.Ignore( Owner )
-					.HitLayer( CollisionLayer.Debris )
-					.Run();
+				var tr = DoTrace();
 
 				if ( !tr.Hit )
 					return;

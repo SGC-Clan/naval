@@ -1,4 +1,0 @@
-importfilelist
-{
-	"file"	"pompom_is_unused.vmt"
-}

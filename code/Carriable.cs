@@ -4,7 +4,7 @@ public partial class Carriable : BaseCarriable, IUse
 {
 	public override void CreateViewModel()
 	{
-		Host.AssertClient();
+		Game.AssertClient();
 
 		if ( string.IsNullOrEmpty( ViewModelPath ) )
 			return;

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "ymJ7+ghUHzl7s19qhUZnv5CNZW2XFow9nbPO0uGSrQuGVSox1LWHbRnDbLnkS+diea3mQxPv+Ceexhcrf6TZQQ==",
+  "dgSpecHash": "cSnDySg6GoiH0xsvstOPV4gor2GyeN5DS+kwLtq9GmSRt7OX8g4reffnnxInAhZE4zEI1l3fKeC6a3skYTKMpA==",
   "success": true,
-  "projectFilePath": "C:\\Program Files (x86)\\Steam\\steamapps\\common\\sbox\\addons\\naval\\code\\naval.csproj",
+  "projectFilePath": "C:\\Users\\Sern\\Documents\\s&box projects\\procedural_map_generation\\code\\naval.csproj",
   "expectedPackageFiles": [],
   "logs": []
 }

@@ -19,7 +19,7 @@ public class InventoryBar : Panel
 	{
 		base.Tick();
 
-		var player = Local.Pawn as Player;
+		var player = Game.LocalPawn as Player;
 		if ( player == null ) return;
 		if ( player.Inventory == null ) return;
 
@@ -31,7 +31,7 @@ public class InventoryBar : Panel
 
 	private static void UpdateIcon( Entity ent, InventoryIcon inventoryIcon, int i )
 	{
-		var player = Local.Pawn as Player;
+		var player = Game.LocalPawn as Player;
 
 		if ( ent == null )
 		{
@@ -46,10 +46,10 @@ public class InventoryBar : Panel
 		inventoryIcon.SetClass( "active", player.ActiveChild == ent );
 	}
 
-	[Event( "buildinput" )]
-	public void ProcessClientInput( InputBuilder input )
+	[Event.Client.BuildInput]
+	public void ProcessClientInput()
 	{
-		var player = Local.Pawn as Player;
+		var player = Game.LocalPawn as Player;
 		if ( player == null )
 			return;
 
@@ -62,22 +62,22 @@ public class InventoryBar : Panel
 			return;
 		}
 
-		if ( input.Pressed( InputButton.Slot1 ) ) SetActiveSlot( input, inventory, 0 );
-		if ( input.Pressed( InputButton.Slot2 ) ) SetActiveSlot( input, inventory, 1 );
-		if ( input.Pressed( InputButton.Slot3 ) ) SetActiveSlot( input, inventory, 2 );
-		if ( input.Pressed( InputButton.Slot4 ) ) SetActiveSlot( input, inventory, 3 );
-		if ( input.Pressed( InputButton.Slot5 ) ) SetActiveSlot( input, inventory, 4 );
-		if ( input.Pressed( InputButton.Slot6 ) ) SetActiveSlot( input, inventory, 5 );
-		if ( input.Pressed( InputButton.Slot7 ) ) SetActiveSlot( input, inventory, 6 );
-		if ( input.Pressed( InputButton.Slot8 ) ) SetActiveSlot( input, inventory, 7 );
-		if ( input.Pressed( InputButton.Slot9 ) ) SetActiveSlot( input, inventory, 8 );
+		if ( Input.Pressed( "slot1" ) ) SetActiveSlot( inventory, 0 );
+		if ( Input.Pressed( "slot2" ) ) SetActiveSlot( inventory, 1 );
+		if ( Input.Pressed( "slot3" ) ) SetActiveSlot( inventory, 2 );
+		if ( Input.Pressed( "slot4" ) ) SetActiveSlot( inventory, 3 );
+		if ( Input.Pressed( "slot5" ) ) SetActiveSlot( inventory, 4 );
+		if ( Input.Pressed( "slot6" ) ) SetActiveSlot( inventory, 5 );
+		if ( Input.Pressed( "slot7" ) ) SetActiveSlot( inventory, 6 );
+		if ( Input.Pressed( "slot8" ) ) SetActiveSlot( inventory, 7 );
+		if ( Input.Pressed( "slot9" ) ) SetActiveSlot( inventory, 8 );
 
-		if ( input.MouseWheel != 0 ) SwitchActiveSlot( input, inventory, -input.MouseWheel );
+		if ( Input.MouseWheel != 0 ) SwitchActiveSlot( inventory, -Input.MouseWheel );
 	}
 
-	private static void SetActiveSlot( InputBuilder input, IBaseInventory inventory, int i )
+	private static void SetActiveSlot( IBaseInventory inventory, int i )
 	{
-		var player = Local.Pawn as Player;
+		var player = Game.LocalPawn as Player;
 
 		if ( player == null )
 			return;
@@ -89,10 +89,10 @@ public class InventoryBar : Panel
 		if ( ent == null )
 			return;
 
-		input.ActiveChild = ent;
+		player.ActiveChildInput = ent;
 	}
 
-	private static void SwitchActiveSlot( InputBuilder input, IBaseInventory inventory, int idelta )
+	private static void SwitchActiveSlot( IBaseInventory inventory, int idelta )
 	{
 		var count = inventory.Count();
 		if ( count == 0 ) return;
@@ -103,6 +103,6 @@ public class InventoryBar : Panel
 		while ( nextSlot < 0 ) nextSlot += count;
 		while ( nextSlot >= count ) nextSlot -= count;
 
-		SetActiveSlot( input, inventory, nextSlot );
+		SetActiveSlot( inventory, nextSlot );
 	}
 }
