@@ -55,9 +55,11 @@ public partial class MyGame : GameManager
 	/// <summary>
 	/// A client has joined the server. Make them a pawn to play with
 	/// </summary>
-	public override void ClientJoined( IClient client )
+	public override async void ClientJoined( IClient client )
 	{
 		base.ClientJoined( client );
+
+		await GameTask.Delay( 2000 );
 
 		// Create a pawn for this client to play with
 		var player = new NavalPlayer();
@@ -79,6 +81,13 @@ public partial class MyGame : GameManager
 		}
 
 	}
+
+
+	public override void OnClientActive( IClient client )
+	{
+		base.OnClientActive( client );
+	}
+
 
 	protected override void OnDestroy()
 	{

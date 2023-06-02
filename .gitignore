@@ -1,2 +1,19 @@
-*
-!dev/
+
+# This file describes files and paths that should not be tracked by Git version control
+# https://git-scm.com/docs/gitignore
+
+# Auto-generated code editor files
+.vs/*
+.vscode/*
+*.csproj
+obj/*
+Properties/*
+code/obj/*
+code/Properties/*
+content/*
+
+# Auto-generated asset related files
+*.generated.*
+*.*_c
+*.los
+*.vpk

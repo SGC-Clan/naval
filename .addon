@@ -3,14 +3,16 @@
   "Type": "game",
   "Org": "sgcdev",
   "Ident": "naval",
-  "Tags": "procedural test",
+  "Tags": "building water pirates conquest procedural plane ship rp",
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "content",
   "ResourcePaths": [
     "models_and_materials",
     "sound",
-    "ui"
+    "ui",
+    "materials",
+    "models"
   ],
   "HasCode": true,
   "CodePath": "/code/",
@@ -32,16 +34,42 @@
       "RootNamespace": "Sandbox",
       "DefineConstants": "SANDBOX;ADDON;DEBUG",
       "NoWarn": "1701;1702;1591;",
-      "References": []
+      "References": [],
+      "DistinctReferences": []
     },
     "PackageSettings": [
       {
-        "DisplayType": "Integer",
-        "Choices": [],
+        "DisplayType": "Choice",
+        "Choices": [
+          {
+            "Value": "1",
+            "Name": "Tiny"
+          },
+          {
+            "Value": "2",
+            "Name": "Small"
+          },
+          {
+            "Value": "4",
+            "Name": "Medium (default)"
+          },
+          {
+            "Value": "6",
+            "Name": "Big"
+          },
+          {
+            "Value": "8",
+            "Name": "Gigantic (preformance hit)"
+          },
+          {
+            "Value": "16",
+            "Name": "Radiculus (will crash)"
+          }
+        ],
         "ConVarName": "proc_gen_world_size",
         "DisplayName": "World Size",
-        "DefaultValue": "64",
-        "Description": "distance to the world border (just like minecraft lmao)",
+        "DefaultValue": "4",
+        "Description": "big worlds take longer to generate",
         "Group": "World Settings",
         "Minimum": 64
       },
@@ -67,6 +95,57 @@
         "Maximum": 9999
       }
     ],
-    "HttpAllowList": null
+    "HttpAllowList": null,
+    "Summary": "Naval Battles and Booty",
+    "Description": "Create crafts ranging from warships to oil transports and submarines. To flying steampunk blimps to acrobatic aircraft! Fight the other team using an array of different weapons from the 18th century black powder cannons to the turrets seen on dreadnoughts and battleships of the 1920\u0027s.",
+    "Public": false,
+    "ReplaceTags": "fight build ship plane water battlefield pirate navy",
+    "Collision": {
+      "Defaults": {
+        "solid": "Collide",
+        "trigger": "Trigger",
+        "ladder": "Ignore",
+        "water": "Trigger",
+        "island": "Collide",
+        "oceanbottom": "Collide"
+      },
+      "Pairs": [
+        {
+          "a": "solid",
+          "b": "solid",
+          "r": "Collide"
+        },
+        {
+          "a": "trigger",
+          "b": "playerclip",
+          "r": "Ignore"
+        },
+        {
+          "a": "trigger",
+          "b": "solid",
+          "r": "Trigger"
+        },
+        {
+          "a": "solid",
+          "b": "trigger",
+          "r": "Collide"
+        },
+        {
+          "a": "playerclip",
+          "b": "solid",
+          "r": "Collide"
+        },
+        {
+          "a": "solid",
+          "b": "island",
+          "r": "Collide"
+        },
+        {
+          "a": "solid",
+          "b": "oceanbottom",
+          "r": "Collide"
+        }
+      ]
+    }
   }
 }
