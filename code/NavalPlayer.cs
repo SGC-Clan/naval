@@ -1,5 +1,6 @@
 ﻿using Sandbox;
 using System.Collections.Generic;
+using System.Numerics;
 
 partial class NavalPlayer : Player
 {
@@ -14,7 +15,7 @@ partial class NavalPlayer : Player
 	/// <summary>
 	/// The clothing container is what dresses the citizen
 	/// </summary>
-	public ClothingContainer Clothing = new();
+	public ClothingContainer Clothing = new(); 
 
 	/// <summary>
 	/// Default init
@@ -56,13 +57,13 @@ partial class NavalPlayer : Player
 
 		Clothing.DressEntity( this );
 
+		Inventory.Add( new NavalEditor() );
 		Inventory.Add( new Cutlass() );
 		Inventory.Add( new Flintlock() );
 		Inventory.Add( new PhysGun(), true );
 		Inventory.Add( new GravGun() );
-		//Inventory.Add( new Tool() );
-		Inventory.Add( new NavalEditor() );
-
+		Inventory.Add( new Tool() );
+		
 		base.Respawn();
 	}
 
@@ -344,6 +345,20 @@ partial class NavalPlayer : Player
 			Camera.Position = EyePosition;
 			Camera.FirstPersonViewer = this;
 			Camera.Main.SetViewModelCamera( 90f );
+		}
+	}
+
+	public bool IsInNavalEditor() 
+	{
+		//when player has editor camera component then we assume he is using the editor
+		bool editor = this.Components.TryGet( out EditorCamera editorCam );
+		if ( editor == true )
+		{
+			return true;
+		}
+		else  //when null or false
+		{
+			return false;
 		}
 	}
 

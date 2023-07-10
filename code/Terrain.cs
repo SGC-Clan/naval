@@ -281,17 +281,17 @@ namespace Sandbox
 					float islandFactor = SmoothStep( 0f, islandRadius, distance );
 					heightValue = Math.Clamp( heightValue - islandFactor, -1, 1 );
 
-					//cllapse land that hits -0.5 value
+					//cllapse land that hits -0.1 value
 					if ( heightValue < -0.10f )
 					{
 						heightValue *= 1.1f;
 					}
 
 					//make land more flat near the water
-					if ( heightValue > 0 )
-					{
-						heightValue /= 1.5f;
-					}
+					//if ( heightValue > 0 )
+					//{
+					//	heightValue /= 1.5f;
+					//}
 
 					// Set the height value in the heightmap
 					heightMap[x, y] = heightValue;
