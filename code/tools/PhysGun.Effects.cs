@@ -1,16 +1,18 @@
 ﻿using Sandbox;
 using Sandbox.Component;
 using System.Linq;
+using System;
 
 public partial class PhysGun
 {
+	CapsuleLightEntity? BeamLight;
 	Particles Beam;
 	Particles EndNoHit;
 
 	Vector3 lastBeamPos;
 	ModelEntity lastGrabbedEntity;
 
-	[Event.Client.Frame]
+	[GameEvent.Client.Frame]
 	public void OnFrame()
 	{
 		UpdateEffects();
@@ -18,9 +20,11 @@ public partial class PhysGun
 
 	protected virtual void KillEffects()
 	{
+		BeamLight?.Delete();
 		Beam?.Destroy( true );
 		Beam = null;
 		BeamActive = false;
+		BeamLight = null;
 
 		EndNoHit?.Destroy( false );
 		EndNoHit = null;
@@ -66,9 +70,14 @@ public partial class PhysGun
 			.WithAllTags( "solid" )
 			.Run();
 
-		if ( Beam == null )
+		Beam ??= Particles.Create( "particles/physgun_beam.vpcf", tr.EndPosition );
+
+		if ( !BeamLight.IsValid() )
 		{
-			Beam = Particles.Create( "particles/physgun_beam.vpcf", tr.EndPosition );
+			BeamLight = new CapsuleLightEntity
+			{
+				Color = Color.FromBytes( 4, 20, 70 )
+			};
 		}
 
 		Beam.SetEntityAttachment( 0, EffectEntity, "muzzle", true );
@@ -126,5 +135,19 @@ public partial class PhysGun
 
 			EndNoHit.SetPosition( 0, lastBeamPos );
 		}
+
+		if ( BeamLight.IsValid() )
+		{
+			var muzzle = IsFirstPersonMode && ViewModelEntity.IsValid ? ViewModelEntity.GetAttachment( "muzzle" ) ?? default : GetAttachment( "muzzle" ) ?? default;
+			var pos = muzzle.Position;
+
+			BeamLight.CapsuleLength = (pos - lastBeamPos).Length * 0.5f;
+			BeamLight.LightSize = 0.5f + (MathF.Sin( Time.Now * 10 ) * 0.5f);
+			BeamLight.Position = (pos + lastBeamPos) * 0.5f;
+			BeamLight.Rotation = Rotation.LookAt( (pos - lastBeamPos).Normal );
+
+			BeamLight.Color = Color.Lerp( BeamLight.Color, new Color( 0.1f, 1.0f, 1.0f, 1.0f ) * 0.039f, Time.Delta * 10 );
+		}
+
 	}
 }
