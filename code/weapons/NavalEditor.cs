@@ -1,4 +1,6 @@
 ﻿using Sandbox;
+using System.Linq;
+using System.Numerics;
 
 [Spawnable]
 [Library("weapon_navaleditor", Title = "Contraption Editor")]
@@ -23,7 +25,7 @@ partial class NavalEditor : Carriable
 
 	public override void Simulate( IClient client )
 	{
-		if ( Owner is not Player ) return;
+		if ( Owner is not NavalPlayer ) return;
 
 		if ( !Game.IsServer )
 			return;
@@ -38,8 +40,8 @@ partial class NavalEditor : Carriable
 				timeSinceUse = 0;
 
 				var MaxTraceDistance = UseDistance;
-				var startPos = (Owner as Player).EyePosition;
-				var dir = (Owner as Player).EyeRotation.Forward;
+				var startPos = (Owner as NavalPlayer).EyePosition;
+				var dir = (Owner as NavalPlayer).EyeRotation.Forward;
 
 				var tr = Trace.Ray( startPos, startPos + dir * MaxTraceDistance )
 					.UseHitboxes()
@@ -48,12 +50,24 @@ partial class NavalEditor : Carriable
 					.Run();
 
 				//if ( !tr.Hit || !tr.Entity.IsValid() )
-					//return;
+				//return;
 
-				var ent = TypeLibrary.Create<Entity>( "nvl_contraption_base" );
+				//var ent = TypeLibrary.Create<Entity>( "nvl_contraption_base" );
 
-				ent.Position = tr.EndPosition + new Vector3(0,0,40);
-				ent.Rotation = Rotation.From( new Angles( 0, Owner.AimRay.Forward.EulerAngles.yaw, 0 ) );
+				//Remove all other editors owned by player
+				var editors = All.OfType<EditorEntity>();
+				foreach ( var e in editors )
+				{
+					if ( e.User == Owner )
+						e.Delete();
+				}
+
+				var ent = new EditorEntity()
+				{
+					Position = tr.EndPosition + new Vector3( 0, 0, 40 ),
+					Rotation = Rotation.From( new Angles( 0, Owner.AimRay.Forward.EulerAngles.yaw, 0 ) ),
+					User = Owner as NavalPlayer,
+				};
 
 			}
 		}
@@ -96,6 +110,9 @@ partial class NavalEditor : Carriable
 	{
 		if ( RenderPreviewArea )
 		{
+			if ( (Owner as NavalPlayer).IsInNavalEditor() )
+				return;
+
 			//if (!IsActiveChild()) return; this function got removed ?
 
 			var tr = Trace.Ray( (Owner as Player).EyePosition, (Owner as Player).EyePosition + (Owner as Player).EyeRotation.Forward * UseDistance )

@@ -49,7 +49,7 @@ public class InventoryBar : Panel
 	[Event.Client.BuildInput]
 	public void ProcessClientInput()
 	{
-		var player = Game.LocalPawn as Player;
+		var player = Game.LocalPawn as NavalPlayer;
 		if ( player == null )
 			return;
 
@@ -61,6 +61,9 @@ public class InventoryBar : Panel
 		{
 			return;
 		}
+
+		if ( player.IsInNavalEditor() )
+			return;
 
 		if ( Input.Pressed( "slot1" ) ) SetActiveSlot( inventory, 0 );
 		if ( Input.Pressed( "slot2" ) ) SetActiveSlot( inventory, 1 );
