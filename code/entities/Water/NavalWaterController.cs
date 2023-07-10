@@ -80,6 +80,9 @@ public class NavalWaterController
 
 	private float UpdateBody( Entity ent, PhysicsBody body )
 	{
+		if ( ShouldBeAffectedByWater( ent, body ) == false )
+			return 0;
+
 		var waterDensity = 1000;
 
 		var WaterEntityScale = (WaterEntity as ModelEntity).Scale;
@@ -163,5 +166,16 @@ public class NavalWaterController
 			}
 		}
 		*/
+	}
+	public bool ShouldBeAffectedByWater( Entity ent, PhysicsBody body )
+	{
+		//DO NOT update anything that is static
+
+		if ( ent.PhysicsGroup.IsValid() )
+		{
+			if ( body.BodyType != PhysicsBodyType.Static )
+				return true;
+		}
+		return false;
 	}
 }
