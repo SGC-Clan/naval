@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static Sandbox.ParticleSnapshot;
 using static Sandbox.Terrain;
+using static Sandbox.Utility.Easing;
 using static System.Net.Mime.MediaTypeNames;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
@@ -38,6 +39,7 @@ namespace Sandbox
 		[Net] public int offsetH { get; set; }
 		[Net] public float islandRadius { get; set; }
 		[Net] public float islandScale { get; set; }
+		[Net] public string islandHeightmapEasings { get; set; } //https://easings.net/
 
 
 		//Terrain mesh settings:
@@ -83,7 +85,7 @@ namespace Sandbox
 
 			if ( HeightMapType == "island" )
 			{
-				GenerateHeightMapIsland();
+				GenerateHeightMapIsland( islandHeightmapEasings );
 			}
 			else
 			{
@@ -249,7 +251,7 @@ namespace Sandbox
 
 		}
 
-		public void GenerateHeightMapIsland()
+		public void GenerateHeightMapIsland( string heightmapEasings )
 		{
 			heightMap = new float[width, height];
 			var seedOffset = seed;
@@ -277,21 +279,29 @@ namespace Sandbox
 					// Use Perlin noise to generate the height value
 					float heightValue = Noise.Fbm( octaves, x + offsetW + seedOffset, y + offsetH + seedOffset );
 
+
+					//add heightmap easings - based on those examples https://easings.net/
+					//if ( heightmapEasings.Contains( "easeInOutCirc" ) ) 
+					//{
+					//	heightValue = easeInOutCirc( heightValue );
+					//}
+					//if ( heightmapEasings.Contains( "easeOutCubic" ) )
+					//{
+					//	heightValue = easeOutCubic( heightValue );
+					//}
+
+					//make island beaches more flat
+					//TO:DO
+
+					////cllapse land that hits -0.1 value
+					//if ( heightValue < -0.10f )
+					//{
+					//	heightValue *= 1.1f;
+					//}
+
 					// Apply island shape based on the distance from the center
 					float islandFactor = SmoothStep( 0f, islandRadius, distance );
 					heightValue = Math.Clamp( heightValue - islandFactor, -1, 1 );
-
-					//cllapse land that hits -0.1 value
-					if ( heightValue < -0.10f )
-					{
-						heightValue *= 1.1f;
-					}
-
-					//make land more flat near the water
-					//if ( heightValue > 0 )
-					//{
-					//	heightValue /= 1.5f;
-					//}
 
 					// Set the height value in the heightmap
 					heightMap[x, y] = heightValue;
@@ -305,9 +315,35 @@ namespace Sandbox
 			t = t * t * (3f - 2f * t);
 			return MathX.Lerp( from, to, t );
 		}
+		public float EasingFunction( float x )
+		{
+			float k = 10f; // Controls the rate of change
+			float value = 1f / (1f + MathF.Exp( -k * (x - 0.5f) ));
+			return value;
+		}
 
-		//calculation based on neighbor vectors
-		private Vector3 CalculateNeighborNormal( int x, int y, int width, int height, Vector3[] vertices )
+		public static float easeInOutCirc( float x ) {
+			//https://easings.net/#easeInOutCirc
+			if ( x < 0.5 ) {
+			return (1 - MathF.Sqrt( 1 - MathF.Pow( 2 * x, 2 ) )) / 2;
+			} else {
+			return (MathF.Sqrt( 1 - MathF.Pow( -2 * x + 2, 2 ) ) + 1) / 2;
+			}
+		}
+		public static float easeInCirc( float x ) {
+			//https://easings.net/#easeInCirc
+			return 1 - MathF.Sqrt(1 - MathF.Pow(x, 2));
+		}
+		public static float easeOutCubic( float x ) {
+			//https://easings.net/#easeOutCubic
+			return 1 - MathF.Pow(1 - x, 3);
+		}
+		public static float easeInOutSine( float x ) {
+			return -(MathF.Cos( MathF.PI* x) - 1) / 2;
+		}
+
+	//calculation based on neighbor vectors
+	private Vector3 CalculateNeighborNormal( int x, int y, int width, int height, Vector3[] vertices )
 		{
 			Vector3 position = vertices[y * width + x];
 

@@ -179,7 +179,7 @@ namespace Sandbox
 			fortress.SetupPhysicsFromModel( PhysicsMotionType.Static );
 
 			//Island generation
-			GenerateIslands( seed, 2, 100*500 );
+			GenerateIslands( seed, 4, 100*500 );
 
 			//Ocean Bottom generation
 			GenerateOceanBottom( seed, 4 ); //6
@@ -334,6 +334,7 @@ namespace Sandbox
 					HeightMapType = "island",
 					islandRadius = islandRadius,
 					islandScale = islandScale,
+					islandHeightmapEasings = "easeOutCubic", //https://easings.net/
 					//terrain mesh settings
 					scale = 2500,
 					spacing = spacing,
@@ -368,13 +369,6 @@ namespace Sandbox
 				"models_and_materials/rocks/moss rock 12.vmdl",
 				"models_and_materials/rocks/moss rock 13.vmdl",
 				"models_and_materials/rocks/moss rock 14.vmdl",
-				//"models/rust_nature/rocks/rock_cliff_a.vmdl",
-				//"models/rust_nature/rocks/rock_cliff_b.vmdl",
-				//"models/rust_nature/rocks/rock_med_a.vmdl",
-				//"models/rust_nature/rocks/rock_med_b.vmdl",
-				//"models/rust_nature/rocks/rock_med_c.vmdl",
-				//"models/rust_nature/rocks/rock_ledge_a.vmdl",
-				//"models/rust_nature/rocks/rock_cliff_c.vmdl",
 				},1,3, true );
 
 				//Trees
@@ -396,10 +390,6 @@ namespace Sandbox
 				//"models_and_materials/vegetation/mediterranean_cypress/mediterranean_cypress_01.vmdl",
 				//"models_and_materials/vegetation/mediterranean_cypress/mediterranean_cypress_02.vmdl",
 				//"models_and_materials/vegetation/mediterranean_cypress/mediterranean_cypress_03.vmdl",
-				//"models/sbox_props/trees/oak/tree_oak_big_a.vmdl",
-				//"models/sbox_props/trees/oak/tree_oak_big_b.vmdl",
-				//"models/sbox_props/trees/oak/tree_oak_medium_a.vmdl",
-				//"models/sbox_props/trees/oak/tree_oak_small_a.vmdl",
 				},1.2f,1.75f, false );
 
 				//Shrubs
@@ -409,37 +399,7 @@ namespace Sandbox
 				"models_and_materials/vegetation/bush_lowpoly_03.vmdl",
 				"models_and_materials/vegetation/bush_lowpoly_04.vmdl",
 				"models_and_materials/vegetation/bush_lowpoly_05.vmdl",
-				//"models/rust_nature/overgrowth/bush_large_spread.vmdl",
-				//"models/sbox_props/shrubs/beech/beech_bush_large.vmdl",
-				//"models/sbox_props/shrubs/beech/beech_bush_medium.vmdl",
-				//"models/sbox_props/shrubs/beech/beech_bush_regular_medium_a.vmdl",
-				//"models/sbox_props/shrubs/beech/beech_bush_regular_medium_b.vmdl",
-				//"models/sbox_props/shrubs/beech/beech_bush_small.vmdl",
-				//"models/sbox_props/shrubs/beech/beech_shrub_tall_large.vmdl",
-				//"models/sbox_props/shrubs/beech/beech_shrub_tall_medium.vmdl",
-				//"models/sbox_props/shrubs/beech/beech_shrub_tall_small.vmdl",
-				//"models/sbox_props/shrubs/beech/beech_shrub_wide_large.vmdl",
-				//"models/sbox_props/shrubs/beech/beech_shrub_wide_medium.vmdl",
-				//"models/sbox_props/shrubs/beech/beech_shrub_wide_small.vmdl",
-				//"models/sbox_props/shrubs/pine/pine_bush_low_b.vmdl",
-				//"models/sbox_props/shrubs/pine/pine_bush_low_a.vmdl",
-				//"models/sbox_props/shrubs/pine/pine_bush_regular_a.vmdl",
-				//"models/sbox_props/shrubs/pine/pine_bush_regular_b.vmdl",
-				//"models/sbox_props/shrubs/pine/pine_bush_regular_c.vmdl",
-				//"models/sbox_props/shrubs/pine/pine_shrub_tall_a.vmdl",
-				//"models/sbox_props/shrubs/pine/pine_shrub_tall_b.vmdl",
-				//"models/sbox_props/shrubs/pine/pine_shrub_wide.vmdl",
 				},0.75f,1.2f, false );
-
-				//Cactail
-				//IslandPopulateWithObjects( islandCenterPos, sizeMax * islandRadius, 80, 300, new string[] {
-				//"models/rust_nature/reeds/reeds_medium.vmdl",
-				//"models/rust_nature/reeds/reeds_small.vmdl",
-				//"models/rust_nature/reeds/reeds_small_dry.vmdl",
-				//"models/rust_nature/reeds/reeds_small_sparse.vmdl",
-				//"models/rust_nature/reeds/reeds_tall.vmdl",
-				//"models/rust_nature/reeds/reeds_tall_dry.vmdl",
-				//},1,1.4f, false );
 
 			}
 
@@ -747,6 +707,20 @@ namespace Sandbox
 					}
 					if ( canPlace == false ) { continue; }
 
+					var selectedModel = Game.Random.FromArray( models );
+
+					//place decal under the selected vegetation
+					string selectedDecal = null;
+					if ( selectedModel.Contains( "tree_lowpoly" ) )
+						selectedDecal = "materials/decals/tree_mask.decal";
+					if ( selectedModel.Contains( "africanbaobab_med" ) || selectedModel.Contains( "westernjuniper_med" ) )
+						selectedDecal = "materials/decals/tree_mask_big.decal";
+
+					if ( selectedDecal != null && ResourceLibrary.TryGet<DecalDefinition>( selectedDecal, out var decal ) )
+					{
+						Decal.Place( decal, tr );
+					}
+
 					Rotation traceNormal = new Rotation(); 
 					if ( useNormal ) { traceNormal = tr.Normal.EulerAngles.ToRotation(); }
 
@@ -754,7 +728,7 @@ namespace Sandbox
 					{
 						Position = tr.HitPosition + new Vector3( 0, 0, 0 ),
 						Rotation = randomNormal.EulerAngles.ToRotation() + traceNormal,
-						Model = Model.Load( models[rand.Next( 0, models.Length )] ),
+						Model = Model.Load( selectedModel ),
 						Scale = rand.Float( sizeMin, sizeMax ),
 					};
 					vegetation.SetupPhysicsFromModel( PhysicsMotionType.Static );
