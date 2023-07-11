@@ -7,13 +7,8 @@
   "Schema": 1,
   "HasAssets": true,
   "AssetsPath": "content",
-  "ResourcePaths": [
-    "models_and_materials",
-    "sound",
-    "ui",
-    "materials",
-    "models"
-  ],
+  "Resources": null,
+  "MenuResources": "\nMenu/*\ncontent/menu/*",
   "HasCode": true,
   "CodePath": "/code/",
   "PackageReferences": [],
@@ -107,7 +102,10 @@
         "ladder": "Ignore",
         "water": "Trigger",
         "island": "Collide",
-        "oceanbottom": "Collide"
+        "oceanbottom": "Collide",
+        "player": "Unset",
+        "glass": "Unset",
+        "debris": "Unset"
       },
       "Pairs": [
         {
@@ -116,8 +114,8 @@
           "r": "Collide"
         },
         {
-          "a": "trigger",
-          "b": "playerclip",
+          "a": "player",
+          "b": "debris",
           "r": "Ignore"
         },
         {
@@ -131,9 +129,9 @@
           "r": "Collide"
         },
         {
-          "a": "playerclip",
-          "b": "solid",
-          "r": "Collide"
+          "a": "player",
+          "b": "glass",
+          "r": "Trigger"
         },
         {
           "a": "solid",
@@ -144,8 +142,35 @@
           "a": "solid",
           "b": "oceanbottom",
           "r": "Collide"
+        },
+        {
+          "a": "ladder",
+          "b": "oceanbottom"
+        },
+        {
+          "a": "trigger",
+          "b": "glass",
+          "r": "Ignore"
+        },
+        {
+          "a": "glass",
+          "b": "glass",
+          "r": "Ignore"
         }
       ]
-    }
+    },
+    "TickRate": 50,
+    "LaunchConfigs": [
+      {
+        "Name": "Naval - empty map",
+        "GameIdent": "sgcdev.naval#local",
+        "MapName": "\u003Cempty\u003E",
+        "MaxPlayers": 2,
+        "GameSettings": {},
+        "Addons": "",
+        "PreLaunchCommand": "",
+        "PostLaunchCommand": ""
+      }
+    ]
   }
 }
