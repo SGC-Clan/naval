@@ -1,253 +1,107 @@
-
-.gamemainmenu {
+.mygamemenu {
+	width: 100%;
+	height: 100%;
+	align-items: flex-start;
+	flex-direction: column;
+	font-family: Bookman, URW Bookman L, serif;
+	background-color: #588574;
 	background-image: url( "menu/background_video.webm" );
 	background-position: center;
 	background-size: cover;
-	opacity: 1;
-	flex-direction: column;
-	font-size: 25px;
-	width: 100%;
-	height: 100%;
-	position: absolute;
-	transition: all 0.3s ease-out;
-	color: white;
-
-	&:intro {
-		opacity: 0;
-		transform: scaleX( 1.1 );
-	}
+	background-tint: #959aa3;
 
 	&.ingame {
-		background-color: #151313ee;
+		backdrop-filter: blur( 10px );
+		background-color: #25281b55;
 		background-image: none;
 	}
 }
 
-.button, .block
-{
-	padding: 4px 16px;
-
-	opacity: 0.8;
-
-	font-size: 28px;
+.title {
+	font-size: 80px;
 	font-family: Poppins;
-	font-weight: 700;
-	flex-shrink: 0;
+	font-weight: bold;
+	color: #ff1;
+	text-shadow: 4px 4px 0px black;
+	margin-top: 65px;
+	margin-left: 170px;
 }
 
-.button
-{
-	background-color: #000a;
-	cursor: pointer;
-
-	&:hover
-	{
-		opacity: 1;
-	}
-
-	&:active
-	{
-		left: 2px;
-		top: 3px;
-	}
-}
-
-
-.gamemainmenu .navigator-canvas
-{
-	height: 100%;
-	flex-grow: 1;
-	flex-shrink: 0;
-	backdrop-filter: blur( 20px );
-	padding: 0px 100px;
-
-	.navigator-body
-	{
-		width: 100%;
-		height: 100%;
-		flex-direction: column;
-		padding: 100px 0px;
-	}
-}
-
-section
-{
+.options {
 	flex-direction: column;
-	flex-grow: 1;
-	flex-shrink: 0;
-
-	&.nogrow
-	{
-		flex-grow: 0;
-	}
-
-	&.box
-	{
-		background-color: rgba( black, 0.5 );
-		
-	}
-}
-
-.scroll
-{
-	overflow-y: scroll;
-	flex-shrink: 1;
-	flex-grow: 0;
-}
-
-h2
-{
-	font-family: poppins;
-	font-weight: 400;
-	opacity: 0.2;
-	margin-bottom: 16px;
-	flex-shrink: 0;
-}
-
-.member-list
-{
-	overflow-x: scroll;
-	padding: 20px;
 	gap: 8px;
-}
+	pointer-events: all;
+	color: white;
+	align-items: flex-start;
+	justify-content: flex-end;
+	padding: 50px;
+	padding-bottom: 100px;
+	position: absolute;
+	left: 200px;
+	top: 400px;
+	bottom: 100px;
 
-
-
-.hidden
-{
-	display: none;
-}
-
-.inset
-{
-	overflow: hidden;
-}
-
-.layout
-{
-	flex-direction: column;
-
-	> *
-	{
-		flex-shrink: 0;
-	}
-
-	> .body
-	{
-		flex-grow: 1;
-		flex-shrink: 0;
-		flex-direction: column;
-
-		&.columned
-		{
-			flex-direction: row;
-			flex-grow: 1;
-			flex-shrink: 1;
-			justify-content: space-around;
-			align-items: center;
-
-			> .left
-			{
-				flex-grow: 0;
-				flex-shrink: 0;
-				overflow-y: scroll;
-				flex-direction: column;
-			}
-
-			> .right
-			{
-				flex-grow: 0;
-				flex-shrink: 0;
-				flex-direction: column;
-			}
-		}
-	}
-}
-
-.navbar
-{
-	padding: 32px 0;
-	flex-shrink: 0;
-
-	.right, .left
-	{
-		flex-grow: 0;
-		flex-shrink: 0;
-		gap: 10px;
-	}
-
-	.left
-	{
+	.spacer {
 		flex-grow: 1;
 	}
-}
 
-$form-row-height: 48px;
+	.option {
+		font-size: 50px;
+		color: #ddd;
+		border-radius: 15px;
+		background-color: rgba(175, 175, 175, 0.1);
+		text-transform: uppercase;
+		cursor: pointer;
+		font-weight: bold;
+		padding: 10px 20px;
+		opacity: 1;
 
-.form
-{
-	flex-direction: column;
-	flex-shrink: 0;
-	flex-grow: 0;
-	gap: 2px;
-	margin-bottom: 50px;
-
-	> .form-group
-	{
-		flex-direction: column;
-		flex-shrink: 0;
-		margin-bottom: 20px;
-
-		> .form-label
-		{
-			opacity: 0.5;
-			height: $form-row-height;
-			font-size: 20px;
-			white-space: nowrap;
-		}
-	}
-}
-
-.form .form-control
-{
-	flex-grow: 1;
-
-	SliderControl, > DropDown, > textentry, SliderControl textentry
-	{
-		flex-grow: 1;
-		font-size: 20px;
-		height: $form-row-height;
-	}
-
-	> textentry, SliderControl textentry
-	{
-		flex-grow: 1;
-		background-color: #ffffff05;
-		height: $form-row-height;
-		color: #aaa;
-		width: 600px;
-		border-radius: 0;
-		padding: 5px;
-
-		&:hover
-		{
-			background-color: #ffffff11;
-		}
-
-		&:focus
-		{
-			background-color: #ffffff22;
+		&:hover {
 			color: #fff;
+			opacity: 1;
+			sound-in: "menu/select_03.sound";
+			//transform: scale( 1.025 );
+		}
+
+		&:active {
+			//padding-top: 2px;
+			//padding-bottom: 0px;
+			sound-in: "menu/select_07.sound";
 		}
 	}
 
-	SliderControl
-	{
-		
+	.text {
+		font-size: 21px;
+		color: #555;
+		font-weight: normal;
 	}
 }
 
-choosemappage.navigator-body
-{
-	padding: 0;
+.leaderboards {
+	position: absolute;
+	right: 0px;
+	flex-direction: column;
+	padding: 100px 50px;
+	top: 0px;
+	bottom: 0px;
+	justify-content: space-between;
+
+	h1 {
+		color: #fff;
+		justify-content: center;
+		font-family: "Cascadia Mono", monospace;
+		font-size: 34px;
+		font-weight: bolder;
+		text-transform: uppercase;
+		letter-spacing: 6px;
+	}
+
+	> h2 {
+		color: #fff;
+		justify-content: center;
+		font-family: Poppins;
+		font-size: 18px;
+		text-transform: uppercase;
+		letter-spacing: 7px;
+	}
 }

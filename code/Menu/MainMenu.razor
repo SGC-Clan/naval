@@ -1,12 +1,137 @@
 @using System
 @using Sandbox;
-@using Sandbox.MenuSystem;
 @using Sandbox.UI;
 @attribute [StyleSheet]
-@inherits Sandbox.UI.GameMenu.DefaultGameMenu
+@inherits RootPanel
+@namespace GameMenu
+@implements Sandbox.Menu.IGameMenuPanel
 
-<root class="gamemainmenu">
+<root class="mygamemenu">
 
-    <div class="navigator-canvas" slot="navigator-canvas"></div>
+	<div class="title"><img src="menu/logo1.png" /></div>
+
+    <div class="options">
+
+        @if ( Game.InGame )
+        {
+            <div class="row">
+                <div class="option" onclick="@(() => Game.Menu.HideMenu() )">Return To Game</div>
+            </div>
+
+            <div class="row">
+                <div class="option" onclick="@(() => Game.Menu.LeaveServer( "End Game" ) )">End Game</div>
+            </div>
+        }
+        else
+        {
+            <div class="row">
+                <div class="option" onclick="@CreateNewGame">New World</div>
+            </div>
+
+			<div class="row">
+				<div class="option" onclick="@LoadWorld">Load World</div>
+			</div>
+
+            <div class="row">
+                <div class="option" onclick="@OpenServerList">Join Game</div>
+            </div>
+        }
+
+        <div class="spacer">
+           
+        </div>
+
+        <div class="row">
+            <div class="option" onclick="@Game.Menu.Close">Quit</div>
+        </div>  
+        
+    </div>
+
+	@* <div class="leaderboards">
+
+        {
+            var stat = Sandbox.Services.Stats.Global.Get( "kills" );
+            <h1><VelocityNumber Value="@stat.Value" Velocity="@stat.Velocity" /></h1>
+        }
+        
+        <h2>Zombies Killed</h2>
+
+        <LeaderboardPanel BoardName="kills" Group="global"></LeaderboardPanel>
+        <LeaderboardPanel BoardName="kills" Group="country"></LeaderboardPanel>
+        <LeaderboardPanel BoardName="kills" Group="friends"></LeaderboardPanel>
+
+
+	</div>*@
 
 </root>
+
+@code
+{
+	public override void Tick()
+	{
+		base.Tick();
+
+		SetClass( "ingame", Game.InGame );
+
+		UpdateMusic();
+	}
+
+	SoundHandle MenuMusic;
+
+	void UpdateMusic()
+	{
+		if (Game.InGame)
+		{
+			MenuMusic.Stop(true);
+			return;
+		}
+
+		if (!MenuMusic.IsPlaying)
+		{
+			MenuMusic = Audio.Play("menu/mainmenumusic.sound");
+		}
+	}
+
+	void CreateNewGame()
+	{
+		var options = new Sandbox.Modals.GameCreateModalOptions();
+		options.Cookie = $"naval.serverconfig";
+		options.ModalTitle = "Create Game";
+		options.MinPlayers = 1;
+		options.MaxPlayers = 4;
+		options.MapSelection = false;
+		options.Default.GameTitle = $"{Game.UserName}'s World";
+
+		options.OnStartGame = (setup) =>
+		{
+			Game.Menu.StartServerAsync( setup.MaxPlayers, setup.GameTitle, "<empty>" );
+		};
+
+		Game.Overlay.ShowCreateGame(options);
+	}
+
+	void OpenServerList()
+	{
+		var options = new Sandbox.Modals.ServerListModalOptions();
+		options.ModalTitle = "Worlds by other players";
+		options.TargetGame = "sgcdev.naval";
+		options.OnSelected = (server) =>
+		{
+			Game.Menu.ConnectToServer(server.SteamId);
+		};
+
+		Game.Overlay.ShowServerList( options );
+	}
+
+	void LoadWorld()
+	{
+
+	}
+
+    protected override int BuildHash()
+    {
+        return HashCode.Combine( Game.InGame );
+    }
+
+
+}
