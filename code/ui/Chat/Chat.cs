@@ -2,10 +2,10 @@ namespace Sandbox;
 
 public partial class Chat
 {
-	[ConCmd.Client( "chat_add", CanBeCalledFromServer = true )]
-	public static void AddChatEntry( string name, string message, string playerId = "0", bool isInfo = false )
+	[ClientRpc]
+	public static void AddChatEntry( string name, string message, long playerId = 0, bool isInfo = false )
 	{
-		Current?.AddEntry( name, message, long.Parse( playerId ), isInfo );
+		Current?.AddEntry( name, message, playerId, isInfo );
 
 		// Only log clientside if we're not the listen server host
 		if ( !Game.IsListenServer )
@@ -14,13 +14,7 @@ public partial class Chat
 		}
 	}
 
-	public static void AddChatEntry( To target, string name, string message, long playerId = 0, bool isInfo = false )
-	{
-		// Can't use long on ConCmd :<
-		AddChatEntry( target, name, message, playerId.ToString(), isInfo );
-	}
-
-	[ConCmd.Server( "say" )]
+	[ConCmd.Server( "sandbox_say" )]
 	public static void Say( string message )
 	{
 		if ( !ConsoleSystem.Caller.IsValid() ) return;

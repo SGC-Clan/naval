@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Numerics;
 
-partial class NavalPlayer : Player
+public partial class NavalPlayer : Player
 {
 	private TimeSince timeSinceDropped;
 	private TimeSince timeSinceJumpReleased;
@@ -57,6 +57,7 @@ partial class NavalPlayer : Player
 
 		Clothing.DressEntity( this );
 
+		Inventory.Add( new Fists() );
 		Inventory.Add( new NavalEditor() );
 		Inventory.Add( new Cutlass() );
 		Inventory.Add( new Flintlock() );
@@ -158,17 +159,29 @@ partial class NavalPlayer : Player
 		{
 			if ( timeSinceJumpReleased < 0.3f )
 			{
-				if ( DevController is NavalNoclipController )
+				if ( DevController is NoclipController )
 				{
 					DevController = null;
 				}
 				else
 				{
-					DevController = new NavalNoclipController();
+					DevController = new NoclipController();
 				}
 			}
 
 			timeSinceJumpReleased = 0;
+		}
+
+		if ( Input.Released( "noclip" ) )
+		{
+			if ( DevController is NoclipController )
+			{
+				DevController = null;
+			}
+			else
+			{
+				DevController = new NoclipController();
+			}
 		}
 
 		if ( InputDirection.y != 0 || InputDirection.x != 0f )

@@ -59,7 +59,11 @@ public class NavalWaterController
 
 	public void Touch( Entity other )
 	{
+		if ( other == null ) return;
+
 		var c = other.Components.Get<NavalWaterEffectComponent>( true );
+		if ( c == null ) return;
+
 		if ( c.WaterEntity != WaterEntity )
 			return;
 		
@@ -105,7 +109,7 @@ public class NavalWaterController
 			var bouyancy = densityDiff.LerpInverse( 0.0f, -300f );
 			bouyancy = MathF.Pow( bouyancy, 0.1f );
 
-				//DebugOverlay.Text( $"{bouyancy}", pos, Color.Red, 0.1f, 10000 );
+				DebugOverlay.Text( $"{bouyancy}", pos, Color.Red, 0.1f, 10000 );
 
 			if ( bouyancy <= 0 )
 			{
@@ -119,8 +123,8 @@ public class NavalWaterController
 
 				float depth = (waterSurface.z - bounds.Maxs.z) / 100.0f;
 				depth = depth.Clamp( 1.0f, 10.0f );
-				//DebugOverlay.Text( $"{depth}", point, Color.White, 0.1f, 10000 );
-				//DebugOverlay.Line( point, closestpoint, 1.0f );
+				DebugOverlay.Text( $"{depth}", point, Color.White, 0.1f, 10000 );
+				DebugOverlay.Line( point, closestpoint, 1.0f );
 
 				//body.ApplyImpulseAt( closestpoint, (Vector3.Up * volume * level * bouyancy * 0.0001f) );
 				body.ApplyForceAt( closestpoint, (Vector3.Up * volume * level * bouyancy * 0.05f * depth) );
@@ -173,6 +177,9 @@ public class NavalWaterController
 
 		if ( ent.PhysicsGroup.IsValid() )
 		{
+			if ( body.MotionEnabled == false )
+				return false;
+
 			if ( body.BodyType != PhysicsBodyType.Static )
 				return true;
 		}
