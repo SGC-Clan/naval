@@ -1,0 +1,104 @@
+NavalEditorOverlay {
+	transition: all 0.1s ease-out;
+	pointer-events: all;
+	width: 100%;
+	height: 100%;
+	top: 0%;
+	justify-content:initial;
+	flex-direction:row;
+
+	&.hidden
+	{
+		transition: all 0.4s ease-in;
+		pointer-events: none;
+		top: 50%;
+		opacity: 0;
+	}
+
+}
+
+.coolbutton {
+	height: 80%;
+	border: 0;
+	line-height: 2.5;
+	padding: 10px;
+	text-align: center;
+	color: #fff;
+	text-shadow: 1px 1px 1px #000;
+	border-radius: 2.5px;
+	background-color: dimgray;
+	background-image: linear-gradient(to top left, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2) 30%, rgba(0, 0, 0, 0));
+}
+
+.topbar {
+	height: 60px;
+	width: 100%;
+	background: linear-gradient( to top, rgba( #222, 0.3 ), rgba( #222, 0.9 ) 95% );
+	backdrop-filter: blur( 10px );
+	color: rgba( 200, 200, 200, 0.8);
+	padding: 0px 32px;
+	justify-content: flex-start;
+
+	.button {
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		margin: 0px 16px;
+	}
+
+	.icon {
+		font-family: MaterialIcons;
+		font-size: 50px;
+	}
+
+	.text {
+		white-space: nowrap;
+	}
+
+}
+
+.editor_center {
+	width:100%;
+	height:100%;
+	background: linear-gradient( to top, rgba( #022, 0.3 ), rgba( #202, 0.9 ) 95% );
+	flex-direction: center;
+}
+
+.listleft {
+	height: 50%;
+	width: 50%;
+	background: linear-gradient( to top, rgba( #222, 0.3 ), rgba( #222, 0.9 ) 95% );
+	backdrop-filter: blur( 10px );
+	width: 100%;
+	color: rgba( 200, 200, 200, 0.8);
+	padding: 0px 32px;
+	flex-direction: column;
+}
+
+.bottomToolRack 
+{
+	height: 120px;
+	background: linear-gradient( to top, rgba( #222, 0.3 ), rgba( #222, 0.9 ) 95% );
+	backdrop-filter: blur( 10px );
+	width: 100%;
+	color: rgba( 200, 200, 200, 0.8);
+	padding: 0px 32px;
+	justify-content: center;
+
+	.button
+	{
+		flex-direction: column;
+		align-items: center;
+		justify-content: center;
+		margin: 0px 16px;
+	}
+
+	.icon {
+		font-family: MaterialIcons;
+		font-size: 50px;
+	}
+
+	.text {
+		white-space: nowrap;
+	}
+}

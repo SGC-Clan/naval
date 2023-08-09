@@ -39,7 +39,6 @@ namespace Sandbox
 
 		protected override void OnActivate()
 		{
-			Log.Info( "Start OnActivate:" + Enabled );
 
 			TargetPos = Camera.Position;
 			TargetRot = Camera.Rotation;
@@ -55,13 +54,14 @@ namespace Sandbox
 			//
 			// Set the devcamera class on the HUD. It's up to the HUD what it does with it.
 			//
-			Game.RootPanel?.SetClass( "editor", true );
+			//Game.RootPanel?.SetClass( "NavalEditorOverlay", true );
 
 			// Only create if we're using the dev cam
 			if ( RootPanel == null )
 			{
 				RootPanel = new();
 				overlay = RootPanel.AddChild<NavalEditorOverlay>();
+				overlay.Show();
 			}
 
 			//overlay?.Activated();
@@ -81,7 +81,6 @@ namespace Sandbox
 			{
 				LookAngles += Input.AnalogLook;
 			}
-
 
 			Input.ClearActions();
 			Input.AnalogMove = default;
@@ -114,7 +113,6 @@ namespace Sandbox
 		[GameEvent.Client.PostCamera]
 		public void Update()
 		{
-			Log.Info( "Start Update:" + Enabled );
 
 			if ( this.Enabled == false ) return;
 			if ( EditorEnt == null ) return;

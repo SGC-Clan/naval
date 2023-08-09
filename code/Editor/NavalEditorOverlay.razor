@@ -7,23 +7,76 @@
 @attribute [StyleSheet]
 @inherits Panel
 
-<style>
-
-	.editor
-	{
-		width: 50px;
-		height: 50px;
-		border-radius: 100px;
-		margin-right: 10px;
-		background-color: red;
-	}
-
-</style>
 
 <root>
 
 	<div class="editor">
+		 
+		<div class="topbar">
 
+			<div class="button">
+				<text class="icon" text="lists" />
+			</div>
+
+			<div class="button">
+				<text class="icon" text="close"/> 
+				<text class="text" text="Exit" />
+			</div>
+
+			<div class="button">
+				<text class="icon" text="save_as" />
+				<text class="text" text="Save" />
+			</div>
+
+			<div class="button">
+				<text class="icon" text="folder_open" />
+				<text class="text" text="Load" />
+			</div>
+
+			<div class="button">
+				<text class="icon" text="publish" />
+				<text class="text" text="Publish" />
+			</div>
+
+			<div class="button">
+				<text class="icon" text="undo" />
+				<text class="text" text="Undo" />
+			</div>
+
+			<div class="button">
+				<text class="icon" text="redo" />
+				<text class="text" text="Redo" />
+			</div>
+
+			<div class="button">
+				<text class="icon" text="menu_book" />
+				<text class="text" text="Wiki" />
+			</div>
+
+		</div>
+
+		<div class="editor_center">
+
+			<div class="listleft">
+				<text text="tool settings:" />
+
+			</div>
+
+		</div>
+
+		<div class="bottomToolRack">
+
+			<div class="button" onclick="@(() => Log.Info("Test Move Scale") )">
+				<text class="icon" text="open_in_full" />
+				<text class="text" text="Move Scale" />
+			</div>
+
+			<div class="button">
+				<text class="icon" text="palette" />
+				<text class="text" text="Color Material" />
+			</div>
+
+		</div>
 
 
 	</div>
@@ -32,5 +85,21 @@
 
 @code
 {
-	// C# code here
+	public override void Tick()
+	{
+		if (Input.Down("attack2"))  //right click
+		{
+			Style.PointerEvents = PointerEvents.All;
+			Log.Info("attack2");
+		}
+		else
+		{
+			Style.PointerEvents = PointerEvents.None;
+		}
+
+
+		base.Tick();
+	}
+
+	//ExitNavalEditor() //onclick=@(() => ExitNavalEditor())
 }
