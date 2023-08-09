@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http.Headers;
 using System.Numerics;
 using System.Runtime.CompilerServices;
+using System.Security.AccessControl;
 using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Text;
@@ -93,7 +94,7 @@ namespace Sandbox
 
 			//Sky box
 			var skyBox = new SceneSkyBox( sceneWorld, Material.Load( "models_and_materials/cubemap/mirrored_skybox.vmat" ) );
-			skyBox.SetSkyLighting( new Vector3( 20, 10, -90 ) );
+			//skyBox.SetSkyLighting( new Vector3( 20, 10, -90 ) );
 
 			var camera = Camera.Main;
 			camera.World = sceneWorld;
@@ -127,6 +128,16 @@ namespace Sandbox
 
 			Log.Info( "creating world.. " + seed );
 
+			//EnvironmentLightEntity WorldLight = new EnvironmentLightEntity();
+			//WorldLight.Position = new Vector3( 0, 0, 5000 );
+			//WorldLight.Brightness = 1;
+			//float SunStrenght = 50f;
+			//WorldLight.Color = new Color { r = 66 / SunStrenght, g = 148 / SunStrenght, b = 209 / SunStrenght };
+			//WorldLight.SkyColor = Color.White * 0.4f;
+			//WorldLight.SkyIntensity = 0.8f;
+			//WorldLight.Rotation = Rotation.From( new Angles( 45, 90, -90 ) );
+			//WorldLight.AmbientColor = new Color { r = 195 / 255, g = 221 / 255, b = 117 / 255 };
+			//WorldLight.DynamicShadows = true;
 
 			//temp island platform
 			//var platform = new ModelEntity
@@ -179,12 +190,22 @@ namespace Sandbox
 			fortress.SetupPhysicsFromModel( PhysicsMotionType.Static );
 
 			//Island generation
-			GenerateIslands( seed, 4, 100*500 );
+			GenerateIslands( seed, 8, 100*500 );
 
 			//Ocean Bottom generation
 			GenerateOceanBottom( seed, 4 ); //6
 			
 			GenerateOcean( 1 );
+
+			//Add basic air soundscape
+			var SoundscapeSea = new SoundscapeBoxEntity()
+			{
+				Enabled = true,
+				Extents = new Vector3( 150000f, 150000f, 50000f ),
+				Soundscape = "sound/soundscapes/air01.sndscape",
+				Position = new Vector3( 0, 0, 500f+25000f ),
+			};
+
 
 			//Respawn everyone
 			await GameTask.Delay( 2500 );
@@ -299,6 +320,16 @@ namespace Sandbox
 
 				}
 			}
+
+			//Add ocean soundscape
+			var SoundscapeSea = new SoundscapeBoxEntity()
+			{
+				Enabled = true,
+				Extents = new Vector3( TileScale * 10000f, TileScale * 10000f, 2000f ),
+				Soundscape = "sound/soundscapes/sea01.sndscape",
+				Position = new Vector3( 0, 0, 1000 ),
+			};
+
 		}
 
 
@@ -316,7 +347,7 @@ namespace Sandbox
 			{
 
 				float islandScale = 1f; //SMALLER number means bigger 
-				float islandRadius = rand.Float( 0.7f, 1.7f ); //1.3f
+				float islandRadius = rand.Float( 1.5f, 1.7f ); //1.3f
 
 				Vector3 pos = new Vector3( rand.Float( -spreadArena, spreadArena ), rand.Float( -spreadArena, spreadArena ), 0 );
 
@@ -349,6 +380,15 @@ namespace Sandbox
 
 				//Generate entities on the surface of the island
 				var islandCenterPos = TerrainEnt.Position + new Vector3( IslandCenter, IslandCenter, 0 );
+
+				//Add island soundscape
+				var SoundscapeIsland = new SoundscapeRadiusEntity()
+				{
+					Enabled = true,
+					Radius = sizeMax * 0.2f,
+					Soundscape = "sound/soundscapes/island01.sndscape",
+					Position = islandCenterPos + new Vector3(0,0,200),
+				};
 
 				//generate overhangs and cliffs
 				IslandPlaceCliffsOverhangs( islandCenterPos, sizeMax * islandRadius, rand.Next(16,24), 0.9f, 1.1f, new string[] 
@@ -499,6 +539,9 @@ namespace Sandbox
 						//flag sandbag base
 						placeDecorations( MainBuilding, new Vector3( 1400, 0, 1000 ), new Angles( 0, 0, 0 ), 1, "models_and_materials/harbors/sandbag_flag_base.vmdl" );
 
+						//flag ambient sound
+						Sound.FromEntity( "sound/flag_cloth_in_the_wind.sound", flag );
+
 						//main harbor buildings
 						placeDecorations( MainBuilding, new Vector3( 660, 0, 1000 ), new Angles( 0, 0, 0 ), 0.65f, "models_and_materials/harbors/harborbuilding01.vmdl" ); //"models_and_materials/buildings/niebrowice_station/niebrowice_station.vmdl" "models/source1/harbor_shop_building01.vmdl"
 						placeDecorations( MainBuilding, new Vector3( -260, 300, 1000 ), new Angles( 0, 0, 0 ), 0.65f, "models_and_materials/buildings/niebrowice_station/niebrowice_station.vmdl" ); //
@@ -541,11 +584,11 @@ namespace Sandbox
 						building1.Position = MainBuilding.Transform.TransformVector( new Vector3( 2000, 800, 0 ) );
 						building1.SetupPhysicsFromModel( PhysicsMotionType.Static );
 
-						placeDecorations( building1, new Vector3( 600, 270, 990 ), new Angles( 0, 0, 0 ), 1.5f, "models/sbox_props/parking_bollard/parking_bollard.vmdl" );
-						placeDecorations( building1, new Vector3( 600, -270, 990 ), new Angles( 0, 0, 0 ), 1.5f, "models/sbox_props/parking_bollard/parking_bollard.vmdl" );
+						placeDecorations( building1, new Vector3( 600, 270, 990 ), new Angles( 0, 0, 0 ), 1.5f, "models_and_materials/harbors/mooring_post01.vmdl" );
+						placeDecorations( building1, new Vector3( 600, -270, 990 ), new Angles( 0, 0, 0 ), 1.5f, "models_and_materials/harbors/mooring_post01.vmdl" );
 
-						placeDecorations( building1, new Vector3( 400, 270, 990 ), new Angles( 0, 0, 0 ), 1.5f, "models/sbox_props/parking_bollard/parking_bollard.vmdl" );
-						placeDecorations( building1, new Vector3( 400, -270, 990 ), new Angles( 0, 0, 0 ), 1.5f, "models/sbox_props/parking_bollard/parking_bollard.vmdl" );
+						placeDecorations( building1, new Vector3( 400, 270, 990 ), new Angles( 0, 0, 0 ), 1.5f, "models_and_materials/harbors/mooring_post01.vmdl" );
+						placeDecorations( building1, new Vector3( 400, -270, 990 ), new Angles( 0, 0, 0 ), 1.5f, "models_and_materials/harbors/mooring_post01.vmdl" );
 
 						var building2 = new Building()
 						{
@@ -559,11 +602,11 @@ namespace Sandbox
 						building2.Position = MainBuilding.Transform.TransformVector( new Vector3( 2000, -800, 0 ) );
 						building2.SetupPhysicsFromModel( PhysicsMotionType.Static );
 
-						placeDecorations( building2, new Vector3( 600, 270, 990 ), new Angles( 0, 0, 0 ), 1.5f, "models/sbox_props/parking_bollard/parking_bollard.vmdl" );
-						placeDecorations( building2, new Vector3( 600, -270, 990 ), new Angles( 0, 0, 0 ), 1.5f, "models/sbox_props/parking_bollard/parking_bollard.vmdl" );
+						placeDecorations( building2, new Vector3( 600, 270, 990 ), new Angles( 0, 0, 0 ), 1.5f, "models_and_materials/harbors/mooring_post01.vmdl" );
+						placeDecorations( building2, new Vector3( 600, -270, 990 ), new Angles( 0, 0, 0 ), 1.5f, "models_and_materials/harbors/mooring_post01.vmdl" );
 
-						placeDecorations( building2, new Vector3( 400, 270, 990 ), new Angles( 0, 0, 0 ), 1.5f, "models/sbox_props/parking_bollard/parking_bollard.vmdl" );
-						placeDecorations( building2, new Vector3( 400, -270, 990 ), new Angles( 0, 0, 0 ), 1.5f, "models/sbox_props/parking_bollard/parking_bollard.vmdl" );
+						placeDecorations( building2, new Vector3( 400, 270, 990 ), new Angles( 0, 0, 0 ), 1.5f, "models_and_materials/harbors/mooring_post01.vmdl" );
+						placeDecorations( building2, new Vector3( 400, -270, 990 ), new Angles( 0, 0, 0 ), 1.5f, "models_and_materials/harbors/mooring_post01.vmdl" );
 
 						//place coastal barricades
 						void placeCoastBarricades( int Amount, Vector3 startPos, float distance, int maxTries )
@@ -610,7 +653,7 @@ namespace Sandbox
 							}
 						}
 
-						placeCoastBarricades( 1000, new Vector3( StartPoint.Position.x, StartPoint.Position.y, 0 ) , 3000, 1000 );
+						placeCoastBarricades( 500, new Vector3( StartPoint.Position.x, StartPoint.Position.y, 0 ) , 3000, 1000 );
 
 					}
 					else if ( amountOfEnts == 2 )
@@ -710,16 +753,16 @@ namespace Sandbox
 					var selectedModel = Game.Random.FromArray( models );
 
 					//place decal under the selected vegetation
-					string selectedDecal = null;
-					if ( selectedModel.Contains( "tree_lowpoly" ) )
-						selectedDecal = "materials/decals/tree_mask.decal";
-					if ( selectedModel.Contains( "africanbaobab_med" ) || selectedModel.Contains( "westernjuniper_med" ) )
-						selectedDecal = "materials/decals/tree_mask_big.decal";
+					//string selectedDecal = null;
+					//if ( selectedModel.Contains( "tree_lowpoly" ) )
+					//	selectedDecal = "materials/decals/tree_mask.decal";
+					//if ( selectedModel.Contains( "africanbaobab_med" ) || selectedModel.Contains( "westernjuniper_med" ) )
+					//	selectedDecal = "materials/decals/tree_mask_big.decal";
 
-					if ( selectedDecal != null && ResourceLibrary.TryGet<DecalDefinition>( selectedDecal, out var decal ) )
-					{
-						Decal.Place( decal, tr );
-					}
+					//if ( selectedDecal != null && ResourceLibrary.TryGet<DecalDefinition>( selectedDecal, out var decal ) )
+					//{
+					//	Decal.Place( decal, tr );
+					//}
 
 					Rotation traceNormal = new Rotation(); 
 					if ( useNormal ) { traceNormal = tr.Normal.EulerAngles.ToRotation(); }
@@ -946,6 +989,9 @@ namespace Sandbox
 								flag?.SetAnimation( "Idle" );
 								flag.SetMaterialGroup( 0 ); //0-pirate, 1-british, 2-french
 
+								//flag ambient sound
+								Sound.FromEntity( "sound/flag_cloth_in_the_wind.sound", flag );
+
 								//TO:DO clean this garbage up please - move everything to buildings folder and put this shit in separate classes I beg you
 
 								var building2 = new Building()
@@ -1130,7 +1176,7 @@ namespace Sandbox
 
 
 
-		//its an apocalypse!
+		//apocalypse is happening!
 		[ConCmd.Admin( "recreate_world" )]
 		public static async void WorldDestruction()
 		{

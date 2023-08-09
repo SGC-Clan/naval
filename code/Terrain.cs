@@ -171,6 +171,10 @@ namespace Sandbox
 
 						verticesData.Add( new Vertex( vertPos, normal, tangent, uv ) );
 
+						//if ( Game.IsServer ) {
+						//	DebugOverlay.Text( Math.Round( heightMap[x, y], 3 ).ToString(), vertPos + this.Position, 0, Color.Blue, 100000, 1500 );
+						//}
+
 						index++;
 					}
 				}
@@ -273,21 +277,20 @@ namespace Sandbox
 					float normalizedX = (sampleX - centerX) / centerX;
 					float normalizedY = (sampleY - centerY) / centerY;
 
-					// Calculate the distance from the center
-					float distance = MathF.Sqrt( normalizedX * normalizedX + normalizedY * normalizedY );
+					float distanceFromCenter = MathF.Sqrt( normalizedX * normalizedX + normalizedY * normalizedY );
 
 					// Use Perlin noise to generate the height value
 					float heightValue = Noise.Fbm( octaves, x + offsetW + seedOffset, y + offsetH + seedOffset );
 
 
 					//add heightmap easings - based on those examples https://easings.net/
-					//if ( heightmapEasings.Contains( "easeInOutCirc" ) ) 
+					//if ( heightmapeasings.contains( "easeinoutcirc" ) ) 
 					//{
-					//	heightValue = easeInOutCirc( heightValue );
+					//	heightvalue = easeinoutcirc( heightvalue );
 					//}
-					//if ( heightmapEasings.Contains( "easeOutCubic" ) )
+					//if ( heightmapeasings.contains( "easeoutcubic" ) )
 					//{
-					//	heightValue = easeOutCubic( heightValue );
+					//	heightvalue = easeoutcubic( heightvalue );
 					//}
 
 					//make island beaches more flat
@@ -300,11 +303,34 @@ namespace Sandbox
 					//}
 
 					// Apply island shape based on the distance from the center
-					float islandFactor = SmoothStep( 0f, islandRadius, distance );
+					float islandFactor = SmoothStep( 0f, islandRadius, distanceFromCenter );
 					heightValue = Math.Clamp( heightValue - islandFactor, -1, 1 );
 
+					float newHeightValue = 0;
+					//make beaches more flat etc
+					if ( heightValue < 0 )
+					{
+						//easings.net/#easeOutCirc
+						newHeightValue = 1 - MathF.Sqrt( 1 - MathF.Pow( Math.Abs(1 - heightValue) - 1, 2 ) );
+						newHeightValue *= -1;
+					}
+					else
+					{
+						newHeightValue = -(MathF.Cos( MathF.PI * heightValue ) - 1) / 2;
+
+						//easings.net/#easeInOutQuint
+						//if ( heightValue < 0.5 )
+						//{ newHeightValue = 16 * heightValue * heightValue * heightValue * heightValue * heightValue; }
+						//else
+						//{ newHeightValue = 1 - MathF.Pow( -2 * heightValue + 2, 5 ) / 2; }
+
+						//newHeightValue = MathF.Sqrt( 1 - MathF.Pow( heightValue - 1, 2 ) );
+
+					}
+
 					// Set the height value in the heightmap
-					heightMap[x, y] = heightValue;
+					
+					heightMap[x, y] = newHeightValue;
 				}
 			}
 		}
@@ -323,7 +349,7 @@ namespace Sandbox
 		}
 
 		public static float easeInOutCirc( float x ) {
-			//https://easings.net/#easeInOutCirc
+			//easings.net/#easeInOutCirc
 			if ( x < 0.5 ) {
 			return (1 - MathF.Sqrt( 1 - MathF.Pow( 2 * x, 2 ) )) / 2;
 			} else {
@@ -331,19 +357,19 @@ namespace Sandbox
 			}
 		}
 		public static float easeInCirc( float x ) {
-			//https://easings.net/#easeInCirc
+			//easings.net/#easeInCirc
 			return 1 - MathF.Sqrt(1 - MathF.Pow(x, 2));
 		}
 		public static float easeOutCubic( float x ) {
-			//https://easings.net/#easeOutCubic
+			//easings.net/#easeOutCubic
 			return 1 - MathF.Pow(1 - x, 3);
 		}
 		public static float easeInOutSine( float x ) {
 			return -(MathF.Cos( MathF.PI* x) - 1) / 2;
 		}
 
-	//calculation based on neighbor vectors
-	private Vector3 CalculateNeighborNormal( int x, int y, int width, int height, Vector3[] vertices )
+		//calculation based on neighbor vectors
+		private Vector3 CalculateNeighborNormal( int x, int y, int width, int height, Vector3[] vertices )
 		{
 			Vector3 position = vertices[y * width + x];
 
