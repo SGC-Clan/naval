@@ -4,11 +4,10 @@
 	align-items: flex-start;
 	flex-direction: column;
 	font-family: Bookman, URW Bookman L, serif;
-	background-color: #588574;
-	background-image: url( "menu/background_video.webm" );
+	background-color: #4f7d7d;
+	background-image: url( "https://i.imgur.com/ECd75f7.mp4" );
 	background-position: center;
 	background-size: cover;
-	background-tint: #959aa3;
 
 	&.ingame {
 		backdrop-filter: blur( 10px );
