@@ -1,4 +1,5 @@
 ﻿using Sandbox;
+using System;
 using System.Collections.Generic;
 using System.Numerics;
 
@@ -15,7 +16,7 @@ public partial class NavalPlayer : Player
 	/// <summary>
 	/// The clothing container is what dresses the citizen
 	/// </summary>
-	public ClothingContainer Clothing = new(); 
+	public ClothingContainer Clothing { get; protected set; }
 
 	/// <summary>
 	/// Default init
@@ -23,6 +24,12 @@ public partial class NavalPlayer : Player
 	public NavalPlayer()
 	{
 		Inventory = new Inventory( this );
+
+		//when world is first created we want to play related sounds
+		if ( ConsoleSystem.GetValue( "world_generated" ) == "False" )
+		{
+			Sound.FromScreen( "sound/ui/world_generated.sound" );
+		}
 	}
 
 	/// <summary>
@@ -31,6 +38,25 @@ public partial class NavalPlayer : Player
 	public NavalPlayer( IClient cl ) : this()
 	{
 		// Load clothing from client data
+		Clothing.LoadFromClient( cl );
+
+		Log.Info("MEEEEEEEEEEEEEEW");
+		Log.Info( ConsoleSystem.GetValue( "world_generated" ) );
+
+		//when world is first created we want to play related sounds
+		if ( ConsoleSystem.GetValue( "world_generated" ) == "False" )
+		{
+			Sound.FromScreen( "sound/ui/world_generated.sound" );
+			Log.Info( "GGAMING" );
+		}
+	}
+
+	/// <summary>
+	/// Set the clothes to whatever the player is wearing
+	/// </summary>
+	public void UpdateClothes( IClient cl )
+	{
+		Clothing ??= new();
 		Clothing.LoadFromClient( cl );
 	}
 
@@ -55,6 +81,7 @@ public partial class NavalPlayer : Player
 		EnableHideInFirstPerson = true;
 		EnableShadowInFirstPerson = true;
 
+		UpdateClothes( Client );
 		Clothing.DressEntity( this );
 
 		Inventory.Add( new Fists() );
@@ -315,7 +342,16 @@ public partial class NavalPlayer : Player
 
 		Camera.ZFar = 100000; //25000;
 
-		if ( ThirdPersonCamera )
+		// naval world creation camera, so we are not stuck at boring 0,0,0 while generating
+		if ( ConsoleSystem.GetValue( "world_generated" ) == "False" ) 
+		{
+			Camera.Position = new Vector3( -14000, -24000, 8500 );
+			Camera.Rotation = Rotation.From( new Angles( 17, 63, 0 ) );
+
+			Camera.ZFar = Math.Clamp( Time.Now*15000, 5000, 100000 );
+			Camera.FieldOfView = Math.Clamp(30 + (Time.Now * 25), 30, 110 );
+		}
+		else if ( ThirdPersonCamera )
 		{
 			Camera.FirstPersonViewer = null;
 
