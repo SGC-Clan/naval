@@ -1,4 +1,7 @@
-﻿using Sandbox.ModelEditor.Nodes;
+﻿using Editor;
+using Sandbox.ModelEditor.Nodes;
+using Sandbox.PostProcess;
+using Sandbox.UI;
 using Sandbox.Utility;
 using System;
 using System.Collections.Generic;
@@ -18,11 +21,14 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Sandbox
 {
+	[Title( "Naval Procedural World Creator" )]
+	[Category( "Setup" )]
+	[Icon( "globe uk" )]
 	public partial class World: Entity
 	{
 
 		[ConVar.Replicated]
-		static int proc_gen_seed { get; set; }
+		static int proc_gen_seed { get; set; } = 1337;
 
 		public World()
 		{
@@ -32,62 +38,31 @@ namespace Sandbox
 		{
 			base.Spawn();
 
-			WorldCreation( proc_gen_seed );
+			if ( Game.IsServer )
+				WorldCreation( proc_gen_seed );
 		}
 
 		public override void ClientSpawn()
 		{
 			base.ClientSpawn();
 
-			//would be cool to have this server controlled but light dissapears when you dont look at its entity..
-			//so its here for now only on client
-
 			var sceneWorld = Game.SceneWorld;
 
-			sceneWorld.AmbientLightColor = Color.Black;//new Color { r = 195 / 255, g = 221 / 255, b = 117 / 255 }; //
-			sceneWorld.ClearColor = Color.Black;
-
-			//Sky sky = new Sky()
-			//{
-			//	Skyname = "models_and_materials/cubemap/mirrored_skybox.vmat",
-			//	TintColor = Color.White,
-			//	FogType = SceneSkyBox.FogType.Distance,
-			//	FogMinStart = -25.0f,
-			//	FogMinEnd = -35.0f,
-			//	FogMaxStart = 25.0f,
-			//	FogMaxEnd = 35.0f,
-
-			//};
-
 			//underwater gradient fog
-			var gradientFog = new GradientFogController();
-			gradientFog.StartDistance = 60000;
-			gradientFog.EndDistance = 100000;
-			gradientFog.StartHeight = -5000;
-			gradientFog.EndHeight = 5000;
-			gradientFog.DistanceFalloffExponent = 0.5f;
-			gradientFog.Enabled = true;
-			gradientFog.Color = Color.White; //new Color( 208/255, 221/255, 244/255 );
-			gradientFog.MaximumOpacity = 0.8f;
+			var gradientFog = new GradientFogController
+			{
+				StartDistance = 60000,
+				EndDistance = 100000,
+				StartHeight = -5000,
+				EndHeight = 5000,
+				DistanceFalloffExponent = 0.5f,
+				Enabled = true,
+				Color = Color.White, //new Color( 208/255, 221/255, 244/255 );
+				MaximumOpacity = 0.8f
+			};
 			sceneWorld.GradientFog = gradientFog;
-
-			//the sun!
-			float SunStrenght = 50f;
-			var SunColor = new Color { r = 66 / SunStrenght, g = 148 / SunStrenght, b = 209 / SunStrenght }; ;//Color.White;
-			var Sun = new SceneSunLight( sceneWorld, Rotation.From( 45, 90, -90 ), SunColor );
-			Sun.ShadowsEnabled = true;
-			Sun.SkyColor = Color.White * 0.2f;
-			Sun.ShadowTextureResolution = 1024;
-
-			//EnvironmentLightEntity Light = new EnvironmentLightEntity();
-			//Light.Position = new Vector3( 0, 0, 5000 );
-			//Light.Brightness = 1;
-			//float SunStrenght = 1f;
-			//Light.Color = new Color( 66 / SunStrenght, 148 / SunStrenght, 209 / SunStrenght );
-			//Light.SkyColor = Color.White * 0.4f;
-			//Light.SkyIntensity = 0.8f;
-			//Light.Rotation = Rotation.From( new Angles( 45, 90, -90 ) );
-			//Light.AmbientColor = new Color { r = 195 / 255, g = 221 / 255, b = 117 / 255 };
+			sceneWorld.AmbientLightColor = Color.Black;
+			sceneWorld.ClearColor = Color.Black;
 
 			//cube map
 			var cubeMap = new SceneCubemap( sceneWorld, Texture.Load( FileSystem.Mounted, "models_and_materials/cubemap/mirrored_skybox.vtex" ), BBox.FromPositionAndSize( Vector3.Zero, 150000 ) ); //"models_and_materials/cubemap/env_cubemap_16.vtex"  "textures/cubemaps/default.vtex"
@@ -95,22 +70,7 @@ namespace Sandbox
 			//Sky box
 			var skyBox = new SceneSkyBox( sceneWorld, Material.Load( "models_and_materials/cubemap/mirrored_skybox.vmat" ) );
 			//skyBox.SetSkyLighting( new Vector3( 20, 10, -90 ) );
-
-			var camera = Camera.Main;
-			camera.World = sceneWorld;
-
 		}
-
-		//[GameEvent.Client.Frame]
-		//public void UpdateLight() 
-		//Make light related entities always visible 
-		//no matter how many million of hammer units away we are
-		//{
-		//	foreach ( Entity ent in Entity.All )
-		//	{
-			
-		//	}
-		//}
 
 		public override void Simulate(IClient cl)
 		{
@@ -120,24 +80,54 @@ namespace Sandbox
 		//Its a miracle - imagine doing it in hammer instead and waiting 32 hours for vrad to throw an error.. I need to upgrade my cpu ;-;
 		public static async void WorldCreation( int seed )
 		{
-			if ( Game.IsClient ) return;
-
-			await GameTask.Delay( 1000 );
-
-			//if ( Game.IsClient ) { return; } //TO:DO proper server/client side delegation on terrain.cs
+			Game.AssertServer();
 
 			Log.Info( "creating world.. " + seed );
 
-			//EnvironmentLightEntity WorldLight = new EnvironmentLightEntity();
-			//WorldLight.Position = new Vector3( 0, 0, 5000 );
-			//WorldLight.Brightness = 1;
+			//We need to move the entire generation thing to separate threads
+			//and tasks so we can tell when the world generation is over
+
+			//the sun!
 			//float SunStrenght = 50f;
-			//WorldLight.Color = new Color { r = 66 / SunStrenght, g = 148 / SunStrenght, b = 209 / SunStrenght };
-			//WorldLight.SkyColor = Color.White * 0.4f;
-			//WorldLight.SkyIntensity = 0.8f;
-			//WorldLight.Rotation = Rotation.From( new Angles( 45, 90, -90 ) );
-			//WorldLight.AmbientColor = new Color { r = 195 / 255, g = 221 / 255, b = 117 / 255 };
-			//WorldLight.DynamicShadows = true;
+			//var SunColor = new Color { r = 66 / SunStrenght, g = 148 / SunStrenght, b = 209 / SunStrenght }; ;//Color.White;
+			//var Sun = new SceneSunLight( sceneWorld, Rotation.From( 45, 90, -90 ), SunColor );
+			//Sun.ShadowsEnabled = true;
+			//Sun.SkyColor = Color.White * 0.2f;
+			//Sun.ShadowTextureResolution = 1024;
+
+			var Light = new EnvironmentLightEntity
+			{
+				Position = new Vector3( 0, 0, 5000 ),
+				Rotation = Rotation.From( new Angles( 60, 90, -90 ) ),
+				Brightness = 7.5f,
+				DynamicShadows = true,
+				Color = new Color( 0.7f, 0.8f, 0.9f, 1 ),
+				SkyColor = new Color( 0.88f, 0.85f, 0.77f ),
+				SkyIntensity = 1,
+				AmbientColor = new Color( 0.48f, 0.62f, 0.73f ),
+				//always render no matter what
+				Transmit = TransmitType.Always
+			};
+
+			//post processing
+			var PostProc = new PostProcessingEntity
+			{
+				PostProcessingFile = "postprocess/standard.vpost",
+				Enabled = true,
+				FadeTime = 1,
+				PercentBrightPixels = -1,
+				PercentTarget = -1,
+				TonemapMinAvgLum = -1,
+				EnableExposure = true,
+				MinExposure = 0.2f,
+				MaxExposure = 1,
+				ExposureCompensation = 0,
+				ExposureFadeSpeedUp = 1,
+				ExposureFadeSpeedDown = 1,
+				//always render
+				Transmit = TransmitType.Always
+			};
+
 
 			//temp island platform
 			//var platform = new ModelEntity
@@ -210,10 +200,15 @@ namespace Sandbox
 			//Respawn everyone
 			await GameTask.Delay( 2500 );
 			var player = All.OfType<Player>();
-			foreach ( var pl in player )
+			foreach ( var pl in player.ToList() )
 			{
+				if (pl.IsValid())
 				pl.Respawn();
+
 			}
+
+			//finish
+			ConsoleSystem.SetValue( "world_generated", true );
 
 		}
 
@@ -269,10 +264,10 @@ namespace Sandbox
 		{
 			if ( Game.IsClient ) return;
 
-			int TileSize = 5000;
-			float TileScale = 40;
+			int TileSize = 100;//5000;
+			float TileScale = 40;//40;
 			float offset = TileSize * TileScale;
-			int waterHeight = 500;
+			int waterHeight = 10; //500
 			int TileCenter = TileSize / 2;
 			Vector3 StartPos = new Vector3();
 			if ( TilesAmount > 1) 
@@ -286,7 +281,7 @@ namespace Sandbox
 			var waterBoundingBox = new BBox( new Vector3( -TileSize, -TileSize, -waterHeight ), new Vector3( TileSize, TileSize, 0 ) );
 			var waterMesh = new Mesh
 			{
-				//Material = Material.Load( "materials/physics/water.vmat" ),
+				Material = Material.Load( "materials/physics/water.vmat" ),
 				PrimitiveType = MeshPrimitiveType.Triangles,
 			};
 			var waterMeshVB = new VertexBuffer();
@@ -305,8 +300,6 @@ namespace Sandbox
 					// Water tile
 					var water = new NavalWater
 					{
-						EnableReflection = true,
-						EnableRipples = true,
 						Model = waterMeshModel,
 						Position = StartPos + new Vector3( -offset * (y + 1), -offset * (x + 1), 0 ) - new Vector3( (y+1) * 400, (x+1) * 400, 0 ),
 						EnableAllCollisions = true,

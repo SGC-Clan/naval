@@ -25,12 +25,16 @@ namespace Sandbox;
 /// You can use this to create things like HUDs and declare which player class
 /// to use for spawned players.
 /// </summary>
-public partial class MyGame : GameManager
+public partial class NavalGame : GameManager
 {
 	public World World { get; private set; }
 
-	public MyGame()
+	[ConVar.Replicated]
+	static bool world_generated { get; set; } = false;
+
+	public NavalGame()
 	{
+
 		PrepareWorldCreation();
 
 		if ( Game.IsServer )
@@ -43,6 +47,8 @@ public partial class MyGame : GameManager
 
 	public async void PrepareWorldCreation() 
 	{
+		ConsoleSystem.SetValue( "world_generated", false );
+
 		await GameTask.Delay( 100 );
 
 		World = new World();
@@ -59,11 +65,12 @@ public partial class MyGame : GameManager
 	{
 		base.ClientJoined( client );
 
-		await GameTask.Delay( 2000 );
-
 		// Create a pawn for this client to play with
 		var player = new NavalPlayer();
 		client.Pawn = player;
+
+		await GameTask.Delay( 2000 );
+
 		player.Respawn();
 
 		// Get all of the spawnpoints
