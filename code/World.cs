@@ -264,33 +264,16 @@ namespace Sandbox
 		{
 			if ( Game.IsClient ) return;
 
-			int TileSize = 100;//5000;
-			float TileScale = 40;//40;
-			float offset = TileSize * TileScale;
-			int waterHeight = 10; //500
+			int TileSize = 250000;//5000;
+			int waterHeight = 0; //50
 			int TileCenter = TileSize / 2;
 			Vector3 StartPos = new Vector3();
 			if ( TilesAmount > 1) 
 			{
-				StartPos = new Vector3( offset * (TilesAmount / 2), offset * (TilesAmount / 2), 0 );
+				StartPos = new Vector3( TileSize * (TilesAmount / 2), TileSize * (TilesAmount / 2), 0 );
 			} else {
-				StartPos = new Vector3( offset/2, offset/2, 0 );
+				StartPos = new Vector3( -TileSize / 2, -TileSize / 2, 0 );
 			}
-
-			//water volume
-			var waterBoundingBox = new BBox( new Vector3( -TileSize, -TileSize, -waterHeight ), new Vector3( TileSize, TileSize, 0 ) );
-			var waterMesh = new Mesh
-			{
-				Material = Material.Load( "materials/physics/water.vmat" ),
-				PrimitiveType = MeshPrimitiveType.Triangles,
-			};
-			var waterMeshVB = new VertexBuffer();
-			waterMeshVB.AddCube( new Vector3( 0, 0, -waterHeight ), new Vector3( (TileSize*2)+1, (TileSize*2)+1, waterHeight ), new Rotation(), default );
-			waterMesh.CreateBuffers( waterMeshVB, true );
-			var waterMeshModelBuilder = new ModelBuilder();
-			waterMeshModelBuilder.AddMesh( waterMesh );
-			waterMeshModelBuilder.AddCollisionBox( new Vector3( TileSize, TileSize, waterHeight/2 ), new Vector3( 0, 0, -waterHeight/2 ) );
-			var waterMeshModel = waterMeshModelBuilder.Create();
 
 			for ( int y = 0; y < TilesAmount; y++ )
 			{
@@ -300,17 +283,12 @@ namespace Sandbox
 					// Water tile
 					var water = new NavalWater
 					{
-						Model = waterMeshModel,
-						Position = StartPos + new Vector3( -offset * (y + 1), -offset * (x + 1), 0 ) - new Vector3( (y+1) * 400, (x+1) * 400, 0 ),
-						EnableAllCollisions = true,
-						Scale = TileScale,
+						WaterMaterial = "materials/water/naval_water_ocean01.vmat",
+						WaterBoundsCenter = TileCenter,
+						WaterBoundsSize = TileSize,
+						Position = StartPos + new Vector3( 0, 0, -TileSize + waterHeight ),
 					};
-					water.SetupPhysicsFromModel( PhysicsMotionType.Static );
-					water.CollisionBounds = waterBoundingBox;
 					water.Tags.Add( "water" );
-
-					//water.SetupPhysicsFromAABB( PhysicsMotionType.Static, new Vector3( -TileSize * TileScale, -TileSize * TileScale, -waterHeight ), new Vector3( TileSize * TileScale, TileSize * TileScale, 0 ) );
-
 				}
 			}
 
@@ -318,7 +296,7 @@ namespace Sandbox
 			var SoundscapeSea = new SoundscapeBoxEntity()
 			{
 				Enabled = true,
-				Extents = new Vector3( TileScale * 10000f, TileScale * 10000f, 2000f ),
+				Extents = new Vector3( TileSize, TileSize, 2000f ),
 				Soundscape = "sound/soundscapes/sea01.sndscape",
 				Position = new Vector3( 0, 0, 1000 ),
 			};

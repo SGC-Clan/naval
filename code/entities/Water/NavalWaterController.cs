@@ -18,7 +18,7 @@ public class NavalWaterController
 	public void EndTouch( Entity other )
 	{
 		var c = other.Components.Get<NavalWaterEffectComponent>( true );
-		if ( c.WaterEntity != WaterEntity )
+		if ( c == null || c.WaterEntity != WaterEntity )
 			return;
 
 		OnLeaveWater( other as ModelEntity );
