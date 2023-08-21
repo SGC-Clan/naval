@@ -17,7 +17,7 @@ partial class Pawn : AnimatedEntity
 		//
 		// Use a watermelon model
 		//
-		SetModel( "models/sbox_props/watermelon/watermelon.vmdl" );
+		Model = Cloud.Model( "https://asset.party/facepunch/watermelon" );
 
 		EnableDrawing = true;
 		EnableHideInFirstPerson = true;

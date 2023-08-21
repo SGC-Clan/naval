@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Numerics;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 public partial class NavalPlayer : Player
 {
@@ -29,25 +30,6 @@ public partial class NavalPlayer : Player
 		if ( ConsoleSystem.GetValue( "world_generated" ) == "False" )
 		{
 			Sound.FromScreen( "sound/ui/world_generated.sound" );
-		}
-	}
-
-	/// <summary>
-	/// Initialize using this client
-	/// </summary>
-	public NavalPlayer( IClient cl ) : this()
-	{
-		// Load clothing from client data
-		Clothing.LoadFromClient( cl );
-
-		Log.Info("MEEEEEEEEEEEEEEW");
-		Log.Info( ConsoleSystem.GetValue( "world_generated" ) );
-
-		//when world is first created we want to play related sounds
-		if ( ConsoleSystem.GetValue( "world_generated" ) == "False" )
-		{
-			Sound.FromScreen( "sound/ui/world_generated.sound" );
-			Log.Info( "GGAMING" );
 		}
 	}
 
@@ -91,6 +73,8 @@ public partial class NavalPlayer : Player
 		Inventory.Add( new PhysGun(), true );
 		Inventory.Add( new GravGun() );
 		Inventory.Add( new Tool() );
+
+		Sound.FromEntity( "sound/player_spawn.sound", this );
 		
 		base.Respawn();
 	}
@@ -345,11 +329,15 @@ public partial class NavalPlayer : Player
 		// naval world creation camera, so we are not stuck at boring 0,0,0 while generating
 		if ( ConsoleSystem.GetValue( "world_generated" ) == "False" ) 
 		{
+			float easeInQuart(float x) {
+				return 1f - (float)Math.Pow( 1 - x, 3 );
+			}
+
 			Camera.Position = new Vector3( -14000, -24000, 8500 );
 			Camera.Rotation = Rotation.From( new Angles( 17, 63, 0 ) );
 
-			Camera.ZFar = Math.Clamp( Time.Now*15000, 5000, 100000 );
-			Camera.FieldOfView = Math.Clamp(30 + (Time.Now * 25), 30, 110 );
+			Camera.ZFar = Math.Clamp( Time.Now * 15000, 5000, 100000 );
+			Camera.FieldOfView = Math.Clamp( 30 + (Time.Now * 25), 30, 110 );
 		}
 		else if ( ThirdPersonCamera )
 		{

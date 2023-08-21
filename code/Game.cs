@@ -298,6 +298,26 @@ public partial class NavalGame : GameManager
 		RespawnEntitiesClient();
 	}
 
+	[ConCmd.Admin( "debug_spawnwater" )]
+	static void SpawnWaterThing()
+	{
+		var caller = ConsoleSystem.Caller.Pawn as Player;
+
+		// Water tile
+		var water = new NavalWater
+		{
+			Position = caller.Position,
+			CollisionBounds = new BBox( new Vector3( 100, 100, 100 ), new Vector3( -100, -100, -100 ) ),
+			EnableAllCollisions = true,
+		};
+		water.Tags.Add("Water");
+		var TileSize = 100;
+		var TileScale = 1;
+		var waterHeight = 50; 
+		water.SetupPhysicsFromAABB( PhysicsMotionType.Static, new Vector3( -TileSize * TileScale, -TileSize * TileScale, -waterHeight ), new Vector3( TileSize * TileScale, TileSize * TileScale, 0 ) );
+
+	}
+
 	static bool DefaultCleanupFilter( Entity ent )
 	{
 		// Basic Source engine stuff

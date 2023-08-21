@@ -20,7 +20,7 @@ namespace Sandbox
 				vel += Vector3.Up * 10000;
 
 			if ( Input.Down( "run" ) )
-				vel *= 15.0f;
+				vel *= 35.0f;
 
 			if ( Input.Down( "duck" ) )
 				vel *= 0.2f;

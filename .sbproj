@@ -103,7 +103,7 @@
         "water": "Trigger",
         "island": "Collide",
         "oceanbottom": "Collide",
-        "player": "Unset",
+        "player": "Trigger",
         "glass": "Unset",
         "debris": "Unset"
       },
@@ -156,6 +156,41 @@
           "a": "glass",
           "b": "glass",
           "r": "Ignore"
+        },
+        {
+          "a": "solid",
+          "b": "player",
+          "r": "Collide"
+        },
+        {
+          "a": "water",
+          "b": "player",
+          "r": "Collide"
+        },
+        {
+          "a": "ladder",
+          "b": "player",
+          "r": "Collide"
+        },
+        {
+          "a": "trigger",
+          "b": "player",
+          "r": "Trigger"
+        },
+        {
+          "a": "island",
+          "b": "player",
+          "r": "Collide"
+        },
+        {
+          "a": "oceanbottom",
+          "b": "player",
+          "r": "Collide"
+        },
+        {
+          "a": "player",
+          "b": "player",
+          "r": "Collide"
         }
       ]
     },
