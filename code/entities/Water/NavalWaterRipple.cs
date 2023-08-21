@@ -135,7 +135,7 @@ namespace Sandbox
 			}
 
 			// If debug view is on
-			DebugView( box, fHeight );
+			//DebugView( box, fHeight );
 		}
 
 		public override void RenderSceneObject()

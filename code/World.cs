@@ -185,7 +185,7 @@ namespace Sandbox
 			//Ocean Bottom generation
 			GenerateOceanBottom( seed, 4 ); //6
 			
-			GenerateOcean( 1 );
+			GenerateOcean( 4 );
 
 			//Add basic air soundscape
 			var SoundscapeSea = new SoundscapeBoxEntity()
@@ -264,7 +264,7 @@ namespace Sandbox
 		{
 			if ( Game.IsClient ) return;
 
-			int TileSize = 250000;//5000;
+			int TileSize = 50000;//5000;
 			int waterHeight = 0; //50
 			int TileCenter = TileSize / 2;
 			Vector3 StartPos = new Vector3();
@@ -281,12 +281,13 @@ namespace Sandbox
 				{
 
 					// Water tile
+					Vector3 pos = StartPos + new Vector3( -TileSize * (y + 1), -TileSize * (x + 1), 0 );
 					var water = new NavalWater
 					{
-						WaterMaterial = "materials/water/naval_water_ocean01.vmat",
+						WaterMaterial = "materials/water/naval_water_ocean01.vmat",//"materials/water/water_pond_a.vmat",
 						WaterBoundsCenter = TileCenter,
 						WaterBoundsSize = TileSize,
-						Position = StartPos + new Vector3( 0, 0, -TileSize + waterHeight ),
+						Position = pos + new Vector3( 0, 0, -TileSize + waterHeight ),
 					};
 					water.Tags.Add( "water" );
 				}

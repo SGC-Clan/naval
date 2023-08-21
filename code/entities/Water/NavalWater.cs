@@ -8,7 +8,7 @@ namespace Sandbox
 		private NavalWaterController WaterController = new NavalWaterController();
 		private NavalWaterRipple WaterRipple;
 
-		[Net] public string WaterMaterial { get; set; } = "materials/water/naval_water_ocean01.vmat";
+		[Net] public string WaterMaterial { get; set; } = "materials/water/naval_water_ocean01.vmat";//"materials/water/water_pond_a.vmat"
 
 		[Net] public float WaterBoundsSize { get; set; } = 100;
 		[Net] public Vector3 WaterBoundsCenter { get; set; } = new Vector3();
@@ -76,9 +76,6 @@ namespace Sandbox
 
 			if ( !WaterRipple.IsValid() )
 				return;
-
-			if ( SceneObject == null )
-				Log.Info( SceneObject );
 
 			if ( SceneObject == null )
 				return;
