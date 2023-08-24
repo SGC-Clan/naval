@@ -17,8 +17,8 @@
   "libraries": {
     "Base Library/1.0.0": {
       "type": "project",
-      "path": "../../../../../../Program Files (x86)/Steam/steamapps/common/sbox/addons/base/code/Base Library.csproj",
-      "msbuildProject": "../../../../../../Program Files (x86)/Steam/steamapps/common/sbox/addons/base/code/Base Library.csproj"
+      "path": "../../../../../../../Program Files (x86)/Steam/steamapps/common/sbox/addons/base/code/Base Library.csproj",
+      "msbuildProject": "../../../../../../../Program Files (x86)/Steam/steamapps/common/sbox/addons/base/code/Base Library.csproj"
     }
   },
   "projectFileDependencyGroups": {
@@ -27,19 +27,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Sern\\.nuget\\packages\\": {}
+    "C:\\Users\\debe0\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Sern\\Documents\\s&box projects\\procedural_map_generation\\code\\naval.csproj",
+      "projectUniqueName": "C:\\Users\\debe0\\OneDrive\\Dokumenty\\S&box Projects\\procedural_map_generation\\code\\naval.csproj",
       "projectName": "naval",
-      "projectPath": "C:\\Users\\Sern\\Documents\\s&box projects\\procedural_map_generation\\code\\naval.csproj",
-      "packagesPath": "C:\\Users\\Sern\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Sern\\Documents\\s&box projects\\procedural_map_generation\\code\\obj\\",
+      "projectPath": "C:\\Users\\debe0\\OneDrive\\Dokumenty\\S&box Projects\\procedural_map_generation\\code\\naval.csproj",
+      "packagesPath": "C:\\Users\\debe0\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\debe0\\OneDrive\\Dokumenty\\S&box Projects\\procedural_map_generation\\code\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Sern\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\debe0\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -58,11 +58,6 @@
             }
           }
         }
-      },
-      "warningProperties": {
-        "warnAsError": [
-          "NU1605"
-        ]
       }
     },
     "frameworks": {
@@ -84,7 +79,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.203\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.400\\RuntimeIdentifierGraph.json"
       }
     }
   }
