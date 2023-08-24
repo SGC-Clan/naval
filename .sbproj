@@ -88,6 +88,14 @@
         "Description": "procedural world seed",
         "Group": "World Settings",
         "Maximum": 9999
+      },
+      {
+        "Choices": [],
+        "ConVarName": "nvl_gaming_time",
+        "DisplayName": "Gaming",
+        "DefaultValue": "lol",
+        "Description": "gaming for gamers",
+        "Group": "gamez"
       }
     ],
     "HttpAllowList": null,

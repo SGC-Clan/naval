@@ -1,23 +1,6 @@
-﻿using Editor;
-using Sandbox.ModelEditor.Nodes;
-using Sandbox.PostProcess;
-using Sandbox.UI;
-using Sandbox.Utility;
+﻿using Sandbox.PostProcess;
 using System;
-using System.Collections.Generic;
-using System.Diagnostics.Metrics;
 using System.Linq;
-using System.Net.Http.Headers;
-using System.Numerics;
-using System.Runtime.CompilerServices;
-using System.Security.AccessControl;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
-using static Sandbox.CitizenAnimationHelper;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace Sandbox
 {
@@ -26,10 +9,6 @@ namespace Sandbox
 	[Icon( "globe uk" )]
 	public partial class World: Entity
 	{
-
-		[ConVar.Replicated]
-		static int proc_gen_seed { get; set; } = 1337;
-
 		public World()
 		{
 		}
@@ -39,7 +18,7 @@ namespace Sandbox
 			base.Spawn();
 
 			if ( Game.IsServer )
-				WorldCreation( proc_gen_seed );
+				WorldCreation( ConsoleSystem.GetValue("proc_gen_seed").ToInt() );
 		}
 
 		public override void ClientSpawn()
@@ -1189,7 +1168,7 @@ namespace Sandbox
 
 			await GameTask.Delay( 5000 );
 
-			WorldCreation( proc_gen_seed );
+			WorldCreation( ConsoleSystem.GetValue( "proc_gen_seed" ).ToInt() );
 
 		}
 

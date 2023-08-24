@@ -8,44 +8,163 @@
 
 <root class="mygamemenu">
 
-	<div class="title"><img src="https://i.imgur.com/ZVA3iRf.png" alt="Naval" /></div>
+    @if (currentPage=="MainMenu") //Only show logo in main menu and add property to options panel
+    {
+    <div class="title"><img src="menu/naval_logo_01.png" alt="Naval" /></div>
+    } 
 
-    <div class="options">
+    <div class="options @shouldBeCentered()">
+        @{
+            string shouldBeCentered()
+            {
+                if (currentPage == "MainMenu")
+                    return "options-centered";
+
+                return "";
+            }
+        }
+  
 
         @if ( Game.InGame )
         {
             <div class="row">
-                <div class="option" onclick="@(() => Game.Menu.HideMenu() )">Return To Game</div>
+                <div class="option btn-confirm" onclick="@(() => Game.Menu.HideMenu() )">Return To Game</div>
             </div>
 
             <div class="row">
-                <div class="option" onclick="@(() => Game.Menu.LeaveServer( "End Game" ) )">End Game</div>
+                <div class="option" onclick="@(() => ConsoleSystem.Run("kill") )">Respawn</div>
+            </div>
+
+            <div class="spacer">
+            </div>
+
+            <div class="row">
+                <div class="option btn-back" onclick="@(() => Game.Menu.LeaveServer( "End Game" ) )">End Game</div>
             </div>
         }
+        //  WORLD CREATION
+        else if (currentPage == "WorldCreation")
+        {
+
+            <div class="text text-header">World Creation</div>
+
+            <div class="spacer">
+            </div>
+
+            <section class="scroll">
+                @{
+                    //TO:DO Lobby.ConVars
+                    //devultj — 18/08/2023 i've noticed Lobby.ConVars to be kinda fucky to use personally, you can do Lobby.SetData( "convar.{convar_name}", value ); if you encounter that too }
+                   }
+            </section>
+
+            <div class="row">
+                <div class="option btn-confirm" onclick="@(() => CreateNewGame() )">Continue</div>
+            </div>
+
+            <div class="spacer">
+            </div>
+
+            <div class="row">
+                <div class="option btn-back" onclick="@(()=> currentPage="MainMenu" )">Back</div>
+            </div>
+
+        }
+        //  LOAD GAME
+        else if (currentPage == "LoadGame")
+        {
+            <div class="text text-header">Load Game</div>
+
+            <img src="menu/not_yet_implemented.png">
+
+            <h1>Loading games and saving worlds is not yet implemented, sorry ;-;</h1>
+
+            <div class="row">
+                <div class="option btn-confirm" onclick="@(() => LoadGame() )">Load Selected Game</div>
+            </div>
+
+            <div class="spacer">
+            </div>
+
+            <div class="row">
+                <div class="option btn-back" onclick="@(()=> currentPage="MainMenu" )">Back</div>
+            </div>
+        }
+        //  SETTINGS
+        else if (currentPage == "Settings")
+        {
+            <div class="text text-header">Settings</div>
+
+            <img src="menu/not_yet_implemented.png">
+
+            <div class="text">insert graphic setting like impostor render distance or grass detail here pls</div>
+
+            <div class="row">
+                <div class="option" onclick="@(()=> currentPage="KeyBinds" )">Edit Key Binds</div>
+            </div>
+
+            <div class="spacer">
+            </div>
+
+            <div class="row">
+                <div class="option btn-back" onclick="@(()=> currentPage="MainMenu" )">Back</div>
+            </div>
+        }
+        //  KEY BINDS SETTINGS
+        else if (currentPage == "KeyBinds")
+        {
+            <img src="menu/not_yet_implemented.png">
+
+            <h1>insert cool keybinds here in the future pls</h1>
+
+            <div class="spacer">
+            </div>
+
+            <div class="row">
+                <div class="option btn-back" onclick="@(()=> currentPage="MainMenu" )">Back</div>
+            </div>
+        } 
+        //  MAIN MENU / FRONT PAGE 
         else
         {
             <div class="row">
-                <div class="option" onclick="@CreateNewGame">New World</div>
+                <div class="option" onclick="@(()=> currentPage="WorldCreation" )">Create World</div>
             </div>
 
-			<div class="row">
-				<div class="option" onclick="@LoadWorld">Load World</div>
-			</div>
+            <div class="row">
+                <div class="option" onclick="@(()=> currentPage="LoadGame" )">Load Game</div>
+            </div>
 
             <div class="row">
                 <div class="option" onclick="@OpenServerList">Join Game</div>
             </div>
+
+            <div class="row">
+                <div class="option" onclick="@(()=> currentPage="Settings" )">Settings</div>
+            </div>
+
+            <div class="spacer">
+            </div>
+
+            <div class="row">
+                <div class="option btn-back" onclick="@Game.Menu.Close">Quit</div>
+            </div>
         }
-
-        <div class="spacer">
-           
-        </div>
-
-        <div class="row">
-            <div class="option" onclick="@Game.Menu.Close">Quit</div>
-        </div>  
         
     </div>
+
+
+    @if (currentPage == "WorldCreation") //Only show this panel on world creation page
+    {
+        <div class="worldCreationPreview">
+            <div class="img-container">
+                <img class="img-terrain" src="menu/world_preview/terrain_medium_placeholder.png">
+                <img class="img-islands" src="menu/world_preview/islands_placeholder.png">
+                <img class="img-worldborder" src="menu/world_preview/worldborder_placeholder.png">
+                <img class="img-harbors" src="menu/world_preview/harbors_placeholder.png">
+            </div>
+        </div>
+    }
 
 	@* <div class="leaderboards">
 
@@ -67,30 +186,32 @@
 
 @code
 {
-	public override void Tick()
-	{
-		base.Tick();
+    public override void Tick()
+    {
+        base.Tick();
 
-		SetClass( "ingame", Game.InGame );
+        SetClass( "ingame", Game.InGame );
 
-		UpdateMusic();
-	}
+        UpdateMusic();
+    }
 
-	SoundHandle MenuMusic;
+    SoundHandle MenuMusic;
 
-	void UpdateMusic()
-	{
-		if (Game.InGame)
-		{
-			MenuMusic.Stop(true);
-			return;
-		}
+    void UpdateMusic()
+    {
+        if (Game.InGame)
+        {
+            MenuMusic.Stop(true);
+            return;
+        }
 
-		if (!MenuMusic.IsPlaying)
-		{
-			MenuMusic = Audio.Play("menu/mainmenumusic.sound");
-		}
-	}
+        if (!MenuMusic.IsPlaying)
+        {
+            MenuMusic = Audio.Play("menu/mainmenumusic.sound");
+        }
+    }
+
+    string currentPage { get; set; } = "MainMenu";
 
 	void CreateNewGame()
 	{
@@ -98,7 +219,7 @@
 		options.Cookie = $"naval.serverconfig";
 		options.ModalTitle = "Create Game";
 		options.MinPlayers = 1;
-		options.MaxPlayers = 4;
+		options.MaxPlayers = 12;
 		options.MapSelection = false;
 		options.Default.GameTitle = $"{Game.UserName}'s World";
 
@@ -123,14 +244,14 @@
 		Game.Overlay.ShowServerList( options );
 	}
 
-	void LoadWorld()
+	void LoadGame()
 	{
-
+        //TO:DO
 	}
 
     protected override int BuildHash()
     {
-        return HashCode.Combine( Game.InGame );
+        return HashCode.Combine(Game.InGame, currentPage );
     }
 
 

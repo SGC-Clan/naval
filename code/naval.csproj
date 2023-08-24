@@ -7,6 +7,7 @@
 		<PackageId>naval</PackageId>
 		<LangVersion>11</LangVersion>
 		<NoWarn>1701;1702;1591;</NoWarn>
+		<WarningsAsErrors></WarningsAsErrors>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<DefineConstants>SANDBOX;ADDON;DEBUG</DefineConstants>
 		<AllowUnsafeBlocks>False</AllowUnsafeBlocks>
@@ -24,6 +25,10 @@
 	  <AdditionalFiles Include="**/*.razor" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <None Remove="menu\InputSettings.razor" />
+	</ItemGroup>
+
 
 	<ItemGroup>
 		<Using Include="Sandbox.Internal.GlobalGameNamespace" Static="true" />
@@ -37,7 +42,7 @@
   </PropertyGroup>
 
 	<ItemGroup>
-		<Analyzer Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed\Sandbox.Generator.dll"/>
+		<Analyzer Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed\Sandbox.Generator.dll" />
 		<Reference Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed/Sandbox.System.dll" />
 		<Reference Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed/Sandbox.Engine.dll" />
 		<Reference Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\bin\managed/Sandbox.Game.dll" />
@@ -49,6 +54,12 @@
   <ItemGroup>
 		<ProjectReference Include="C:\Program Files (x86)\Steam\steamapps\common\sbox\addons\base\code\Base Library.csproj" />
 
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Menu\MainMenu.razor.scss">
+      <DependentUpon>MainMenu.razor</DependentUpon>
+    </None>
   </ItemGroup>
 
 </Project>
