@@ -30,13 +30,16 @@ public partial class NavalGame : GameManager
 	public World World { get; private set; }
 
 	[ConVar.Replicated]
-	static int proc_gen_seed { get; set; } = 1337;
+	static int proc_gen_seed { get; set; }
 
 	[ConVar.Replicated]
-	static int proc_gen_island_density { get; set; } = 3;
+	static int proc_gen_island_density { get; set; }
 
 	[ConVar.Replicated]
-	static int proc_gen_world_size { get; set; } = 4;
+	static int proc_gen_world_size { get; set; }
+
+	[ConVar.Replicated]
+	static string proc_gen_world_name { get; set; }
 
 	[ConVar.Replicated]
 	static bool world_generated { get; set; } = false;

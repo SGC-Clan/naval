@@ -51,22 +51,44 @@
             <div class="spacer">
             </div>
 
-            <section class="scroll">
-                @{
-                    //TO:DO Lobby.ConVars
-                    //devultj — 18/08/2023 i've noticed Lobby.ConVars to be kinda fucky to use personally, you can do Lobby.SetData( "convar.{convar_name}", value ); if you encounter that too }
-                   }
-            </section>
+            <div class="worldCreationControls">
 
-            <div class="row">
-                <div class="option btn-confirm" onclick="@(() => CreateNewGame() )">Continue</div>
-            </div>
+                <div class="text">World Name:</div>
+                <TextEntry Value:bind=@proc_gen_world_name></TextEntry>
 
-            <div class="spacer">
-            </div>
+                <section>
+                    <div class="text">World Size:</div>
+                    <div class="text text-row-indicator">@proc_gen_world_size</div>
+                </section>
+                <SliderControl min="1" max="16" step="1" Value:bind=@proc_gen_world_size></SliderControl>
 
-            <div class="row">
-                <div class="option btn-back" onclick="@(()=> currentPage="MainMenu" )">Back</div>
+                <section>
+                    <div class="text">Island Density:</div>
+                    <div class="text text-row-indicator">@proc_gen_island_density</div>
+                </section>
+                <SliderControl min="0" max="10" step="1" Value:bind=@proc_gen_island_density></SliderControl>
+
+                <div class="text">Random Seed:</div>
+                <TextEntry MinLength="@(1)" MaxLength="@(7)" Numeric="@(true)" Value:bind=@proc_gen_seed></TextEntry>
+
+                <div class="spacer">
+                </div>
+
+                <section class="scroll">
+
+                    <div class="row">
+                        <div class="option btn-back" onclick="@(()=> currentPage="MainMenu" )">Back</div>
+                    </div>
+
+                    <div class="spacer" style="padding: 10px 20px;">
+                    </div>
+
+                    <div class="row">
+                        <div class="option btn-confirm" onclick="@(() => CreateNewGame() )">Continue</div>
+                    </div>
+
+                </section>
+
             </div>
 
         }
@@ -173,7 +195,7 @@
             <h1><VelocityNumber Value="@stat.Value" Velocity="@stat.Velocity" /></h1>
         }
         
-        <h2>Zombies Killed</h2>
+        <h2>Enemies Killed</h2>
 
         <LeaderboardPanel BoardName="kills" Group="global"></LeaderboardPanel>
         <LeaderboardPanel BoardName="kills" Group="country"></LeaderboardPanel>
@@ -186,6 +208,40 @@
 
 @code
 {
+    protected async override void OnAfterTreeRender(bool firstTime)
+    {
+        base.OnAfterTreeRender(firstTime);
+
+        if (firstTime)
+        {
+            var lobby = await Game.Menu.CreateLobbyAsync(1);
+            lobby.Title = $"{Game.UserName}'s Naval Private Lobby";
+            lobby.Public = false;
+
+            UpdateConVars();
+
+        }
+
+    }
+
+    int proc_gen_world_size = 2;
+    int proc_gen_island_density = 2;
+    int proc_gen_seed = 9669;
+    string proc_gen_world_name = "terra incognita";
+
+    public void UpdateConVars()
+    {
+       // devultj — 18/08/2023 i've noticed Lobby.ConVars to be kinda fucky to use personally, you can do Lobby.SetData( "convar.{convar_name}", value ); if you encounter that too
+
+        var lobby = Game.Menu.Lobby;
+        if (lobby == null)
+            return;
+        lobby.SetData("convar.proc_gen_world_size", proc_gen_world_size.ToString());
+        lobby.SetData("convar.proc_gen_island_density", proc_gen_island_density.ToString());
+        lobby.SetData("convar.proc_gen_seed", proc_gen_seed.ToString());
+        lobby.SetData("convar.proc_gen_world_name", proc_gen_world_name);
+    }
+
     public override void Tick()
     {
         base.Tick();
@@ -213,8 +269,12 @@
 
     string currentPage { get; set; } = "MainMenu";
 
-	void CreateNewGame()
-	{
+    void CreateNewGame()
+    {
+        //save our map settings first pls
+        UpdateConVars();
+
+        //default game creator
 		var options = new Sandbox.Modals.GameCreateModalOptions();
 		options.Cookie = $"naval.serverconfig";
 		options.ModalTitle = "Create Game";

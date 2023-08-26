@@ -79,6 +79,12 @@
 		font-weight: bold;
 	}
 
+	.text-row-indicator { 
+		font-size: 38px;
+		font-weight:600;
+		padding-left:20px;
+	}
+
 	.btn-back {
 		background-color: rgb(176, 52, 52, 0.65);
 	}
@@ -88,11 +94,44 @@
 	}
 }
 
+.worldCreationControls {
+	gap: 8px;
+	padding: 10px;
+	background-color: rgb(74, 72, 72, 0.35);
+	border-radius: 15px;
+	flex-direction: column;
+
+	section {
+		
+		flex-direction: row; 
+		flex-grow: 4;
+	}
+}
+
+.slidercontrol {
+	min-width: 300px;
+}
+
+.textentry {
+	background-color: rgb(20, 90, 92, 0.36);
+	min-width: 200px;
+}
+
 .options-centered {
 	position: absolute;
 	left: 200px;
 	top: 350px;
 	bottom: 10px;
+}
+
+.lobbyPanel {
+	position: absolute;
+	right: 0px;
+	flex-direction: column;
+	padding: 100px 50px;
+	top: 0px;
+	bottom: 0px;
+	justify-content: space-between;
 }
 
 

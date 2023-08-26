@@ -61,7 +61,8 @@ namespace Sandbox
 		{
 			Game.AssertServer();
 
-			Log.Info( "creating world.. " + seed );
+			Log.Info( "creating world.. " + ConsoleSystem.GetValue( "proc_gen_name" ) );
+			Log.Info( "seed: " + ConsoleSystem.GetValue( "proc_gen_seed" ) );
 
 			//We need to move the entire generation thing to separate threads
 			//and tasks so we can tell when the world generation is over
@@ -158,13 +159,16 @@ namespace Sandbox
 			};
 			fortress.SetupPhysicsFromModel( PhysicsMotionType.Static );
 
-			//Island generation
-			GenerateIslands( seed, 8, 100*500 );
+			//  -> Island generation
+			int islandAmount = ConsoleSystem.GetValue( "proc_gen_island_density" ).ToInt();
+			GenerateIslands( seed, islandAmount, 100*500 );
 
-			//Ocean Bottom generation
-			GenerateOceanBottom( seed, 4 ); //6
+			//  -> Ocean Bottom generation
+			int worldSize = ConsoleSystem.GetValue( "proc_gen_world_size" ).ToInt();
+
+			GenerateOceanBottom( seed, worldSize ); //6
 			
-			GenerateOcean( 4 );
+			GenerateOcean( worldSize );
 
 			//Add basic air soundscape
 			var SoundscapeSea = new SoundscapeBoxEntity()

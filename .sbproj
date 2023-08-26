@@ -8,7 +8,7 @@
   "HasAssets": true,
   "AssetsPath": "content",
   "Resources": null,
-  "MenuResources": "\nMenu/*\ncontent/menu/*",
+  "MenuResources": "\nMenu/*\nmenu/*",
   "HasCode": true,
   "CodePath": "/code/",
   "PackageReferences": [],
@@ -91,11 +91,11 @@
       },
       {
         "Choices": [],
-        "ConVarName": "nvl_gaming_time",
-        "DisplayName": "Gaming",
-        "DefaultValue": "lol",
-        "Description": "gaming for gamers",
-        "Group": "gamez"
+        "ConVarName": "proc_gen_world_name",
+        "DisplayName": "display name of the world",
+        "DefaultValue": "terra incognita",
+        "Description": "name it something cool\nmaybe in the future it will be shown in the 2D map of all servers",
+        "Group": ""
       }
     ],
     "HttpAllowList": null,
