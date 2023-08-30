@@ -1,6 +1,7 @@
 @using System
 @using Sandbox;
 @using Sandbox.UI;
+@using System.Collections.Generic;
 @attribute [StyleSheet]
 @inherits RootPanel
 @namespace GameMenu
@@ -214,7 +215,7 @@
 
         if (firstTime)
         {
-            var lobby = await Game.Menu.CreateLobbyAsync(1);
+            var lobby = await Game.Menu.CreateLobbyAsync(1,"naval_lobby_settings",true);
             lobby.Title = $"{Game.UserName}'s Naval Private Lobby";
             lobby.Public = false;
 
@@ -229,17 +230,43 @@
     int proc_gen_seed = 9669;
     string proc_gen_world_name = "terra incognita";
 
+
+
     public void UpdateConVars()
     {
-       // devultj — 18/08/2023 i've noticed Lobby.ConVars to be kinda fucky to use personally, you can do Lobby.SetData( "convar.{convar_name}", value ); if you encounter that too
 
-        var lobby = Game.Menu.Lobby;
-        if (lobby == null)
-            return;
-        lobby.SetData("convar.proc_gen_world_size", proc_gen_world_size.ToString());
-        lobby.SetData("convar.proc_gen_island_density", proc_gen_island_density.ToString());
-        lobby.SetData("convar.proc_gen_seed", proc_gen_seed.ToString());
-        lobby.SetData("convar.proc_gen_world_name", proc_gen_world_name);
+        var worldSettings = new Dictionary<string, string>()
+        {
+            { "proc_gen_world_size", proc_gen_world_size.ToString() },
+            { "proc_gen_island_density", proc_gen_island_density.ToString() },
+            { "proc_gen_seed", proc_gen_seed.ToString() },
+            { "proc_gen_world_name", proc_gen_world_name }
+        };
+
+        Log.Info("Saving to proc_gen_settings.json");
+        FileSystem.Data.WriteJson("proc_gen_settings.json", worldSettings);
+
+        // -- lobby convars and GameSettings are super broken, I lost so much time on this...
+        // -- thats why im using FileSystem instead. its just works
+
+        // devultj — 18/08/2023 i've noticed Lobby.ConVars to be kinda fucky to use personally,
+        // you can do Lobby.SetData( "convar.{convar_name}", value ); if you encounter that too
+
+        // var lobby = Game.Menu.Lobby;
+        // if (lobby == null)
+        //     return;
+        // lobby.SetData("proc_gen_world_size", proc_gen_world_size.ToString());
+        // lobby.SetData("proc_gen_island_density", proc_gen_island_density.ToString());
+        // lobby.SetData("proc_gen_seed", proc_gen_seed.ToString());
+        // lobby.SetData("proc_gen_world_name", proc_gen_world_name);
+
+        // foreach (var data in lobby.Data)
+        // {
+        //     Log.Info("Key  =" + data.Key);
+        //     Log.Info("Value=" + data.Value);
+        //     Log.Info("-------");
+        // }
+
     }
 
     public override void Tick()
