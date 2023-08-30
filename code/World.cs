@@ -159,15 +159,17 @@ namespace Sandbox
 			};
 			fortress.SetupPhysicsFromModel( PhysicsMotionType.Static );
 
-			//  -> Island generation
+			
+			int worldSize = ConsoleSystem.GetValue( "proc_gen_world_size" ).ToInt();
 			int islandAmount = ConsoleSystem.GetValue( "proc_gen_island_density" ).ToInt();
-			GenerateIslands( seed, islandAmount, 100*500 );
+
+			//  -> Island generation
+			GenerateIslands( seed, islandAmount, ((100*500)/2)*worldSize );
 
 			//  -> Ocean Bottom generation
-			int worldSize = ConsoleSystem.GetValue( "proc_gen_world_size" ).ToInt();
-
 			GenerateOceanBottom( seed, worldSize ); //6
-			
+
+			//  -> Water Surface
 			GenerateOcean( worldSize );
 
 			//Add basic air soundscape
@@ -205,7 +207,15 @@ namespace Sandbox
 			int offset = terrainSize * spacing;
 			int TileHeight = -4600;
 			int TileCenter = offset / 2;
-			Vector3 StartPos = new Vector3( offset * (TilesAmount / 2), offset * (TilesAmount / 2), TileHeight );
+			Vector3 StartPos = new Vector3();
+			if ( TilesAmount > 1 )
+			{
+				StartPos = new Vector3( offset * (TilesAmount / 2), offset * (TilesAmount / 2), TileHeight );
+			}
+			else
+			{
+				StartPos = new Vector3( offset / 2, offset / 2, TileHeight );
+			}
 
 			for ( int y = 0; y < TilesAmount; y++ )
 			{
@@ -255,7 +265,7 @@ namespace Sandbox
 			{
 				StartPos = new Vector3( TileSize * (TilesAmount / 2), TileSize * (TilesAmount / 2), 0 );
 			} else {
-				StartPos = new Vector3( -TileSize / 2, -TileSize / 2, 0 );
+				StartPos = new Vector3( TileSize / 2, TileSize / 2, 0 );
 			}
 
 			for ( int y = 0; y < TilesAmount; y++ )
@@ -290,6 +300,9 @@ namespace Sandbox
 
 		public async static void GenerateIslands( int seed, int islandsAmount, float spreadArena )
 		{
+			if ( islandsAmount < 1 )
+				return;
+
 			var rand = new Random();
 
 			int terrainSize = 100; //200
@@ -297,6 +310,7 @@ namespace Sandbox
 			int sizeMax = terrainSize * spacing;
 			int IslandHeight = 0;
 			int IslandCenter = sizeMax / 2;
+			int IslandPosHeightOffset = 25;
 
 			for ( int x = 0; x < islandsAmount; x++ )
 			{
@@ -304,7 +318,15 @@ namespace Sandbox
 				float islandScale = 1f; //SMALLER number means bigger 
 				float islandRadius = rand.Float( 1.5f, 1.7f ); //1.3f
 
-				Vector3 pos = new Vector3( rand.Float( -spreadArena, spreadArena ), rand.Float( -spreadArena, spreadArena ), 0 );
+				Vector3 pos = new Vector3();
+				if ( islandsAmount == 1 )
+				{
+					pos = new Vector3( 0, 0, IslandPosHeightOffset );
+				}
+				else 
+				{
+					pos = new Vector3( rand.Float( -spreadArena, spreadArena ), rand.Float( -spreadArena, spreadArena ), IslandPosHeightOffset );
+				}
 
 				var TerrainEnt = new Terrain()
 				{
@@ -320,7 +342,7 @@ namespace Sandbox
 					HeightMapType = "island",
 					islandRadius = islandRadius,
 					islandScale = islandScale,
-					islandHeightmapEasings = "easeOutCubic", //https://easings.net/
+					//islandHeightmapEasings = "easeOutCubic", //https://easings.net/
 					//terrain mesh settings
 					scale = 2500,
 					spacing = spacing,

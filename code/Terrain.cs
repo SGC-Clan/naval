@@ -85,7 +85,7 @@ namespace Sandbox
 
 			if ( HeightMapType == "island" )
 			{
-				GenerateHeightMapIsland( islandHeightmapEasings );
+				GenerateHeightMapIsland();
 			}
 			else
 			{
@@ -255,10 +255,11 @@ namespace Sandbox
 
 		}
 
-		public void GenerateHeightMapIsland( string heightmapEasings )
+		public void GenerateHeightMapIsland()
 		{
 			heightMap = new float[width, height];
 			var seedOffset = seed;
+			//var heightmapeasings = islandHeightmapEasings;
 
 			// Calculate the center position of the heightmap
 			float centerX = width / 2f;

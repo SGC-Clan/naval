@@ -2,6 +2,7 @@
 using Sandbox.UI.Construct;
 using Sandbox.Utility;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -63,7 +64,23 @@ public partial class NavalGame : GameManager
 
 		await GameTask.Delay( 100 );
 
+		LoadWorldCreationSettings();
+
 		World = new World();
+	}
+
+	public void LoadWorldCreationSettings() 
+	{
+
+		Log.Info( "Loading from proc_gen_settings.json" );
+		var worldSettings = FileSystem.Data.ReadJson< Dictionary<string, string> > ( "proc_gen_settings.json" );
+
+		foreach ( string key in worldSettings.Keys )
+		{
+			if ( key.Contains( "proc_gen_" ) )
+			ConsoleSystem.SetValue( key, worldSettings[key] );
+		}
+
 	}
 
 
@@ -311,9 +328,11 @@ public partial class NavalGame : GameManager
 	}
 
 	[ConCmd.Admin( "debug_spawnwater" )]
-	static void SpawnWaterThing()
+	static void SpawnWaterThing() 
 	{
 		var caller = ConsoleSystem.Caller.Pawn as Player;
+		if ( caller == null )
+			return;
 
 		// Water tile
 		var water = new NavalWater
@@ -360,6 +379,17 @@ public partial class NavalGame : GameManager
 
 		return true;
 	}
+	static bool NavalAdminCleanupFilter( Entity ent ) 
+	{
+		var className = ent.ClassName;
+		if ( className == "Terrain" )
+		{
+			return false;
+		}
+
+		return true;
+	}
+
 
 
 }
