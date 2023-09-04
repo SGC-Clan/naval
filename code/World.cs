@@ -7,7 +7,7 @@ namespace Sandbox
 	[Title( "Naval Procedural World Creator" )]
 	[Category( "Setup" )]
 	[Icon( "globe uk" )]
-	public partial class World: Entity
+	public partial class World : Entity
 	{
 		public World()
 		{
@@ -18,20 +18,28 @@ namespace Sandbox
 			base.Spawn();
 
 			if ( Game.IsServer )
-				WorldCreation( ConsoleSystem.GetValue("proc_gen_seed").ToInt() );
+				WorldCreation( ConsoleSystem.GetValue( "proc_gen_seed" ).ToInt() );
 		}
 
 		public override void ClientSpawn()
 		{
 			base.ClientSpawn();
 
+			SetupWorldOnClient();
+		}
+
+		public async void SetupWorldOnClient() 
+		{
+			await GameTask.Delay( 1000 );
+
 			var sceneWorld = Game.SceneWorld;
+			var world_size = ConsoleSystem.GetValue( "proc_gen_world_size" ).ToInt();
 
 			//underwater gradient fog
 			var gradientFog = new GradientFogController
 			{
-				StartDistance = 60000,
-				EndDistance = 100000,
+				StartDistance = world_size * 100 * 500 / 1.5f,
+				EndDistance = world_size*100*500,
 				StartHeight = -5000,
 				EndHeight = 5000,
 				DistanceFalloffExponent = 0.5f,
@@ -44,7 +52,7 @@ namespace Sandbox
 			sceneWorld.ClearColor = Color.Black;
 
 			//cube map
-			var cubeMap = new SceneCubemap( sceneWorld, Texture.Load( FileSystem.Mounted, "models_and_materials/cubemap/mirrored_skybox.vtex" ), BBox.FromPositionAndSize( Vector3.Zero, 150000 ) ); //"models_and_materials/cubemap/env_cubemap_16.vtex"  "textures/cubemaps/default.vtex"
+			var cubeMap = new SceneCubemap( sceneWorld, Texture.Load( FileSystem.Mounted, "models_and_materials/cubemap/mirrored_skybox.vtex" ), BBox.FromPositionAndSize( Vector3.Zero, world_size * 100 * 500 ) ); //"models_and_materials/cubemap/env_cubemap_16.vtex"  "textures/cubemaps/default.vtex"
 
 			//Sky box
 			var skyBox = new SceneSkyBox( sceneWorld, Material.Load( "models_and_materials/cubemap/mirrored_skybox.vmat" ) );
